@@ -13,5 +13,10 @@ namespace tp_cuatrimestral_equipo_12B
         {
 
         }
+
+        protected void btnLogin_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Pacientes.aspx", false);
+        }
     }
 }
