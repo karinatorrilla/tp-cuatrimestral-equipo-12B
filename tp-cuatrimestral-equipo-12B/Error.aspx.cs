@@ -7,11 +7,17 @@ using System.Web.UI.WebControls;
 
 namespace tp_cuatrimestral_equipo_12B
 {
-    public partial class Inicio : System.Web.UI.Page
+    public partial class Error : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            lblTipoUsuario.Text = Session["TipoUsuario"].ToString();
+
+            if (Session["error"] != null)
+            {
+                lblMensaje.Text = Session["error"].ToString();
+            }
+
+
         }
     }
 }

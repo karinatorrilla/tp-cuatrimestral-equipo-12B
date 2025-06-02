@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using dominio;
+using negocio;
 
 namespace tp_cuatrimestral_equipo_12B
 {
@@ -16,7 +18,40 @@ namespace tp_cuatrimestral_equipo_12B
 
         protected void btnLogin_Click(object sender, EventArgs e)
         {
-            Response.Redirect("Inicio.aspx", false);
+            Usuario usuario;
+            UsuarioNegocio negocio = new UsuarioNegocio();
+
+            try
+            {
+                usuario = new Usuario(txtUsuario.Text, txtPassword.Text);
+
+
+                if (negocio.Loguear(usuario))
+                {
+                    Session.Add("usuario", usuario);
+                    Session.Add("TipoUsuario", usuario.Tipo.NombreTipo);
+                    Response.Redirect("Inicio.aspx", false);
+
+                }
+                else
+                {
+                    Session.Add("error", "User o password incorrecto");
+                    Response.Redirect("Error.aspx", false);
+
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+                Session.Add("error", ex.ToString());
+            }
+
+
+
+
         }
     }
 }
