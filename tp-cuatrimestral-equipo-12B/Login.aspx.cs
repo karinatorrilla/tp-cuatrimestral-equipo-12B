@@ -31,13 +31,11 @@ namespace tp_cuatrimestral_equipo_12B
                     Session.Add("usuario", usuario);
                     Session.Add("TipoUsuario", usuario.Tipo.NombreTipo);
                     Response.Redirect("Inicio.aspx", false);
-
                 }
                 else
                 {
                     Session.Add("error", "User o password incorrecto");
                     Response.Redirect("Error.aspx", false);
-
                 }
 
 

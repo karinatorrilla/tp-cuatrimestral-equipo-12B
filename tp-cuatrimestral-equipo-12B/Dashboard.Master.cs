@@ -16,7 +16,9 @@ namespace tp_cuatrimestral_equipo_12B
 
         protected void lnkCerrarSesion_Click(object sender, EventArgs e)
         {
-            
+            Session.Clear();
+            Session.Abandon();
+            Response.Redirect("Login.aspx", false);
         }
     }
 }

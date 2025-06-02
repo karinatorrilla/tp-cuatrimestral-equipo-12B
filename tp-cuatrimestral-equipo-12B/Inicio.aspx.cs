@@ -11,7 +11,18 @@ namespace tp_cuatrimestral_equipo_12B
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            lblTipoUsuario.Text = Session["TipoUsuario"].ToString();
+            if (Session["TipoUsuario"] != null)
+            {
+
+                lblTipoUsuario.Text = Session["TipoUsuario"].ToString();
+
+            }
+            else
+            {
+                lblTipoUsuario.Text = "Usuario o password incorrectos";
+            }
+
+
         }
     }
 }
