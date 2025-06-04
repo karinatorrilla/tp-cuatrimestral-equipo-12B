@@ -3,7 +3,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="container-fluid py-4">
-        <h1 class="mb-4">Listado Pacientes</h1>
+        <h1 class="mb-4">Listado de pacientes</h1>
 
         <%-- Busqueda y Filtros --%>
         <div class="filter-section mb-4">

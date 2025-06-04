@@ -13,5 +13,10 @@ namespace tp_cuatrimestral_equipo_12B
         {
 
         }
+
+        protected void btnGuardar_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
