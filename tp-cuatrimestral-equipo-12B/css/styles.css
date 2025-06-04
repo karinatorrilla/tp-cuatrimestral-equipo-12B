@@ -54,3 +54,15 @@
 .sidebar .nav-link.logout {
     margin-top: auto;
 }
+
+.action-link {
+    margin-right: 18px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.action-icon-img {
+    width: 28px;
+    height: 28px;
+    transition: transform 0.2s ease-in-out;
+}
