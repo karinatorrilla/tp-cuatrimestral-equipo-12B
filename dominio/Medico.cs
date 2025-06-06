@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dominio
 {
-    public class Medico : Paciente    //hereda propiedades de paciente para cargar datos
+    public class Medico : Persona    //hereda propiedades de persona para cargar datos
     {
         public string Matricula { get; set; }
         public Especialidad EspecialidadSeleccionada { get; set; }
@@ -15,7 +15,6 @@ namespace dominio
             get { return EspecialidadSeleccionada != null ? EspecialidadSeleccionada.Descripcion : "N/A"; }
         }
         public TurnoTrabajo TurnoTrabajo { get; set; }   //cada médico está asociado a un turno de trabajo
-       public List<Especialidad> Especialidades { get; set; }  //cada médico tiene varias especialidades
-       public List<Paciente> Pacientes { get; set; }  //cada médico tiene varios pacientes
+        public List<Especialidad> Especialidades { get; set; }  //cada médico tiene varias especialidades
     }
 }
