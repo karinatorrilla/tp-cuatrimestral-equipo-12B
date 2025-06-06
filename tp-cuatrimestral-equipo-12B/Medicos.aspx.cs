@@ -12,22 +12,12 @@ namespace tp_cuatrimestral_equipo_12B
         protected void Page_Load(object sender, EventArgs e)
         {
             
-            if (Session["TipoUsuario"] != null)
-            {
-                lblPermisos.Text = "Bienvenido tu rol es : "+Session["TipoUsuario"];
-                //lblPermisos.Text = Session["TipoUsuario"].ToString();
 
-            }
-            else
-            {
+        }
 
-                lblPermisos.Text = "Usuario o password incorrectos";
-
-            }
-
-
-
-
+        protected void btnNuevoMedico_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("FormularioMedico.aspx", false);
         }
     }
 }

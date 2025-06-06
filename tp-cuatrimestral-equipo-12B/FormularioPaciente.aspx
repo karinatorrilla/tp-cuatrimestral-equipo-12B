@@ -9,65 +9,63 @@
     <div id="divMensaje" runat="server" class="alert" visible="false"></div>
 
     <div class="p-4 rounded bg-white shadow-sm">
-        <div class="row align-items-end g-3">
+        <%-- Sección de Datos Personales --%>
+        <div class="row align-items-end g-3 mb-4">
 
-            <!-- Nombre -->
-            <div class="col-md-2">
+            <%-- Nombre --%>
+            <div class="col-md-4">
                 <label for="txtNombre" class="form-label font-weight-bold text-dark">Nombre</label>
                 <asp:TextBox runat="server" ID="txtNombre" CssClass="form-control" placeholder="Pedro" />
             </div>
 
-            <!-- Apellido -->
-            <div class="col-md-2">
+            <%-- Apellido --%>
+            <div class="col-md-4">
                 <label for="txtApellido" class="form-label font-weight-bold text-dark">Apellido</label>
                 <asp:TextBox runat="server" ID="txtApellido" CssClass="form-control" placeholder="Lopez" />
             </div>
 
-            <!-- DNI -->
-            <div class="col-md-2">
+            <%-- DNI --%>
+            <div class="col-md-4">
                 <label for="txtDni" class="form-label font-weight-bold text-dark">DNI</label>
                 <asp:TextBox runat="server" ID="txtDni" CssClass="form-control" MaxLength="8" TextMode="Number" placeholder="11222333" />
             </div>
+            <%-- VALIDAR SOLO HASTA 8 DIGITOS DE MAXIMO FALTA --%>
+        </div>
 
-            <!-- VALIDAR SOLO HASTA 8 DIGITOS DE MAXIMO   FALTA -->
-
-
-
-            <!-- Email -->
-            <div class="col-md-2">
+        <%-- Sección de Contacto  --%>
+        <div class="row align-items-end g-3 mb-4">
+            <%-- Email --%>
+            <div class="col-md-4">
                 <label for="txtEmail" class="form-label font-weight-bold text-dark">Email</label>
                 <asp:TextBox runat="server" ID="txtEmail" CssClass="form-control" TextMode="Email" placeholder="nombre@gmail.com" />
             </div>
 
-
-            <!-- Fecha de Nacimiento -->
-            <div class="col-md-2">
-                <label for="Calendar1" class="form-label font-weight-bold text-dark">Fecha de Nacimiento</label>
-
-                <asp:TextBox runat="server" ID="txtFechaNacimiento" CssClass="form-control" placeholder="Mendoza 123" TextMode="Date" />
+            <%-- Fecha de Nacimiento --%>
+            <div class="col-md-4">
+                <label for="txtFechaNacimiento" class="form-label font-weight-bold text-dark">Fecha de Nacimiento</label>
+                <asp:TextBox runat="server" ID="txtFechaNacimiento" CssClass="form-control" TextMode="Date" />
             </div>
 
-            <!-- Dirección -->
-            <div class="col-md-2">
+            <%-- Dirección --%>
+            <div class="col-md-4">
                 <label for="txtDireccion" class="form-label font-weight-bold text-dark">Dirección</label>
                 <asp:TextBox runat="server" ID="txtDireccion" CssClass="form-control" placeholder="Mendoza 123" />
             </div>
+        </div>
 
-            <!-- Obra social -->
-            <div class="col-md-2">
+        <%-- Sección de Obra Social --%>
+        <div class="row align-items-end g-3 mb-4">
+            <%-- Obra social --%>
+            <div class="col-md-4">
                 <label for="txtObraSocial" class="form-label font-weight-bold text-dark">Obra Social</label>
                 <asp:TextBox runat="server" ID="txtObraSocial" CssClass="form-control" placeholder="Galeno" />
             </div>
         </div>
-    </div>
 
-    <!-- botones -->
-    <div class="row mt-4">
-        <div class="col-md-6 mb-2 text-center">
-            <asp:Button Text="Guardar" ID="btnGuardar" CssClass="btn btn-primary w-50" runat="server" OnClick="btnGuardar_Click" />
-        </div>
-        <div class="col-md-6 mb-2 text-center">
-            <a href="Pacientes.aspx" class="btn btn-secondary w-50">Volver</a>
+        <%-- Contenedor de Botones --%>
+        <div class="d-flex justify-content-center mt-4">
+            <asp:Button Text="Guardar" ID="btnGuardar" CssClass="btn btn-primary px-5 me-3" runat="server" OnClick="btnGuardar_Click" />
+            <a href="Pacientes.aspx" class="btn btn-secondary px-5">Volver</a>
         </div>
     </div>
 
