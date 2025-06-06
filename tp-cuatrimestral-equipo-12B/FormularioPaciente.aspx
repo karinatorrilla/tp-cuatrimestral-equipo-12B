@@ -6,6 +6,7 @@
     <div class="container-fluid py-4">
         <h1 class="mb-4">Agregar paciente</h1>
     </div>
+    <div id="divMensaje" runat="server" class="alert" visible="false"></div>
 
     <div class="p-4 rounded bg-white shadow-sm">
         <div class="row align-items-end g-3">
@@ -25,8 +26,12 @@
             <!-- DNI -->
             <div class="col-md-2">
                 <label for="txtDni" class="form-label font-weight-bold text-dark">DNI</label>
-                <asp:TextBox runat="server" ID="txtDni" CssClass="form-control" MaxLength="8" placeholder="11222333" />
+                <asp:TextBox runat="server" ID="txtDni" CssClass="form-control" MaxLength="8" TextMode="Number" placeholder="11222333" />
             </div>
+
+            <!-- VALIDAR SOLO HASTA 8 DIGITOS DE MAXIMO   FALTA -->
+
+
 
             <!-- Email -->
             <div class="col-md-2">
@@ -34,6 +39,13 @@
                 <asp:TextBox runat="server" ID="txtEmail" CssClass="form-control" TextMode="Email" placeholder="nombre@gmail.com" />
             </div>
 
+
+            <!-- Fecha de Nacimiento -->
+            <div class="col-md-2">
+                <label for="Calendar1" class="form-label font-weight-bold text-dark">Fecha de Nacimiento</label>
+
+                <asp:TextBox runat="server" ID="txtFechaNacimiento" CssClass="form-control" placeholder="Mendoza 123" TextMode="Date" />
+            </div>
 
             <!-- Dirección -->
             <div class="col-md-2">

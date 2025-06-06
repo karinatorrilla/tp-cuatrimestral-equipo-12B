@@ -50,5 +50,35 @@ namespace negocio
 
         }
 
+
+        public bool agregarPaciente(Paciente nuevo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("INSERT INTO PACIENTES (Nombre, Apellido, DNI, Email, FechaNacimiento, ObraSocial)" +
+                 "VALUES (@Nombre, @Apellido, @DNI, @Email, @FechaNacimiento, @ObraSocial);");
+
+                datos.setearParametro("@Nombre", nuevo.Nombre);
+                datos.setearParametro("@Apellido", nuevo.Apellido);
+                datos.setearParametro("@DNI", nuevo.Dni);
+                datos.setearParametro("@Email", nuevo.Email);
+                datos.setearParametro("@FechaNacimiento", nuevo.FechaNacimiento);
+                datos.setearParametro("@ObraSocial", nuevo.ObraSocial);
+
+                datos.ejecutarAccion();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
