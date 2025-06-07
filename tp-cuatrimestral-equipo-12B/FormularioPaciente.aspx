@@ -15,21 +15,24 @@
             <%-- Nombre --%>
             <div class="col-md-4">
                 <label for="txtNombre" class="form-label font-weight-bold text-dark">Nombre</label>
-                <asp:TextBox runat="server" ID="txtNombre" CssClass="form-control" placeholder="Pedro" />
-            </div>
+                <asp:TextBox runat="server" ID="txtNombre" CssClass="form-control" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$" title="No puede contener numeros" placeholder="Pedro" required="true"/>
+                      </div>
 
             <%-- Apellido --%>
             <div class="col-md-4">
                 <label for="txtApellido" class="form-label font-weight-bold text-dark">Apellido</label>
-                <asp:TextBox runat="server" ID="txtApellido" CssClass="form-control" placeholder="Lopez" />
+                <asp:TextBox runat="server" ID="txtApellido" CssClass="form-control" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$" title="No puede contener numeros" placeholder="Lopez" required="true" />
             </div>
 
             <%-- DNI --%>
             <div class="col-md-4">
                 <label for="txtDni" class="form-label font-weight-bold text-dark">DNI</label>
-                <asp:TextBox runat="server" ID="txtDni" CssClass="form-control" MaxLength="8" TextMode="Number" placeholder="11222333" />
+                
+              <asp:TextBox runat="server" ID="txtDni" CssClass="form-control" MaxLength="8" placeholder="12345678" required="true" TextMode="SingleLine" pattern="\d{1,8}" 
+    title="El DNI debe tener entre 1 y 8 dígitos"  />
+
             </div>
-            <%-- VALIDAR SOLO HASTA 8 DIGITOS DE MAXIMO FALTA --%>
+          
         </div>
 
         <%-- Sección de Contacto  --%>
@@ -37,29 +40,36 @@
             <%-- Email --%>
             <div class="col-md-4">
                 <label for="txtEmail" class="form-label font-weight-bold text-dark">Email</label>
-                <asp:TextBox runat="server" ID="txtEmail" CssClass="form-control" TextMode="Email" placeholder="nombre@gmail.com" />
+                <asp:TextBox runat="server" ID="txtEmail" CssClass="form-control" TextMode="Email" placeholder="nombre@gmail.com" required="true"/>
             </div>
 
             <%-- Fecha de Nacimiento --%>
             <div class="col-md-4">
                 <label for="txtFechaNacimiento" class="form-label font-weight-bold text-dark">Fecha de Nacimiento</label>
-                <asp:TextBox runat="server" ID="txtFechaNacimiento" CssClass="form-control" TextMode="Date" />
+                <asp:TextBox runat="server" ID="txtFechaNacimiento" CssClass="form-control" TextMode="Date" required="true"/>
             </div>
 
             <%-- Dirección --%>
             <div class="col-md-4">
                 <label for="txtDireccion" class="form-label font-weight-bold text-dark">Dirección</label>
-                <asp:TextBox runat="server" ID="txtDireccion" CssClass="form-control" placeholder="Mendoza 123" />
+                <asp:TextBox runat="server" ID="txtDireccion" CssClass="form-control" placeholder="Mendoza 123" required="true"/>
             </div>
         </div>
 
         <%-- Sección de Obra Social --%>
         <div class="row align-items-end g-3 mb-4">
-            <%-- Obra social --%>
+          <%--  Obra social >
             <div class="col-md-4">
                 <label for="txtObraSocial" class="form-label font-weight-bold text-dark">Obra Social</label>
-                <asp:TextBox runat="server" ID="txtObraSocial" CssClass="form-control" placeholder="Galeno" />
-            </div>
+                <asp:TextBox runat="server" ID="txtObraSocial" CssClass="form-control" placeholder="Galeno" required="true"/>
+            </div>--%>
+
+             <%-- Obra Social (DropDownList) --%>
+ <div class="col-md-4">
+     <label for="ddlObraSocial" class="form-label font-weight-bold text-dark">Obra Social</label>
+     <asp:DropDownList ID="ddlObraSocial" runat="server" CssClass="form-control"></asp:DropDownList>
+ </div>
+
         </div>
 
         <%-- Contenedor de Botones --%>

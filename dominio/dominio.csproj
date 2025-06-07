@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Especialidad.cs" />
     <Compile Include="Medico.cs" />
+    <Compile Include="ObraSocial.cs" />
     <Compile Include="Paciente.cs" />
     <Compile Include="Persona.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
