@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Dashboard.Master" AutoEventWireup="true" CodeBehind="Pacientes.aspx.cs" Inherits="tp_cuatrimestral_equipo_12B.Pacientes" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -38,36 +39,83 @@
                 </thead>
                 <tbody>
                     <%-- Cuerpo del listado --%>
-                    <% if (listaPaciente != null && listaPaciente.Any()) { %>
-                        <% foreach (var paciente in listaPaciente) { %>
-                            <tr>
-                                <td><%= paciente.Id %></td>
-                                <td><%= paciente.Nombre %></td>
-                                <td><%= paciente.Apellido %></td>
-                                <td><%= paciente.Dni %></td>
-                                <td><%= paciente.Email %></td>
-                                <td>DIRECCIÓN</td><%-- Hardcodeado  --%>
-                                <td><%= paciente.ObraSocial %></td>
-                                <td class="d-flex justify-content-center align-items-center gap-3">
-                                    <%-- Ícono Ver --%>
-                                    <a href="#" class="action-link" title="Ver Detalles" onclick="alert('Ver paciente ID: <%= paciente.Id %>'); return false;">
-                                        <img src="images/icon_view.svg" alt="Ver" class="action-icon-img" />
-                                    </a>
-                                    <%-- Ícono Editar --%>
-                                    <a href="#" class="action-link" title="Editar Paciente" onclick="alert('Editar paciente ID: <%= paciente.Id %>'); return false;">
-                                        <img src="images/icon_edit.svg" alt="Editar" class="action-icon-img" />
-                                    </a>
-                                    <%-- Ícono Eliminar --%>
-                                    <a href="#" class="action-link" title="Eliminar Paciente" onclick="if(confirm('¿Estás seguro de eliminar al paciente <%= paciente.Nombre %>?')) { alert('Eliminar paciente ID: <%= paciente.Id %>'); return true; } else { return false; }">
-                                        <img src="images/icon_delete.svg" alt="Eliminar" class="action-icon-img" />
-                                    </a>
-                                </td>
-                            </tr>
-                        <% } %>
-                    <% } else { %>
-                        <tr>
-                            <td colspan="8" class="text-center py-4">No hay pacientes cargados.</td>
-                        </tr>
+                    <% if (listaPaciente != null && listaPaciente.Any())
+                        { %>
+                    <% foreach (var paciente in listaPaciente)
+                        { %>
+                    <tr>
+                        <td><%= paciente.Id %></td>
+                        <td><%= paciente.Nombre %></td>
+                        <td><%= paciente.Apellido %></td>
+                        <td><%= paciente.Dni %></td>
+                        <td><%= paciente.Email %></td>
+                        <td>DIRECCIÓN</td>
+                        <%-- Hardcodeado  --%>
+                        <td><%= paciente.ObraSocial %></td>
+                        <td class="d-flex justify-content-center align-items-center gap-3">
+                            <%-- Ícono Ver --%>
+                            <%-- <a href="#" class="action-link" title="Ver Detalles" onclick="alert('Ver paciente ID: <%= paciente.Id %>'); return false;">
+                                <img src="images/icon_view.svg" alt="Ver" class="action-icon-img" />
+                            </a>--%>
+
+
+                            <!-- Button trigger modal -->
+                            <img src="images/icon_view.svg" class="action-icon-img" alt="Ver" data-bs-toggle="modal" data-bs-target="#detalleModal_<%= paciente.Id %>" style="cursor: pointer; width: 100px;">
+
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="detalleModal_<%= paciente.Id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Detalle Paciente</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <%-- <p><strong>ID:</strong> <%= paciente.Id %></p> --%>
+                                            <p><strong>Nombre:</strong> <%= paciente.Nombre %></p>
+                                            <p><strong>Apellido:</strong> <%= paciente.Apellido %></p>
+                                            <p><strong>DNI:</strong> <%= paciente.Dni %></p>
+                                            <p><strong>Email:</strong> <%= paciente.Email %></p>
+                                            <p><strong>Dirección:</strong> DIRECCIÓN</p>
+                                            <p><strong>Obra Social:</strong> <%= paciente.ObraSocial %></p>
+                                            <p><strong>Observaciones:</strong> <%= paciente.Observaciones %></p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <%-- Ícono Editar --%>
+                            <a href="#" class="action-link" title="Editar Paciente" onclick="alert('Editar paciente ID: <%= paciente.Id %>'); return false;">
+                                <img src="images/icon_edit.svg" alt="Editar" class="action-icon-img" />
+                            </a>
+                            <%-- Ícono Eliminar --%>
+                            <a href="#" class="action-link" title="Eliminar Paciente" onclick="if(confirm('¿Estás seguro de eliminar al paciente <%= paciente.Nombre %>?')) { alert('Eliminar paciente ID: <%= paciente.Id %>'); return true; } else { return false; }">
+                                <img src="images/icon_delete.svg" alt="Eliminar" class="action-icon-img" />
+                            </a>
+                            <%-- Ícono Dar Turno --%>
+                            <a href="#" class="action-link" title="Dar Turno" onclick="alert('Dar turno a ID: <%= paciente.Nombre %>'); return false;">
+                                <img src="images/icon_turno.svg" alt="Dar Turno!" class="action-icon-img" />
+                            </a>
+                            <%--  Hacer un modal para dar turno / eliminar / editar o enviar a otra pagina?????????? --%>
+
+
+
+
+                        </td>
+                    </tr>
+                    <% } %>
+                    <% }
+                        else
+                        { %>
+                    <tr>
+                        <td colspan="8" class="text-center py-4">No hay pacientes cargados.</td>
+                    </tr>
                     <% } %>
                 </tbody>
             </table>
