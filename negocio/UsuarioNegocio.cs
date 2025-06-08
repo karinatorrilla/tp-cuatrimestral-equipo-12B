@@ -15,10 +15,9 @@ namespace negocio
 
             try
             {
-               // datos.setearConsulta("Select U.IDUsuario from USUARIOS AS U where U.Usuario=@Nombre and U.Pass=@Password");
                 datos.setearConsulta("select U.IDUsuario,TU.Nombre from USUARIOS AS U INNER JOIN TIPOUSUARIOS AS TU ON U.IdTipoUsuario=TU.IdTipoUsuario where U.Usuario=@Nombre and Pass=@Password");
                 datos.setearParametro("@Nombre", usuario.Nombre);
-                datos.setearParametro("@Password",usuario.Password);
+                datos.setearParametro("@Password", usuario.Password);
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -26,14 +25,8 @@ namespace negocio
                     usuario.Id = (int)datos.Lector["IDUsuario"];
 
                     usuario.Tipo = new TipoUsuario();
-                    
+
                     usuario.Tipo.NombreTipo = (string)datos.Lector["Nombre"];
-                                        
-
-                   
-
-
-
 
                     return true;
 
@@ -45,12 +38,12 @@ namespace negocio
 
             catch (Exception ex)
             {
-
-
                 throw ex;
-
             }
-            finally { datos.cerrarConexion(); }
+            finally
+            {
+                datos.cerrarConexion();
+            }
 
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using dominio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -15,9 +16,20 @@ namespace tp_cuatrimestral_equipo_12B
             if (Session["error"] != null)
             {
                 lblMensaje.Text = Session["error"].ToString();
+            }         
+
+        }
+
+        protected void btnVolver_Click(object sender, EventArgs e)
+        {
+            if (Session["TipoUsuario"] == null)
+            {
+                Response.Redirect("Login.aspx", false);
             }
-
-
+            else
+            {
+                Response.Redirect("Inicio.aspx", false);
+            }
         }
     }
 }

@@ -34,7 +34,7 @@ namespace tp_cuatrimestral_equipo_12B
                 }
                 else
                 {
-                    Session.Add("error", "User o password incorrecto");
+                    Session.Add("error", "Usuario o contraseña incorrectos. Intentelo nuevamente.");
                     Response.Redirect("Error.aspx", false);
                 }
 

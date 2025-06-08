@@ -11,8 +11,17 @@ namespace tp_cuatrimestral_equipo_12B
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["TipoUsuario"] != null && Session["TipoUsuario"].ToString() == "Médico")
+            {
+                Session.Add("error", "Tenes que tener permisos de Administrador o Recepcionista para ver esta pantalla.");
+                Response.Redirect("Error.aspx", false);
+            }
             
-
+            if (Session["TipoUsuario"] == null)
+            {
+                Session.Add("error", "Debes loguearte para ingresar.");
+                Response.Redirect("Error.aspx", false);
+            }
         }
 
         protected void btnNuevoMedico_Click(object sender, EventArgs e)

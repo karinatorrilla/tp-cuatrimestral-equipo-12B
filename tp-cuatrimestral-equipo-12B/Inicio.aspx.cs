@@ -13,16 +13,28 @@ namespace tp_cuatrimestral_equipo_12B
         {
             if (Session["TipoUsuario"] != null)
             {
-
-                lblTipoUsuario.Text = Session["TipoUsuario"].ToString();
-
+                lblTipoUsuario.Text = "Usted está logueado como " + Session["TipoUsuario"].ToString() + ".";
             }
             else
             {
-                lblTipoUsuario.Text = "Usuario o password incorrectos";
+                Session.Add("error", "Debes loguearte para ingresar.");               
+                Response.Redirect("Error.aspx", false);
             }
+        }
 
+        protected void btnIrTurnos_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Turnos.aspx", false);
+        }
 
+        protected void BtnIrMedicos_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Medicos.aspx", false);
+        }
+
+        protected void btnIrPacientes_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Pacientes.aspx", false);
         }
     }
 }
