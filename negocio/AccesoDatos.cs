@@ -12,7 +12,7 @@ namespace negocio
     {
         private SqlConnection conexion;
 
-        private SqlCommand comando;
+        public SqlCommand comando;
 
         private SqlDataReader lector;
 
@@ -20,8 +20,7 @@ namespace negocio
         {
             get { return lector; }
         }
-
-        ///CAMBIAR BASE DE DATOS!!! to do ---listo!
+        
         public AccesoDatos()
         {
             conexion = new SqlConnection("server=.\\SQLEXPRESS; database=CLINICA_DB; integrated security=true");

@@ -91,7 +91,7 @@
 
 
                             <%-- Ícono Editar --%>
-                            <a href="#" class="action-link" title="Editar Paciente" onclick="alert('Editar paciente ID: <%= paciente.Id %>'); return false;">
+                            <a href="FormularioPaciente.aspx?id=<%= paciente.Id %>" class="action-link" title="Editar Paciente">
                                 <img src="images/icon_edit.svg" alt="Editar" class="action-icon-img" />
                             </a>
                             <%-- Ícono Eliminar --%>

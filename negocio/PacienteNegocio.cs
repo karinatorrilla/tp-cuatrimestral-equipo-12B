@@ -10,7 +10,7 @@ namespace negocio
     public class PacienteNegocio
     {
 
-        public List<Paciente> ListarPacientes()
+        public List<Paciente> ListarPacientes(int id = 0)
         {
 
 
@@ -19,7 +19,13 @@ namespace negocio
 
             try
             {
-                datos.setearConsulta("SELECT IDPaciente, Nombre, Apellido, Dni, Email, ObraSocial FROM PACIENTES");
+                string consulta = "SELECT IDPaciente, Nombre, Apellido, Dni, Email, FechaNacimiento, ObraSocial FROM PACIENTES ";
+                if (id > 0)
+                {
+                    consulta += " WHERE IDPaciente = " + id;
+                }
+
+                datos.setearConsulta(consulta);
                 datos.ejecutarLectura();
                 while (datos.Lector.Read())
                 {
@@ -29,8 +35,8 @@ namespace negocio
                     aux.Apellido = (string)datos.Lector["Apellido"];
                     aux.Dni = (int)datos.Lector["Dni"];
                     aux.Email = (string)datos.Lector["Email"];
+                    aux.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
                     //aux.Direccion = (string)datos.Lector["Direccion"];
-                    //aux.FechaNacimiento = (string)datos.Lector["FechaNacimiento"];
                     aux.ObraSocial = (string)datos.Lector["ObraSocial"];
 
 
@@ -79,6 +85,34 @@ namespace negocio
             {
                 datos.cerrarConexion();
             }
+        }
+
+        public void modificarPaciente(Paciente mod)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("Update PACIENTES set Nombre = @nombre, Apellido = @apellido, DNI = @dni, Email = @email, FechaNacimiento = @fechanacimiento, ObraSocial = @obrasocial WHERE IDPaciente = @id");
+                datos.setearParametro("@id", mod.Id);
+                datos.setearParametro("@Nombre", mod.Nombre);
+                datos.setearParametro("@Apellido", mod.Apellido);
+                datos.setearParametro("@DNI", mod.Dni);
+                datos.setearParametro("@Email", mod.Email);
+                datos.setearParametro("@FechaNacimiento", mod.FechaNacimiento);
+                datos.setearParametro("@ObraSocial", mod.ObraSocial);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
         }
     }
 }

@@ -1,9 +1,17 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Dashboard.Master" AutoEventWireup="true" CodeBehind="FormularioMedico.aspx.cs" Inherits="tp_cuatrimestral_equipo_12B.FormularioMedico" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="container-fluid py-4">
-        <h1 class="mb-4">Agregar Médico</h1>
+        <% if (Request.QueryString["id"] != null)
+            { %>
+        <h1 class="mb-4">Editar médico</h1>
+        <%} %>
+        <%else
+            { %>
+        <h1 class="mb-4">Agregar médico</h1>
+        <%} %>
     </div>
 
     <div class="p-4 rounded bg-white shadow-sm">
@@ -57,7 +65,7 @@
                 <label for="txtDireccion" class="form-label font-weight-bold text-dark">Dirección</label>
                 <asp:TextBox runat="server" ID="txtDireccion" CssClass="form-control" placeholder="Av. Siempre Viva 742" />
             </div>
-            
+
             <%-- Matrícula --%>
             <div class="col-md-4">
                 <label for="txtMatricula" class="form-label font-weight-bold text-dark">Matrícula</label>
