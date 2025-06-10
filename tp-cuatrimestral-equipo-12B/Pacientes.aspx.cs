@@ -29,7 +29,7 @@ namespace tp_cuatrimestral_equipo_12B
                 Session.Add("error", "Debes loguearte para ingresar.");
                 Response.Redirect("Error.aspx", false);
             }
-/*
+
             if (!IsPostBack && Request["eliminar"] != null)
             {
                 int idEliminar;
@@ -39,7 +39,7 @@ namespace tp_cuatrimestral_equipo_12B
                     pacienteNegocio.eliminarPaciente(idEliminar); 
                 }
             }
-*/
+
            ///se carga la lista actualizada por primera vez o despues de una eliminacion
             PacienteNegocio negocio = new PacienteNegocio();
             listaPaciente = negocio.ListarPacientes();
