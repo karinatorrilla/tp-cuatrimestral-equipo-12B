@@ -78,7 +78,6 @@
                 <asp:DropDownList ID="ddlEspecialidad" runat="server" CssClass="form-control"></asp:DropDownList>
             </div>
         </div>
-
         <%-- Contenedor de Botones --%>
         <div class="d-flex justify-content-center mt-4">
             <a href="Medicos.aspx" class="btn btn-primary px-5 me-3">Guardar</a>

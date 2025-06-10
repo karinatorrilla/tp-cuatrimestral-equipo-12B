@@ -22,7 +22,7 @@ namespace negocio
                 string consulta = "SELECT IDPaciente, Nombre, Apellido, Dni, Email, FechaNacimiento, ObraSocial FROM PACIENTES where Habilitado = 1 ";
                 if (id > 0)
                 {
-                    consulta += "AND WHERE IDPaciente = " + id;
+                    consulta += "AND IDPaciente = " + id;
                 }
 
                 datos.setearConsulta(consulta);
@@ -55,7 +55,6 @@ namespace negocio
             }
 
         }
-
 
         public bool agregarPaciente(Paciente nuevo)
         {

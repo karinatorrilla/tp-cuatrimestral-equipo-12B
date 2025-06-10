@@ -8,7 +8,7 @@ namespace dominio
 {
     public class Medico : Persona    //hereda propiedades de persona para cargar datos
     {
-        public string Matricula { get; set; }
+        public int Matricula { get; set; }
         public Especialidad EspecialidadSeleccionada { get; set; }
         public string Especialidad
         {

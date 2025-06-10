@@ -14,11 +14,11 @@ namespace tp_cuatrimestral_equipo_12B
         protected void Page_Load(object sender, EventArgs e)
         {
             // Cargar especialidades en el DropDownList
-            EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
-            ddlEspecialidad.DataSource = especialidadNegocio.Listar();
-            ddlEspecialidad.DataValueField = "Id";       // Valor que se guarda (ID de la especialidad)
-            ddlEspecialidad.DataTextField = "Descripcion"; // Texto que se muestra en el DropDownList
-            ddlEspecialidad.DataBind();
+             EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
+             ddlEspecialidad.DataSource = especialidadNegocio.Listar();
+             ddlEspecialidad.DataValueField = "Id";       // Valor que se guarda (ID de la especialidad)
+             ddlEspecialidad.DataTextField = "Descripcion"; // Texto que se muestra en el DropDownList
+             ddlEspecialidad.DataBind();
         }
     }
 }
