@@ -14,21 +14,41 @@ namespace tp_cuatrimestral_equipo_12B
         public List<Paciente> listaPaciente;
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["TipoUsuario"] != null && Session["TipoUsuario"].ToString() == "Médico")
+            try
             {
-                Session.Add("error", "Tenes que tener permisos de Administrador o Recepcionista para ver esta pantalla.");
-                Response.Redirect("Error.aspx", false);
-            }
 
-            if (Session["TipoUsuario"] == null)
+
+                if (Session["TipoUsuario"] != null && Session["TipoUsuario"].ToString() == "Médico")
+                {
+                    Session.Add("error", "Tenes que tener permisos de Administrador o Recepcionista para ver esta pantalla.");
+                    Response.Redirect("Error.aspx", false);
+                }
+
+                if (Session["TipoUsuario"] == null)
+                {
+                    Session.Add("error", "Debes loguearte para ingresar.");
+                    Response.Redirect("Error.aspx", false);
+                }
+
+                if (!IsPostBack && Request["eliminar"] != null)
+                {
+                    int idEliminar;
+                    if (int.TryParse(Request["eliminar"], out idEliminar))
+                    {
+                        PacienteNegocio pacienteNegocio = new PacienteNegocio();
+                        pacienteNegocio.eliminarPaciente(idEliminar);
+                    }
+                }
+
+                ///se carga la lista actualizada por primera vez o despues de una eliminacion
+                PacienteNegocio negocio = new PacienteNegocio();
+                listaPaciente = negocio.ListarPacientes();
+            }
+            catch (Exception ex)
             {
-                Session.Add("error", "Debes loguearte para ingresar.");
-                Response.Redirect("Error.aspx", false);
+
+                throw ex;
             }
-
-            PacienteNegocio pacienteNegocio = new PacienteNegocio();
-            listaPaciente = pacienteNegocio.ListarPacientes();
-
         }
 
         protected void btnNuevoPaciente_Click(object sender, EventArgs e)
