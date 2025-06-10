@@ -97,7 +97,7 @@
                                 <img src="images/icon_edit.svg" alt="Editar" class="action-icon-img" />
                             </a>
 
-
+ <%-- 
                             <!-- Ícono Eliminar -->
                             <img src="images/icon_delete.svg" alt="Eliminar" class="action-icon-img" style="cursor: pointer"
                                 data-bs-toggle="modal" data-bs-target="#eliminarModal_<%= paciente.Id %>" />
@@ -123,7 +123,7 @@
                                 </div>
                             </div>
 
-
+     Ícono Editar --%>
 
                             <%-- Ícono Dar Turno --%>
                             <a href="#" class="action-link" title="Dar Turno" onclick="alert('Dar turno a ID: <%= paciente.Nombre %>'); return false;">
