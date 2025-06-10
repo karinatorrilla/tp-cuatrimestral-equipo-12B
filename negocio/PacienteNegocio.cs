@@ -19,10 +19,10 @@ namespace negocio
 
             try
             {
-                string consulta = "SELECT IDPaciente, Nombre, Apellido, Dni, Email, FechaNacimiento, ObraSocial FROM PACIENTES where Habilitado = 1  ";
+                string consulta = "SELECT IDPaciente, Nombre, Apellido, Dni, Email, FechaNacimiento, ObraSocial FROM PACIENTES ";
                 if (id > 0)
                 {
-                    consulta += " AND WHERE IDPaciente = " + id;
+                    consulta += " WHERE IDPaciente = " + id;
                 }
 
                 datos.setearConsulta(consulta);
@@ -113,28 +113,6 @@ namespace negocio
                 datos.cerrarConexion();
             }
 
-        }
-
-        public void eliminarPaciente(int idPaciente)
-        {
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta("Update PACIENTES set Habilitado=0 WHERE IDPaciente = @id");
-                datos.setearParametro("@id", idPaciente);
-              
-                datos.ejecutarAccion();
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
         }
     }
 }

@@ -14,10 +14,6 @@ namespace tp_cuatrimestral_equipo_12B
         public List<Paciente> listaPaciente;
         protected void Page_Load(object sender, EventArgs e)
         {
-            try
-            {
-
-           
             if (Session["TipoUsuario"] != null && Session["TipoUsuario"].ToString() == "Médico")
             {
                 Session.Add("error", "Tenes que tener permisos de Administrador o Recepcionista para ver esta pantalla.");
@@ -30,35 +26,14 @@ namespace tp_cuatrimestral_equipo_12B
                 Response.Redirect("Error.aspx", false);
             }
 
-            if (!IsPostBack && Request["eliminar"] != null)
-            {
-                int idEliminar;
-                if (int.TryParse(Request["eliminar"], out idEliminar))
-                {
-                    PacienteNegocio pacienteNegocio = new PacienteNegocio();
-                    pacienteNegocio.eliminarPaciente(idEliminar); 
-                }
-            }
+            PacienteNegocio pacienteNegocio = new PacienteNegocio();
+            listaPaciente = pacienteNegocio.ListarPacientes();
 
-           ///se carga la lista actualizada por primera vez o despues de una eliminacion
-            PacienteNegocio negocio = new PacienteNegocio();
-            listaPaciente = negocio.ListarPacientes();
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
         }
-
 
         protected void btnNuevoPaciente_Click(object sender, EventArgs e)
         {
             Response.Redirect("FormularioPaciente.aspx", false);
         }
-
- 
-
-
     }
 }
