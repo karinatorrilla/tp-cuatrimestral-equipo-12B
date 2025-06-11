@@ -13,6 +13,7 @@
         <h1 class="mb-4">Agregar médico</h1>
         <%} %>
     </div>
+    <div id="divMensaje" runat="server" class="alert" visible="false"></div>
 
     <div class="p-4 rounded bg-white shadow-sm">
         <%-- Sección de Datos Personales --%>
@@ -69,7 +70,7 @@
             <%-- Matrícula --%>
             <div class="col-md-4">
                 <label for="txtMatricula" class="form-label font-weight-bold text-dark">Matrícula</label>
-                <asp:TextBox runat="server" ID="txtMatricula" CssClass="form-control" placeholder="MP12345" />
+                <asp:TextBox runat="server" ID="txtMatricula" CssClass="form-control" placeholder="1000" />
             </div>
 
             <%-- Especialidad (DropDownList) --%>
@@ -80,7 +81,7 @@
         </div>
         <%-- Contenedor de Botones --%>
         <div class="d-flex justify-content-center mt-4">
-            <a href="Medicos.aspx" class="btn btn-primary px-5 me-3">Guardar</a>
+            <asp:Button Text="Guardar" ID="btnGuardar" CssClass="btn btn-primary px-5 me-3" runat="server" OnClick="btnGuardar_Click" />
             <a href="Medicos.aspx" class="btn btn-secondary px-5">Volver</a>
         </div>
     </div>

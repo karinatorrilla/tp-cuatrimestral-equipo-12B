@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Dashboard.Master" AutoEventWireup="true" CodeBehind="Medicos.aspx.cs" Inherits="tp_cuatrimestral_equipo_12B.Medicos" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -36,12 +37,17 @@
                 </thead>
                 <tbody>
                     <%-- Cuerpo del listado --%>
+                    <% if (listaMedico != null && listaMedico.Any())
+                        { %>
+                    <% foreach (var medico in listaMedico)
+                        { %>
                     <tr>
-                        <td>1</td>
-                        <td>Sebastian</td>
-                        <td>Perez</td>
-                        <td>Cardíologo</td>
+                        <td><%= medico.Id %></td>
+                        <td><%= medico.Nombre %></td>
+                        <td><%= medico.Apellido %></td>
+                        <td><%= medico.EspecialidadSeleccionada.Descripcion %></td>
                         <td class="d-flex justify-content-center align-items-center gap-3">
+
                             <%-- Ícono Ver --%>
                             <a href="#" class="action-link" title="Ver Detalles" onclick="alert('Ver médico ID: 1'); return false;">
                                 <img src="images/icon_view.svg" alt="Ver" class="action-icon-img" />
@@ -56,6 +62,14 @@
                             </a>
                         </td>
                     </tr>
+                    <% } %>
+                    <% }
+                        else
+                        { %>
+                    <tr>
+                        <td colspan="8" class="text-center py-4">No hay médicos cargados.</td>
+                    </tr>
+                    <% } %>
                 </tbody>
             </table>
         </div>

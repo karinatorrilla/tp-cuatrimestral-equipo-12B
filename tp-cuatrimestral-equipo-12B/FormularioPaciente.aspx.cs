@@ -64,10 +64,10 @@ namespace tp_cuatrimestral_equipo_12B
                     divMensaje.Visible = true;
                     return;
                 }
-                pacientenuevo.FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text);              
+                pacientenuevo.FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text);
                 pacientenuevo.Direccion = txtDireccion.Text;
                 pacientenuevo.Email = txtEmail.Text;
-                pacientenuevo.ObraSocial = ddlObraSocial.SelectedItem.Text;                  
+                pacientenuevo.ObraSocial = ddlObraSocial.SelectedItem.Text;
 
                 if (Request.QueryString["id"] != null)
                 {
@@ -101,12 +101,6 @@ namespace tp_cuatrimestral_equipo_12B
                 divMensaje.InnerText = "Ocurrió un error al procesar la operación.";
                 divMensaje.Visible = true;
             }
-
-
-
-
-
-
 
         }
     }

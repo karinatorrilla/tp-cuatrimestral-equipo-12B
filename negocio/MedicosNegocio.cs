@@ -17,10 +17,12 @@ namespace negocio
 
             try
             {
-                string consulta = "SELECT IDMedico, Nombre, Apellido, IDEspecialidad, Matricula FROM MEDICOS ";
+                string consulta = "SELECT M.IDMedico, M.Nombre, M.Apellido, M.IDEspecialidad, M.Matricula, E.Nombre " +
+                    "AS NombreEspecialidad FROM MEDICOS M " +
+                    "INNER JOIN ESPECIALIDADES E ON M.IDEspecialidad = E.IDEspecialidad";
                 if (id > 0)
                 {
-                    consulta += "WHERE IDMedico = " + id;
+                    consulta += "WHERE M.IDMedico = " + id;
                 }
 
                 datos.setearConsulta(consulta);
@@ -36,9 +38,11 @@ namespace negocio
                     //aux.Telefono = (int)datos.Lector["Telefono"]; to-do en bd
                     //aux.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"]; to-do en bd
                     //aux.Direccion = (string)datos.Lector["Direccion"]; to-do en bd
+                    aux.EspecialidadSeleccionada = new Especialidad();
                     aux.EspecialidadSeleccionada.Id = (int)datos.Lector["IDEspecialidad"];
+                    aux.EspecialidadSeleccionada.Descripcion = (string)datos.Lector["NombreEspecialidad"];
                     aux.Matricula = (int)datos.Lector["Matricula"];
-                                    
+
                     lista.Add(aux);
                 }
 
@@ -73,7 +77,7 @@ namespace negocio
                 //datos.setearParametro("@Direccion", nuevo.Direccion); to-do en bd
                 datos.setearParametro("@IDEspecialidad", nuevo.EspecialidadSeleccionada.Id);
                 datos.setearParametro("@Matricula", nuevo.Matricula);
-               
+
                 datos.ejecutarAccion();
                 return true;
             }
@@ -104,7 +108,7 @@ namespace negocio
                 //datos.setearParametro("@FechaNacimiento", mod.FechaNacimiento); to-do en bd
                 //datos.setearParametro("@Direccion", mod.Direccion); to-do en bd
                 datos.setearParametro("@idespecialidad", mod.EspecialidadSeleccionada.Id);
-                datos.setearParametro("@matricula", mod.Matricula);             
+                datos.setearParametro("@matricula", mod.Matricula);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)

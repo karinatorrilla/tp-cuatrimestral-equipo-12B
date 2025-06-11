@@ -53,15 +53,11 @@
                         <%-- Hardcodeado  --%>
                         <td><%= paciente.ObraSocial %></td>
                         <td class="d-flex justify-content-center align-items-center gap-3">
-                           
+
                             <%-- Ícono Ver --%>
-                           <a href="#" class="action-link" title="Ver Detalles" onclick="alert('Ver paciente ID: <%= paciente.Id %>'); return false;">
+                            <a href="#" class="action-link" title="Ver Detalles" onclick="alert('Ver paciente ID: <%= paciente.Id %>'); return false;">
                                 <img src="images/icon_view.svg" alt="Ver" class="action-icon-img" />
                             </a>
-
-                          
-
-
 
                             <%-- Ícono Editar --%>
                             <a href="FormularioPaciente.aspx?id=<%= paciente.Id %>" class="action-link" title="Editar Paciente">
