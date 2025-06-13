@@ -53,7 +53,7 @@
                                 <img src="images/icon_view.svg" alt="Ver" class="action-icon-img" />
                             </a>
                             <%-- Ícono Editar --%>
-                            <a href="#" class="action-link" title="Editar Médico" onclick="alert('Editar médico ID: 1'); return false;">
+                            <a href="FormularioMedico.aspx?id=<%= medico.Id %>" class="action-link" title="Editar Médico">
                                 <img src="images/icon_edit.svg" alt="Editar" class="action-icon-img" />
                             </a>
                             <%-- Ícono Eliminar --%>

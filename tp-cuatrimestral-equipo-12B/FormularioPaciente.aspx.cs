@@ -38,10 +38,8 @@ namespace tp_cuatrimestral_equipo_12B
                 txtDni.Text = seleccionado.Dni.ToString();
                 txtEmail.Text = seleccionado.Email;
                 txtFechaNacimiento.Text = seleccionado.FechaNacimiento.ToString(("yyyy-MM-dd"));
-                //to do --> txtDireccion.Text = seleccionado.Direccion;              
+                // to-do --> txtDireccion.Text = seleccionado.Direccion;              
                 ddlObraSocial.SelectedValue = seleccionado.ObraSocial;
-
-
             }
         }
 

@@ -17,8 +17,8 @@ namespace negocio
             lista.Add(new Especialidad { Id = 1, Descripcion = "Cardiología" });
             lista.Add(new Especialidad { Id = 2, Descripcion = "Pediatría" });
             lista.Add(new Especialidad { Id = 3, Descripcion = "Dermatología" });
-            lista.Add(new Especialidad { Id = 4, Descripcion = "Odontología" });
-            lista.Add(new Especialidad { Id = 5, Descripcion = "Oftalmología" });
+            lista.Add(new Especialidad { Id = 4, Descripcion = "Neurología" });
+            lista.Add(new Especialidad { Id = 5, Descripcion = "Ginecología" });
             return lista;
         }
 

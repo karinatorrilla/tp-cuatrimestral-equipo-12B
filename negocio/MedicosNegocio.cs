@@ -19,7 +19,7 @@ namespace negocio
             {
                 string consulta = "SELECT M.IDMedico, M.Nombre, M.Apellido, M.IDEspecialidad, M.Matricula, E.Nombre " +
                     "AS NombreEspecialidad FROM MEDICOS M " +
-                    "INNER JOIN ESPECIALIDADES E ON M.IDEspecialidad = E.IDEspecialidad";
+                    "INNER JOIN ESPECIALIDADES E ON M.IDEspecialidad = E.IDEspecialidad ";
                 if (id > 0)
                 {
                     consulta += "WHERE M.IDMedico = " + id;

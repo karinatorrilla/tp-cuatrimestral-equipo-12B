@@ -24,6 +24,26 @@ namespace tp_cuatrimestral_equipo_12B
                 ddlEspecialidad.DataBind();
             }
 
+            ///Config. para modificar médico
+            if (Request.QueryString["id"] != null && !IsPostBack)
+            {
+                MedicosNegocio negocio = new MedicosNegocio();
+                List<Medico> lista = negocio.ListarMedicos(int.Parse(Request.QueryString["id"]));
+                Medico seleccionado = lista[0];
+
+                //precarga de datos
+
+                txtNombre.Text = seleccionado.Nombre;
+                txtApellido.Text = seleccionado.Apellido;
+                // to-do --> txtDni.Text = seleccionado.Dni.ToString();
+                // to-do --> txtEmail.Text = seleccionado.Email;
+                // to-do --> txtTelefono.Text = seleccionado.Telefono.ToString();
+                // to-do --> txtFechaNacimiento.Text = seleccionado.FechaNacimiento.ToString(("yyyy-MM-dd"));
+                // to-do --> txtDireccion.Text = seleccionado.Direccion;
+                txtMatricula.Text = seleccionado.Matricula.ToString();
+                ddlEspecialidad.SelectedValue = seleccionado.EspecialidadSeleccionada.Id.ToString();
+            }
+
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
@@ -54,18 +74,28 @@ namespace tp_cuatrimestral_equipo_12B
                 mediconuevo.EspecialidadSeleccionada = new Especialidad();
                 mediconuevo.EspecialidadSeleccionada.Id = int.Parse(ddlEspecialidad.SelectedValue);
 
-                if (negocio.agregarMedico(mediconuevo))
+                if (Request.QueryString["id"] != null) //modificación
                 {
+                    mediconuevo.Id = int.Parse(Request.QueryString["id"].ToString()); //le paso el id para modificar
+                    negocio.modificarMedico(mediconuevo);
                     divMensaje.Attributes["class"] = "alert alert-success";
-                    divMensaje.InnerText = "Operación realizada con éxito.";
+                    divMensaje.InnerText = "Modificación realizada con éxito.";
+                    divMensaje.Visible = true;
                 }
-                else
+                else //agregar
                 {
-                    divMensaje.Attributes["class"] = "alert alert-danger";
-                    divMensaje.InnerText = "Ocurrió un error al procesar la operación.";
+                    if (negocio.agregarMedico(mediconuevo))
+                    {
+                        divMensaje.Attributes["class"] = "alert alert-success";
+                        divMensaje.InnerText = "Operación realizada con éxito.";
+                    }
+                    else
+                    {
+                        divMensaje.Attributes["class"] = "alert alert-danger";
+                        divMensaje.InnerText = "Ocurrió un error al procesar la operación.";
+                    }
+                    divMensaje.Visible = true;
                 }
-                divMensaje.Visible = true;
-
             }
             catch (Exception ex)
             {
