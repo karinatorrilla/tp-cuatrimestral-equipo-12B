@@ -8,7 +8,7 @@ namespace dominio
 {
     public class Paciente : Persona     //hereda propiedades de persona para cargar datos
     {
-        public string ObraSocial { get; set; }
+        public string ObraSocial { get; set; } // VER SI PUEDE SER SELECTOR, BUSCAR API
 
         public string Observaciones { get; set; } ////////////////////////
     }

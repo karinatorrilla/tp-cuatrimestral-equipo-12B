@@ -29,13 +29,15 @@ namespace tp_cuatrimestral_equipo_12B
                 if (negocio.Loguear(usuario))
                 {
                     Session.Add("usuario", usuario);
-                    Session.Add("TipoUsuario", usuario.Tipo.NombreTipo);
+                    Session.Add("TipoUsuario", usuario.TipoUsuario);
+                    lblErrorLogin.Visible = false;
                     Response.Redirect("Inicio.aspx", false);
                 }
                 else
                 {
+                    lblErrorLogin.Visible = true;
                     Session.Add("error", "Usuario o contraseña incorrectos. Intentelo nuevamente.");
-                    Response.Redirect("Error.aspx", false);
+                    
                 }
 
 
@@ -43,7 +45,8 @@ namespace tp_cuatrimestral_equipo_12B
             }
             catch (Exception ex)
             {
-
+                lblErrorLogin.Text = "Ocurrió un error inesperado. Por favor, intente de nuevamente más tarde.";
+                lblErrorLogin.Visible = true;
                 Session.Add("error", ex.ToString());
             }
 

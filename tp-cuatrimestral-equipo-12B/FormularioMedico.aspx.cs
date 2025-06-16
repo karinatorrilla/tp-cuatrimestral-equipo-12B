@@ -54,7 +54,7 @@ namespace tp_cuatrimestral_equipo_12B
             {
                 mediconuevo.Nombre = txtNombre.Text;
                 mediconuevo.Apellido = txtApellido.Text;
-                mediconuevo.Dni = int.Parse(txtDni.Text);
+                mediconuevo.Documento = int.Parse(txtDni.Text);
                 mediconuevo.Email = txtEmail.Text;
                 mediconuevo.Telefono = txtTelefono.Text;
 
@@ -69,7 +69,7 @@ namespace tp_cuatrimestral_equipo_12B
                 }
                 mediconuevo.FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text);
                 //
-                mediconuevo.Direccion = txtDireccion.Text;
+                mediconuevo.Calle = txtDireccion.Text;
                 mediconuevo.Matricula = int.Parse(txtMatricula.Text);
                 mediconuevo.EspecialidadSeleccionada = new Especialidad();
                 mediconuevo.EspecialidadSeleccionada.Id = int.Parse(ddlEspecialidad.SelectedValue);

@@ -30,14 +30,14 @@ namespace negocio
                 while (datos.Lector.Read())
                 {
                     Medico aux = new Medico();
-                    aux.Id = (int)datos.Lector["IDMedico"];
+                    aux.Id = (int)datos.Lector["Id"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     aux.Apellido = (string)datos.Lector["Apellido"];
-                    //aux.Dni = (int)datos.Lector["Dni"]; to-do en bd
+                    //aux.Documento = (int)datos.Lector["Documento"]; to-do en bd
                     //aux.Email = (string)datos.Lector["Email"]; to-do en bd
                     //aux.Telefono = (int)datos.Lector["Telefono"]; to-do en bd
                     //aux.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"]; to-do en bd
-                    //aux.Direccion = (string)datos.Lector["Direccion"]; to-do en bd
+                    //aux.Calle = (string)datos.Lector["Calle"]; to-do en bd
                     aux.EspecialidadSeleccionada = new Especialidad();
                     aux.EspecialidadSeleccionada.Id = (int)datos.Lector["IDEspecialidad"];
                     aux.EspecialidadSeleccionada.Descripcion = (string)datos.Lector["NombreEspecialidad"];
@@ -70,11 +70,11 @@ namespace negocio
 
                 datos.setearParametro("@Nombre", nuevo.Nombre);
                 datos.setearParametro("@Apellido", nuevo.Apellido);
-                //datos.setearParametro("@Dni", nuevo.Dni); to-do en bd
+                //datos.setearParametro("@Documento", nuevo.Documento); to-do en bd
                 //datos.setearParametro("@Email", nuevo.Email); to-do en bd
                 //datos.setearParametro("@Telefono", nuevo.Telefono); to-do en bd
                 //datos.setearParametro("@FechaNacimiento", nuevo.FechaNacimiento); to-do en bd
-                //datos.setearParametro("@Direccion", nuevo.Direccion); to-do en bd
+                //datos.setearParametro("@Calle", nuevo.Calle); to-do en bd
                 datos.setearParametro("@IDEspecialidad", nuevo.EspecialidadSeleccionada.Id);
                 datos.setearParametro("@Matricula", nuevo.Matricula);
 
@@ -102,11 +102,11 @@ namespace negocio
                 datos.setearParametro("@id", mod.Id);
                 datos.setearParametro("@nombre", mod.Nombre);
                 datos.setearParametro("@apellido", mod.Apellido);
-                //datos.setearParametro("@Dni", mod.Dni); to-do en bd
+                //datos.setearParametro("@Documento", mod.Documento); to-do en bd
                 //datos.setearParametro("@Email", mod.Email); to-do en bd
                 //datos.setearParametro("@Telefono", mod.Telefono); to-do en bd
                 //datos.setearParametro("@FechaNacimiento", mod.FechaNacimiento); to-do en bd
-                //datos.setearParametro("@Direccion", mod.Direccion); to-do en bd
+                //datos.setearParametro("@Calle", mod.Calle); to-do en bd
                 datos.setearParametro("@idespecialidad", mod.EspecialidadSeleccionada.Id);
                 datos.setearParametro("@matricula", mod.Matricula);
                 datos.ejecutarAccion();
@@ -128,7 +128,7 @@ namespace negocio
 
             try
             {
-                datos.setearConsulta("Update MEDICOS set Habilitado = 0 WHERE IDMedico = @id"); //to-do HABILITADO en BD
+                datos.setearConsulta("Update MEDICOS set Habilitado = 0 WHERE Id = @id"); //to-do HABILITADO en BD
                 datos.setearParametro("@id", idMedico);
 
                 datos.ejecutarAccion();

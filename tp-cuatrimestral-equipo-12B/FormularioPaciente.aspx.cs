@@ -35,7 +35,7 @@ namespace tp_cuatrimestral_equipo_12B
 
                 txtNombre.Text = seleccionado.Nombre;
                 txtApellido.Text = seleccionado.Apellido;
-                txtDni.Text = seleccionado.Dni.ToString();
+                txtDni.Text = seleccionado.Documento.ToString();
                 txtEmail.Text = seleccionado.Email;
                 txtFechaNacimiento.Text = seleccionado.FechaNacimiento.ToString(("yyyy-MM-dd"));
                 // to-do --> txtDireccion.Text = seleccionado.Direccion;              
@@ -51,7 +51,7 @@ namespace tp_cuatrimestral_equipo_12B
             {
                 pacientenuevo.Nombre = txtNombre.Text;
                 pacientenuevo.Apellido = txtApellido.Text;
-                pacientenuevo.Dni = int.Parse(txtDni.Text);
+                pacientenuevo.Documento = int.Parse(txtDni.Text);
 
                 //validacion de fecha nacimiento para que no sea fecha futura 
                 DateTime fechaNacimiento;
@@ -63,7 +63,7 @@ namespace tp_cuatrimestral_equipo_12B
                     return;
                 }
                 pacientenuevo.FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text);
-                pacientenuevo.Direccion = txtDireccion.Text;
+                pacientenuevo.Calle = txtDireccion.Text;
                 pacientenuevo.Email = txtEmail.Text;
                 pacientenuevo.ObraSocial = ddlObraSocial.SelectedItem.Text;
 

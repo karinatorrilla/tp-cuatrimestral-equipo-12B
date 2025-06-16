@@ -19,10 +19,10 @@ namespace negocio
 
             try
             {
-                string consulta = "SELECT IDPaciente, Nombre, Apellido, Dni, Email, FechaNacimiento, ObraSocial FROM PACIENTES where Habilitado = 1 ";
+                string consulta = "SELECT Id, Nombre, Apellido, Documento, Email, FechaNacimiento, ObraSocial FROM PACIENTES where Habilitado = 1 ";
                 if (id > 0)
                 {
-                    consulta += "AND IDPaciente = " + id;
+                    consulta += "AND Id = " + id;
                 }
 
                 datos.setearConsulta(consulta);
@@ -33,10 +33,10 @@ namespace negocio
                     aux.Id = (int)datos.Lector["IDPaciente"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     aux.Apellido = (string)datos.Lector["Apellido"];
-                    aux.Dni = (int)datos.Lector["Dni"];
+                    aux.Documento = (int)datos.Lector["Documento"];
                     aux.Email = (string)datos.Lector["Email"];
                     aux.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
-                    //aux.Direccion = (string)datos.Lector["Direccion"];
+                    //aux.Calle = (string)datos.Lector["Calle"];
                     aux.ObraSocial = (string)datos.Lector["ObraSocial"];
 
 
@@ -62,12 +62,12 @@ namespace negocio
 
             try
             {
-                datos.setearConsulta("INSERT INTO PACIENTES (Nombre, Apellido, DNI, Email, FechaNacimiento, ObraSocial)" +
-                 "VALUES (@Nombre, @Apellido, @DNI, @Email, @FechaNacimiento, @ObraSocial);");
+                datos.setearConsulta("INSERT INTO PACIENTES (Nombre, Apellido, Documento, Email, FechaNacimiento, ObraSocial)" +
+                 "VALUES (@Nombre, @Apellido, @Documento, @Email, @FechaNacimiento, @ObraSocial);");
 
                 datos.setearParametro("@Nombre", nuevo.Nombre);
                 datos.setearParametro("@Apellido", nuevo.Apellido);
-                datos.setearParametro("@DNI", nuevo.Dni);
+                datos.setearParametro("@Documento", nuevo.Documento);
                 datos.setearParametro("@Email", nuevo.Email);
                 datos.setearParametro("@FechaNacimiento", nuevo.FechaNacimiento);
                 datos.setearParametro("@ObraSocial", nuevo.ObraSocial);
@@ -92,11 +92,11 @@ namespace negocio
 
             try
             {
-                datos.setearConsulta("Update PACIENTES set Nombre = @nombre, Apellido = @apellido, DNI = @dni, Email = @email, FechaNacimiento = @fechanacimiento, ObraSocial = @obrasocial WHERE IDPaciente = @id");
+                datos.setearConsulta("Update PACIENTES set Nombre = @nombre, Apellido = @apellido, Documento = @Documento, Email = @email, FechaNacimiento = @fechanacimiento, ObraSocial = @obrasocial WHERE IDPaciente = @id");
                 datos.setearParametro("@id", mod.Id);
                 datos.setearParametro("@Nombre", mod.Nombre);
                 datos.setearParametro("@Apellido", mod.Apellido);
-                datos.setearParametro("@DNI", mod.Dni);
+                datos.setearParametro("@Documento", mod.Documento);
                 datos.setearParametro("@Email", mod.Email);
                 datos.setearParametro("@FechaNacimiento", mod.FechaNacimiento);
                 datos.setearParametro("@ObraSocial", mod.ObraSocial);
@@ -119,7 +119,7 @@ namespace negocio
 
             try
             {
-                datos.setearConsulta("Update PACIENTES set Habilitado=0 WHERE IDPaciente = @id");
+                datos.setearConsulta("Update PACIENTES set Habilitado=0 WHERE Id = @id");
                 datos.setearParametro("@id", idPaciente);
 
                 datos.ejecutarAccion();

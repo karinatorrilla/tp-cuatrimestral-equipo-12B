@@ -17,12 +17,6 @@ namespace tp_cuatrimestral_equipo_12B
         {
 
 
-            if (Session["TipoUsuario"] != null && Session["TipoUsuario"].ToString() == "Médico")
-            {
-                Session.Add("error", "Tenes que tener permisos de Administrador o Recepcionista para ver esta pantalla.");
-                Response.Redirect("Error.aspx", false);
-            }
-
             if (Session["TipoUsuario"] == null)
             {
                 Session.Add("error", "Debes loguearte para ingresar.");
@@ -31,8 +25,8 @@ namespace tp_cuatrimestral_equipo_12B
 
 
             ///se carga la lista actualizada por primera vez o despues de una eliminacion
-            MedicosNegocio negocio = new MedicosNegocio();
-            listaMedico = negocio.ListarMedicos();
+            //MedicosNegocio negocio = new MedicosNegocio();
+            //listaMedico = negocio.ListarMedicos();
 
         }
 

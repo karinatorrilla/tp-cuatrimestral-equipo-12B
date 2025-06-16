@@ -15,18 +15,16 @@ namespace negocio
 
             try
             {
-                datos.setearConsulta("select U.IDUsuario,TU.Nombre from USUARIOS AS U INNER JOIN TIPOUSUARIOS AS TU ON U.IdTipoUsuario=TU.IdTipoUsuario where U.Usuario=@Nombre and Pass=@Password");
-                datos.setearParametro("@Nombre", usuario.Nombre);
+                datos.setearConsulta("select Id, TipoUser from USUARIOS where usuario = @user and Pass = @Password");
+                datos.setearParametro("@user", usuario.User);
                 datos.setearParametro("@Password", usuario.Password);
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
                 {
-                    usuario.Id = (int)datos.Lector["IDUsuario"];
+                    usuario.Id = (int)datos.Lector["Id"];
 
-                    usuario.Tipo = new TipoUsuario();
-
-                    usuario.Tipo.NombreTipo = (string)datos.Lector["Nombre"];
+                    usuario.TipoUsuario = (int)(datos.Lector["TipoUser"]) == 1 ? TipoUsuario.ADMIN : ((int)(datos.Lector["TipoUser"]) == 2 ? TipoUsuario.RECEP : TipoUsuario.MED);
 
                     return true;
 

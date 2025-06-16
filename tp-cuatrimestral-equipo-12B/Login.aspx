@@ -23,6 +23,11 @@
                     <label for="txtPassword" class="form-label">Contraseña</label>
                     <asp:TextBox runat="server" CssClass="form-control" ID="txtPassword" TextMode="Password" />
                 </div>
+                <%-- Muestra label de error --%>
+                <div class="text-center mt-3 mb-4">
+                    <asp:Label ID="lblErrorLogin" runat="server" Text="Error al ingresar los datos, usuario o contraseña incorrecta" CssClass="text-danger" Visible="false" />
+                </div>
+
                 <div class="d-grid gap-2">
                     <asp:Button Text="Ingresar" CssClass="btn btn-primary btn-lg" ID="btnLogin" OnClick="btnLogin_Click" runat="server" />
                 </div>

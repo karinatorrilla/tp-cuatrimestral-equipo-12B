@@ -30,7 +30,7 @@
                         <th scope="col">ID</th>
                         <th scope="col">NOMBRE</th>
                         <th scope="col">APELLIDO</th>
-                        <th scope="col">DNI</th>
+                        <th scope="col">DOCUMENTO</th>
                         <th scope="col">EMAIL</th>
                         <th scope="col">DIRECCIÓN</th>
                         <th scope="col">OBRA SOCIAL</th>
@@ -47,7 +47,7 @@
                         <td><%= paciente.Id %></td>
                         <td><%= paciente.Nombre %></td>
                         <td><%= paciente.Apellido %></td>
-                        <td><%= paciente.Dni %></td>
+                        <td><%= paciente.Documento %></td>
                         <td><%= paciente.Email %></td>
                         <td>DIRECCIÓN</td>
                         <%-- Hardcodeado  --%>
@@ -78,7 +78,7 @@
                                         </div>
                                         <div class="modal-body">
                                             ¿Estás seguro que deseas eliminar al paciente 
-                      Nombre:<strong><%= paciente.Nombre %> <%= paciente.Apellido %> DNI:<%= paciente.Dni %></strong>?
+                      Nombre:<strong><%= paciente.Nombre %> <%= paciente.Apellido %> DNI:<%= paciente.Documento %></strong>?
                                         </div>
                                         <div class="modal-footer">
                                             <a href="Pacientes.aspx?eliminar=<%= paciente.Id %>" class="btn btn-danger">Eliminar</a>

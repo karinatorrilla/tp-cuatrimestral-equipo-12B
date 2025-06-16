@@ -25,24 +25,20 @@
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="Inicio.aspx">Inicio</a>
                         </li>
-                        <%if (Session["TipoUsuario"] != null && Session["TipoUsuario"].ToString() != "Médico")
-                            { %>
                         <li class="nav-item">
                             <a class="nav-link" href="Pacientes.aspx">Pacientes</a>
                         </li>
+                        <%if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] != 3)
+                            { %>
+                        
                         <li class="nav-item">
                             <a class="nav-link" href="Medicos.aspx">Médicos</a>
                         </li>
                         <%   }%>
-                        <%if (Session["TipoUsuario"] != null)
-                                if (Session["TipoUsuario"].ToString() == "Recepcionista" ||
-                                    Session["TipoUsuario"].ToString() == "Médico" ||
-                                    Session["TipoUsuario"].ToString() == "Administrador")
-                                { %>
+
                         <li class="nav-item">
                             <a class="nav-link" href="Turnos.aspx">Turnos</a>
                         </li>
-                        <% } %>
                         <%--<li class="nav-item">
                             <a class="nav-link" href="Especialidades.aspx">Especialidades</a>
                         </li>--%>
