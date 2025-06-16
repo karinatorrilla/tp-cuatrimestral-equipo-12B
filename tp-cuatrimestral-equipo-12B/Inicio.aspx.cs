@@ -13,12 +13,25 @@ namespace tp_cuatrimestral_equipo_12B
         {
             if (Session["TipoUsuario"] != null)
             {
-                lblTipoUsuario.Text = "Usted está logueado como " + Session["TipoUsuario"].ToString() + ".";
+                lblTipoUsuario.Text = "Bienvenido " + Session["TipoUsuario"].ToString() + "!";
             }
             else
             {
                 Session.Add("error", "Debes loguearte para ingresar.");               
                 Response.Redirect("Error.aspx", false);
+            }
+
+            if (!IsPostBack)
+            {
+                
+                ddlFiltrarPor.Items.Clear();
+
+                // Añade los items al DropDownList
+                ddlFiltrarPor.Items.Add(new ListItem("Pacientes", "PACIENTE"));
+                ddlFiltrarPor.Items.Add(new ListItem("Médicos", "MEDICO"));
+
+                //Selecciona por defecto
+                ddlFiltrarPor.SelectedIndex = 0;
             }
         }
 

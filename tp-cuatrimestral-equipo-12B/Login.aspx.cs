@@ -28,7 +28,7 @@ namespace tp_cuatrimestral_equipo_12B
 
                 if (negocio.Loguear(usuario))
                 {
-                    Session.Add("usuario", usuario);
+                    Session.Add("Usuario", usuario);
                     Session.Add("TipoUsuario", usuario.TipoUsuario);
                     lblErrorLogin.Visible = false;
                     Response.Redirect("Inicio.aspx", false);

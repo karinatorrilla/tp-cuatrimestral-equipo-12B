@@ -1,5 +1,6 @@
 ﻿html, body {
     height: 100%;
+    background-color: red;
     margin: 0;
     padding: 0;
     overflow: hidden;
@@ -66,4 +67,100 @@
     height: 28px;
     transition: transform 0.2s ease-in-out;
     
+}
+
+.bienvenida-panel {
+    background-color: #e4ecf4;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.bienvenida-texto {
+    flex: 1;
+}
+
+.bienvenida-imagen {
+    flex-shrink: 0;
+    margin-left: 30px;
+}
+
+.bienvenida-imagen img {
+    max-height: 180px;
+    width: auto;
+    border-radius: 8px;
+}
+
+.dashboard-cards {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.dashboard-card {
+    flex: 1;
+    min-width: 80px;
+    max-width: 30%;
+    background-color: #b4bdde;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.dashboard-card img {
+    width: 70px;
+    height: 70px;
+}
+
+.dashboard-card .card-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #3b3e5e;
+}
+
+.dashboard-card .card-title {
+    font-size: 1.2rem;
+    color: #fff;
+    font-weight: bold;
+}
+
+.content-listado-card {
+    background-color: #e4ecf4;
+    height: 400px;
+    display: flex;
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.listado-card {
+    width: 100%;
+}
+
+.listado-table-thead {
+    background-color: #3b3e5e;
+}
+
+.listado-table-thead tr th {
+    color: #fff;
+    font-weight: bold;
+}
+
+.listado-card h3 {
+    margin-bottom: 20px;
+    color: #333;
 }
