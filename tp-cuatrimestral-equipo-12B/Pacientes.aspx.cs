@@ -37,6 +37,22 @@ namespace tp_cuatrimestral_equipo_12B
                 ///se carga la lista actualizada por primera vez o despues de una eliminacion
                 ///PacienteNegocio negocio = new PacienteNegocio();
                 ///listaPaciente = negocio.ListarPacientes();
+                if (!IsPostBack)
+                {
+                    PacienteNegocio negocio = new PacienteNegocio();
+                    listaPaciente = negocio.ListarPacientes();
+
+                    List<ObraSocial> obrasSociales = new ObraSocialNegocio().Listar();
+
+                    // Recorrer la lista de pacientes para enriquecer los datos a mostrar
+                    foreach (var paciente in listaPaciente)
+                    {
+                        // Obtener la descripción de la Obra Social
+                        var os = obrasSociales.FirstOrDefault(x => x.Id == paciente.ObraSocial);
+                        paciente.DescripcionObraSocial = os != null ? os.Descripcion : "-";
+
+                    }
+                }
             }
             catch (Exception ex)
             {

@@ -8,8 +8,10 @@ namespace dominio
 {
     public class Paciente : Persona     //hereda propiedades de persona para cargar datos
     {
-        public string ObraSocial { get; set; } // VER SI PUEDE SER SELECTOR, BUSCAR API
+        public int ObraSocial { get; set; } // VER SI PUEDE SER SELECTOR, BUSCAR API
 
         public string Observaciones { get; set; } ////////////////////////
+
+        public string DescripcionObraSocial { get; set; }
     }
 }

@@ -19,25 +19,34 @@ namespace negocio
 
             try
             {
-                string consulta = "SELECT Id, Nombre, Apellido, Documento, Email, FechaNacimiento, ObraSocial FROM PACIENTES where Habilitado = 1 ";
-                if (id > 0)
-                {
-                    consulta += "AND Id = " + id;
-                }
+                string consulta = "SELECT Id, Nombre, Apellido, Documento, Email, Telefono, Nacionalidad, " +
+                                  "ProvinciaId, LocalidadId, Calle, Altura, CodPostal, Depto, " +
+                                  "FechaNacimiento, ObraSocialId, Observaciones, Habilitado " +
+                                  "FROM PACIENTES WHERE Habilitado = 1 ";
+
 
                 datos.setearConsulta(consulta);
                 datos.ejecutarLectura();
                 while (datos.Lector.Read())
                 {
                     Paciente aux = new Paciente();
-                    aux.Id = (int)datos.Lector["IDPaciente"];
+                    aux.Id = (int)datos.Lector["Id"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     aux.Apellido = (string)datos.Lector["Apellido"];
                     aux.Documento = (int)datos.Lector["Documento"];
                     aux.Email = (string)datos.Lector["Email"];
+                    aux.Telefono = datos.Lector["Telefono"] is DBNull ? null : (string)datos.Lector["Telefono"];
+                    aux.Nacionalidad = datos.Lector["Nacionalidad"] is DBNull ? null : (string)datos.Lector["Nacionalidad"];
+                    aux.Calle = datos.Lector["Calle"] is DBNull ? null : (string)datos.Lector["Calle"];
+                    aux.Altura = datos.Lector["Altura"] is DBNull ? 0 : (int)datos.Lector["Altura"]; 
+                    aux.CodPostal = datos.Lector["CodPostal"] is DBNull ? null : (string)datos.Lector["CodPostal"];
+                    aux.Depto = datos.Lector["Depto"] is DBNull ? null : (string)datos.Lector["Depto"];
                     aux.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
-                    //aux.Calle = (string)datos.Lector["Calle"];
-                    aux.ObraSocial = (string)datos.Lector["ObraSocial"];
+                    aux.ObraSocial = datos.Lector["ObraSocialId"] is DBNull ? 0 : (int)datos.Lector["ObraSocialId"]; 
+                    aux.Observaciones = datos.Lector["Observaciones"] is DBNull ? null : (string)datos.Lector["Observaciones"];
+                    aux.Provincia = datos.Lector["ProvinciaId"] is DBNull ? 0 : (int)datos.Lector["ProvinciaId"];
+                    aux.Localidad = datos.Lector["LocalidadId"] is DBNull ? 0 : (int)datos.Lector["LocalidadId"];
+                    aux.Habilitado = datos.Lector["Habilitado"] is DBNull ? 1 : ((bool)datos.Lector["Habilitado"] ? 1 : 0);
 
 
                     lista.Add(aux);
@@ -62,15 +71,32 @@ namespace negocio
 
             try
             {
-                datos.setearConsulta("INSERT INTO PACIENTES (Nombre, Apellido, Documento, Email, FechaNacimiento, ObraSocial)" +
-                 "VALUES (@Nombre, @Apellido, @Documento, @Email, @FechaNacimiento, @ObraSocial);");
+                datos.setearConsulta("INSERT INTO PACIENTES (Nombre, Apellido, Documento, Email, Telefono, Nacionalidad, " +
+                                     "ProvinciaId, LocalidadId, Calle, Altura, CodPostal, Depto, FechaNacimiento, ObraSocialId, Observaciones, Habilitado) " +
+                                     "VALUES (@Nombre, @Apellido, @Documento, @Email, @Telefono, @Nacionalidad, " +
+                                     "@ProvinciaId, @LocalidadId, @Calle, @Altura, @CodPostal, @Depto, @FechaNacimiento, @ObraSocialId, @Observaciones, @Habilitado);");
 
+                // Setear parámetros para cada campo
                 datos.setearParametro("@Nombre", nuevo.Nombre);
                 datos.setearParametro("@Apellido", nuevo.Apellido);
                 datos.setearParametro("@Documento", nuevo.Documento);
                 datos.setearParametro("@Email", nuevo.Email);
+                datos.setearParametro("@Telefono", nuevo.Telefono);
+                datos.setearParametro("@Nacionalidad", nuevo.Nacionalidad);
+
+                datos.setearParametro("@ProvinciaId", nuevo.Provincia);
+                datos.setearParametro("@LocalidadId", nuevo.Localidad);
+                datos.setearParametro("@Calle", nuevo.Calle);
+                datos.setearParametro("@Altura", nuevo.Altura);
+                datos.setearParametro("@CodPostal", nuevo.CodPostal);
+
+                datos.setearParametro("@Depto", string.IsNullOrEmpty(nuevo.Depto) ? (object)DBNull.Value : nuevo.Depto);
+
                 datos.setearParametro("@FechaNacimiento", nuevo.FechaNacimiento);
-                datos.setearParametro("@ObraSocial", nuevo.ObraSocial);
+                datos.setearParametro("@ObraSocialId", nuevo.ObraSocial);
+                datos.setearParametro("@Observaciones", string.IsNullOrEmpty(nuevo.Observaciones) ? (object)DBNull.Value : nuevo.Observaciones);
+
+                datos.setearParametro("@Habilitado", nuevo.Habilitado);
 
                 datos.ejecutarAccion();
                 return true;

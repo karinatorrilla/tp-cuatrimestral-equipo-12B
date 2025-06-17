@@ -69,16 +69,12 @@
                 <asp:TextBox runat="server" ID="txtNacionalidad" CssClass="form-control" placeholder="Argentina" required="true" />
             </div>
 
-            <%--  Obra social >
-            <div class="col-md-3">
-                <label for="txtObraSocial" class="form-label font-weight-bold text-dark">Obra Social</label>
-                <asp:TextBox runat="server" ID="txtObraSocial" CssClass="form-control" placeholder="Galeno" required="true"/>
-            </div>--%>
-
             <%-- Obra Social (DropDownList) --%>
             <div class="col-md-3">
                 <label for="ddlObraSocial" class="form-label font-weight-bold text-dark">Obra Social</label>
-                <asp:DropDownList ID="ddlObraSocial" runat="server" CssClass="form-control"></asp:DropDownList>
+                <asp:DropDownList ID="ddlObraSocial" runat="server" CssClass="form-control" AppendDataBoundItems="true" required="true">
+                    <asp:ListItem Text="Seleccione Obra Social" Value=""></asp:ListItem>
+                </asp:DropDownList>
             </div>
 
         </div>

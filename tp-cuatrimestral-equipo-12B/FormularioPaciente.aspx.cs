@@ -23,7 +23,7 @@ namespace tp_cuatrimestral_equipo_12B
                 // Cargar obra social en el DropDownList
                 ObraSocialNegocio obraSocialNegocio = new ObraSocialNegocio();
                 ddlObraSocial.DataSource = obraSocialNegocio.Listar();
-                ddlObraSocial.DataValueField = "Descripcion";
+                ddlObraSocial.DataValueField = "Id";
                 ddlObraSocial.DataTextField = "Descripcion";
                 ddlObraSocial.DataBind();
 
@@ -46,7 +46,6 @@ namespace tp_cuatrimestral_equipo_12B
                 txtEmail.Text = seleccionado.Email;
                 txtFechaNacimiento.Text = seleccionado.FechaNacimiento.ToString(("yyyy-MM-dd"));
                 // to-do --> txtDireccion.Text = seleccionado.Direccion;              
-                ddlObraSocial.SelectedValue = seleccionado.ObraSocial;
             }
         }
 
@@ -123,9 +122,7 @@ namespace tp_cuatrimestral_equipo_12B
             PacienteNegocio negocio = new PacienteNegocio();
             try
             {
-                pacientenuevo.Nombre = txtNombre.Text;
-                pacientenuevo.Apellido = txtApellido.Text;
-                pacientenuevo.Documento = int.Parse(txtDni.Text);
+                
 
                 //validacion de fecha nacimiento para que no sea fecha futura 
                 DateTime fechaNacimiento;
@@ -136,10 +133,26 @@ namespace tp_cuatrimestral_equipo_12B
                     divMensaje.Visible = true;
                     return;
                 }
-                pacientenuevo.FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text);
-                pacientenuevo.Calle = txtDireccion.Text;
+
+                pacientenuevo.FechaNacimiento = fechaNacimiento;
+                pacientenuevo.Nombre = txtNombre.Text;
+                pacientenuevo.Apellido = txtApellido.Text;
+                pacientenuevo.Documento = int.Parse(txtDni.Text);
                 pacientenuevo.Email = txtEmail.Text;
-                pacientenuevo.ObraSocial = ddlObraSocial.SelectedItem.Text;
+                pacientenuevo.Telefono = txtTelefono.Text;
+                pacientenuevo.Nacionalidad = txtNacionalidad.Text;
+                pacientenuevo.Provincia = int.Parse(ddlProvincia.SelectedValue);
+                pacientenuevo.Localidad = int.Parse(ddlLocalidad.SelectedValue);
+                pacientenuevo.Calle = txtDireccion.Text;
+                pacientenuevo.Altura = int.Parse(txtAltura.Text);
+                pacientenuevo.CodPostal = txtCodPostal.Text;
+                pacientenuevo.Depto = txtDepto.Text;
+                pacientenuevo.ObraSocial = int.Parse(ddlObraSocial.SelectedValue);
+
+                pacientenuevo.Observaciones = txtObservaciones.Text;
+
+                // Habilitado: Por defecto en 1 (true) para nuevos pacientes
+                pacientenuevo.Habilitado = 1;
 
                 if (Request.QueryString["id"] != null)
                 {
@@ -166,7 +179,7 @@ namespace tp_cuatrimestral_equipo_12B
 
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 divMensaje.Attributes["class"] = "alert alert-danger";

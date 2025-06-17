@@ -14,10 +14,11 @@ namespace negocio
         {
             List<ObraSocial> lista = new List<ObraSocial>();
             //SE HARCODEA ObraSociales  proximo hacer tabla y traer de DB !!!!!!!!!!!!!!!!
-            lista.Add(new ObraSocial { Id = 1, Descripcion = "OSDE" });
-            lista.Add(new ObraSocial { Id = 2, Descripcion = "Swiss Medical" });
-            lista.Add(new ObraSocial { Id = 3, Descripcion = "Galeno" });
-            lista.Add(new ObraSocial { Id = 4, Descripcion = "Medicus" });
+            lista.Add(new ObraSocial { Id = 1, Descripcion = "Particular" });
+            lista.Add(new ObraSocial { Id = 2, Descripcion = "OSDE" });
+            lista.Add(new ObraSocial { Id = 3, Descripcion = "Swiss Medical" });
+            lista.Add(new ObraSocial { Id = 4, Descripcion = "Galeno" });
+            lista.Add(new ObraSocial { Id = 5, Descripcion = "Medicus" });
 
             return lista;
         }

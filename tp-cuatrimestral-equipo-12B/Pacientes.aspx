@@ -39,72 +39,57 @@
                 </thead>
                 <tbody>
                     <%-- Cuerpo del listado --%>
-                    <% if (listaPaciente != null && listaPaciente.Any())
-                        { %>
-                    <% foreach (var paciente in listaPaciente)
-                        { %>
-                    <tr>
-                        <td><%= paciente.Id %></td>
-                        <td><%= paciente.Nombre %></td>
-                        <td><%= paciente.Apellido %></td>
-                        <td><%= paciente.Documento %></td>
-                        <td><%= paciente.Email %></td>
-                        <td>DIRECCIÓN</td>
-                        <%-- Hardcodeado  --%>
-                        <td><%= paciente.ObraSocial %></td>
-                        <td class="d-flex justify-content-center align-items-center gap-3">
-
-                            <%-- Ícono Ver --%>
-                            <a href="#" class="action-link" title="Ver Detalles" onclick="alert('Ver paciente ID: <%= paciente.Id %>'); return false;">
-                                <img src="images/icon_view.svg" alt="Ver" class="action-icon-img" />
-                            </a>
-
-                            <%-- Ícono Editar --%>
-                            <a href="FormularioPaciente.aspx?id=<%= paciente.Id %>" class="action-link" title="Editar Paciente">
-                                <img src="images/icon_edit.svg" alt="Editar" class="action-icon-img" />
-                            </a>
-
-                            <!-- Ícono Eliminar -->
-                            <img src="images/icon_delete.svg" alt="Eliminar" class="action-icon-img" style="cursor: pointer"
-                                data-bs-toggle="modal" data-bs-target="#eliminarModal_<%= paciente.Id %>" />
-
-                            <!-- Modal de Confirmación de Eliminación -->
-                            <div class="modal fade" id="eliminarModal_<%= paciente.Id %>" tabindex="-1" aria-labelledby="eliminarLabel_<%= paciente.Id %>" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="eliminarLabel_<%= paciente.Id %>">Confirmar Eliminación</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            ¿Estás seguro que deseas eliminar al paciente 
-                      Nombre:<strong><%= paciente.Nombre %> <%= paciente.Apellido %> DNI:<%= paciente.Documento %></strong>?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <a href="Pacientes.aspx?eliminar=<%= paciente.Id %>" class="btn btn-danger">Eliminar</a>
-                                            <!-- hacemos un request a la misma pagina para usar el code behind -->
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <% if (listaPaciente != null && listaPaciente.Any()) { %>
+                        <% foreach (var paciente in listaPaciente) { %>
+                        <tr>
+                            <td><%= paciente.Id %></td>
+                            <td><%= paciente.Nombre %></td>
+                            <td><%= paciente.Apellido %></td>
+                            <td><%= paciente.Documento %></td>
+                            <td><%= paciente.Email %></td>
+                            <%-- Construcción de la DIRECCIÓN --%>
+                            <td>
+                                <%= paciente.Calle %> <%= paciente.Altura %>
+                            <%-- Mostrar la Descripción de la Obra Social --%>
+                            <td><%= paciente.DescripcionObraSocial %></td>
+                            <td class="d-flex justify-content-center align-items-center gap-4">
+                                <%-- Íconos de acciones (Ver, Editar, Eliminar, Dar Turno) --%>
+                                <a href="#" class="action-link" title="Ver Detalles" onclick="alert('Ver paciente ID: <%= paciente.Id %>'); return false;">
+                                    <img src="images/icon_view.svg" alt="Ver" class="action-icon-img" />
+                                </a>
+                                <a href="FormularioPaciente.aspx?id=<%= paciente.Id %>" class="action-link" title="Editar Paciente">
+                                    <img src="images/icon_edit.svg" alt="Editar" class="action-icon-img" />
+                                </a>
+                                <div class="action-link">
+                                    <img src="images/icon_delete.svg" alt="Eliminar" class="action-icon-img" style="cursor: pointer"
+                                    data-bs-toggle="modal" data-bs-target="#eliminarModal_<%= paciente.Id %>" />
+                                </div>
+                                
+                                <div class="modal fade" id="eliminarModal_<%= paciente.Id %>" tabindex="-1" aria-labelledby="eliminarLabel_<%= paciente.Id %>" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="eliminarLabel_<%= paciente.Id %>">Confirmar Eliminación</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                ¿Estás seguro que deseas eliminar al paciente 
+                                                Nombre:<strong><%= paciente.Nombre %> <%= paciente.Apellido %> DNI:<%= paciente.Documento %></strong>?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="Pacientes.aspx?eliminar=<%= paciente.Id %>" class="btn btn-danger">Eliminar</a>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-
-                            <%-- Ícono Dar Turno --%>
-                            <a href="#" class="action-link" title="Dar Turno" onclick="alert('Dar turno a ID: <%= paciente.Nombre %>'); return false;">
-                                <img src="images/icon_turno.svg" alt="Dar Turno!" class="action-icon-img" />
-                            </a>
-                            <%--  Hacer un modal para dar turno / eliminar / editar o enviar a otra pagina?????????? --%>
-
-
-
-
-                        </td>
-                    </tr>
-                    <% } %>
-                    <% }
-                        else
-                        { %>
+                                <a href="#" class="action-link" title="Dar Turno" onclick="alert('Dar turno a NOMBRE: <%= paciente.Nombre %>'); return false;">
+                                    <img src="images/icon_turno.svg" alt="Dar Turno!" class="action-icon-img" />
+                                </a>
+                            </td>
+                        </tr>
+                        <% } %>
+                    <% } else { %>
                     <tr>
                         <td colspan="8" class="text-center py-4">No hay pacientes cargados.</td>
                     </tr>

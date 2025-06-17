@@ -17,21 +17,21 @@ namespace dominio
         public string Nacionalidad { get; set; }
 
         /// DOMICILIO DATOS EN ARGENTINA YA QUE ES UNA APLICACION PARA ARGENTINA
-        public int Provincia { get; set; } // VER SI PUEDE SER SELECTOR, BUSCAR API
+        public int Provincia { get; set; } 
 
-        public int Localidad { get; set; } // VER SI PUEDE SER SELECTOR, BUSCAR API
+        public int Localidad { get; set; } 
 
         public string Calle { get; set; }
 
         public int Altura { get; set; }
 
-        public int CodPostal { get; set; }
+        public string CodPostal { get; set; }
 
         public string Depto { get; set; } //Opcional, va null en la DB
 
         public DateTime FechaNacimiento { get; set; }
 
-        public int Habilitado { get; set; } //Estado para eliminarlo logicamente 
+        public int Habilitado { get; set; } //Estado para eliminarlo logicamente, Habilitado =1, Deshabilitado = 0
 
     }
 }
