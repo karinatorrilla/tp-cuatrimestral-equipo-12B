@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Dashboard.Master" AutoEventWireup="true" CodeBehind="FormularioPaciente.aspx.cs" Inherits="tp_cuatrimestral_equipo_12B.FormularioPaciente" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Dashboard.Master" Async="true" AutoEventWireup="true" CodeBehind="FormularioPaciente.aspx.cs" Inherits="tp_cuatrimestral_equipo_12B.FormularioPaciente" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -92,15 +92,18 @@
             <%-- Provincia (DropDownList) --%>
             <div class="col-md-3">
                 <label for="ddlProvincia" class="form-label font-weight-bold text-dark">Provincia</label>
-                <asp:DropDownList ID="ddlProvincia" runat="server" CssClass="form-control"></asp:DropDownList>
+                <asp:DropDownList ID="ddlProvincia" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlProvincia_SelectedIndexChanged" AppendDataBoundItems="true" required="true">
+                        <asp:ListItem Text="Seleccione Provincia" Value=""></asp:ListItem>
+                </asp:DropDownList>
             </div>
 
             <%-- Localidad (DropDownList) --%>
             <div class="col-md-3">
                 <label for="ddlLocalidad" class="form-label font-weight-bold text-dark">Localidad</label>
-                <asp:DropDownList ID="ddlLocalidad" runat="server" CssClass="form-control"></asp:DropDownList>
+                <asp:DropDownList ID="ddlLocalidad" runat="server" CssClass="form-control" AppendDataBoundItems="true" required="true" Enabled="false">
+                        <asp:ListItem Text="Seleccione Localidad" Value=""></asp:ListItem>
+                </asp:DropDownList>
             </div>
-
             
             <%-- Dirección/Calle --%>
             <div class="col-md-2">

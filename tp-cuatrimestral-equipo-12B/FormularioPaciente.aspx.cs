@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Threading.Tasks;
 using dominio;
 using negocio;
 
@@ -11,20 +12,26 @@ namespace tp_cuatrimestral_equipo_12B
 {
     public partial class FormularioPaciente : System.Web.UI.Page
     {
-        protected void Page_Load(object sender, EventArgs e)
+        protected async void Page_Load(object sender, EventArgs e)
         {
-            ///Config. inicial
             if (!IsPostBack)
             {
+                // Cargar provincias
+                await PopulateProvincias();
+
+
                 // Cargar obra social en el DropDownList
                 ObraSocialNegocio obraSocialNegocio = new ObraSocialNegocio();
                 ddlObraSocial.DataSource = obraSocialNegocio.Listar();
                 ddlObraSocial.DataValueField = "Descripcion";
                 ddlObraSocial.DataTextField = "Descripcion";
                 ddlObraSocial.DataBind();
+
+
+                // Deshabilitar localidad al inicio
+                ddlLocalidad.Enabled = false;
             }
 
-            ///Config. para modificar paciente
             if (Request.QueryString["id"] != null && !IsPostBack)
             {
                 PacienteNegocio negocio = new PacienteNegocio();
@@ -40,6 +47,73 @@ namespace tp_cuatrimestral_equipo_12B
                 txtFechaNacimiento.Text = seleccionado.FechaNacimiento.ToString(("yyyy-MM-dd"));
                 // to-do --> txtDireccion.Text = seleccionado.Direccion;              
                 ddlObraSocial.SelectedValue = seleccionado.ObraSocial;
+            }
+        }
+
+        private async Task PopulateProvincias()
+        {
+            GeoRefNegocio geoRefNegocio = new GeoRefNegocio();
+            try
+            {
+                List<GeoRefEntity> provincias = await geoRefNegocio.ObtenerProvinciasAsync();
+
+                ddlProvincia.Items.Clear();
+                ddlProvincia.Items.Add(new ListItem("Seleccione Provincia", "")); // Item por defecto
+
+                foreach (var provincia in provincias)
+                {
+                    // Usar provincia.id (string) porque la API lo devuelve como string
+                    ddlProvincia.Items.Add(new ListItem(provincia.nombre, provincia.id));
+                }
+            }
+            catch (Exception)
+            {
+                divMensaje.Visible = true;
+            }
+        }
+
+        // Este es el evento que se dispara cuando el usuario cambia la selección de provincia.
+        // También debe ser async void para poder usar await dentro.
+        protected async void ddlProvincia_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedProvincia = ddlProvincia.SelectedValue;
+            if (!string.IsNullOrEmpty(selectedProvincia))
+            {
+                // Si se selecciona una provincia válida, habilitar ddlLocalidad y cargar localidades
+                ddlLocalidad.Enabled = true;
+                await PopulateLocalidades(selectedProvincia); // Pasar el id de la provincia
+            }
+            else
+            {
+                // Si se selecciona el ítem "Seleccione Provincia", limpia las localidades
+                ddlLocalidad.Items.Clear();
+                ddlLocalidad.Items.Add(new ListItem("Seleccione Localidad", ""));
+                ddlLocalidad.Enabled = false; //Deshabilita localidad
+            }
+        }
+
+        // Este método se encarga de cargar las localidades según la provincia seleccionada.
+        private async Task PopulateLocalidades(string idProvincia) // idProvincia es string según la API
+        {
+            GeoRefNegocio geoRefNegocio = new GeoRefNegocio();
+            try
+            {
+                List<GeoRefEntity> localidades = await geoRefNegocio.ObtenerLocalidadesPorProvinciaAsync(idProvincia);
+
+                ddlLocalidad.Items.Clear(); // Limpia    
+                ddlLocalidad.Items.Add(new ListItem("Seleccione Localidad", "")); // Item por defecto
+
+                foreach (var localidad in localidades)
+                {
+                    // Usar localidad.id (string)
+                    ddlLocalidad.Items.Add(new ListItem(localidad.nombre, localidad.id));
+                }
+            }
+            catch (Exception)
+            {
+                divMensaje.Visible = true;
+                ddlLocalidad.Enabled = false;
+
             }
         }
 

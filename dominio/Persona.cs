@@ -17,9 +17,9 @@ namespace dominio
         public string Nacionalidad { get; set; }
 
         /// DOMICILIO DATOS EN ARGENTINA YA QUE ES UNA APLICACION PARA ARGENTINA
-        public string Provincia { get; set; } // VER SI PUEDE SER SELECTOR, BUSCAR API
+        public int Provincia { get; set; } // VER SI PUEDE SER SELECTOR, BUSCAR API
 
-        public string Localidad { get; set; } // VER SI PUEDE SER SELECTOR, BUSCAR API
+        public int Localidad { get; set; } // VER SI PUEDE SER SELECTOR, BUSCAR API
 
         public string Calle { get; set; }
 
