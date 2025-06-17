@@ -21,18 +21,33 @@ namespace tp_cuatrimestral_equipo_12B
                 Response.Redirect("Error.aspx", false);
             }
 
-            if (!IsPostBack)
+           
+
+            if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 1)
             {
-                
-                ddlFiltrarPor.Items.Clear();
-
-                // Añade los items al DropDownList
-                ddlFiltrarPor.Items.Add(new ListItem("Pacientes", "PACIENTE"));
-                ddlFiltrarPor.Items.Add(new ListItem("Médicos", "MEDICO"));
-
-                //Selecciona por defecto
-                ddlFiltrarPor.SelectedIndex = 0;
+                divListadoGeneral.Visible = false; // Ocultar la tabla de filtro
+                pnlGraficoAdmin.Visible = true;
             }
+            else
+            {
+                divListadoGeneral.Visible = true; // muestra la tabla de filtro
+                pnlGraficoAdmin.Visible = false;
+
+                if (!IsPostBack)
+                {
+
+                    ddlFiltrarPor.Items.Clear();
+
+                    // Añade los items al DropDownList
+                    ddlFiltrarPor.Items.Add(new ListItem("Pacientes", "0"));
+                    ddlFiltrarPor.Items.Add(new ListItem("Médicos", "1"));
+
+                    //Selecciona por defecto
+                    ddlFiltrarPor.SelectedIndex = 0;
+                }
+            }
+
+
         }
 
         protected void btnIrTurnos_Click(object sender, EventArgs e)
