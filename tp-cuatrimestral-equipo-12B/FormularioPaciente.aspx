@@ -4,13 +4,17 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="container-fluid py-4">
-        <% if (Request.QueryString["id"] != null)
+        <% if (Request.QueryString["modo"] == null)
             { %>
-        <h1 class="mb-4">Editar paciente</h1>
+        <h1 class="mb-4">Editar Paciente</h1>
         <%} %>
-        <%else
+        <%if (Request.QueryString["modo"] == "ver")
             { %>
-        <h1 class="mb-4">Agregar paciente</h1>
+        <h1 class="mb-4">Detalles del Paciente</h1>
+        <%} %>
+        <%if (Request.QueryString["id"] == null)
+            { %>
+        <h1 class="mb-4">Agregar Paciente</h1>
         <%} %>
     </div>
     <div id="divMensaje" runat="server" class="alert" visible="false"></div>
@@ -79,7 +83,7 @@
 
         </div>
 
-            
+
 
         <%-- Sección domicilio --%>
         <h3 class="mb-4 text-dark">Datos de Domicilio</h3>
@@ -89,7 +93,7 @@
             <div class="col-md-3">
                 <label for="ddlProvincia" class="form-label font-weight-bold text-dark">Provincia</label>
                 <asp:DropDownList ID="ddlProvincia" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlProvincia_SelectedIndexChanged" AppendDataBoundItems="true" required="true">
-                        <asp:ListItem Text="Seleccione Provincia" Value=""></asp:ListItem>
+                    <asp:ListItem Text="Seleccione Provincia" Value=""></asp:ListItem>
                 </asp:DropDownList>
             </div>
 
@@ -97,14 +101,14 @@
             <div class="col-md-3">
                 <label for="ddlLocalidad" class="form-label font-weight-bold text-dark">Localidad</label>
                 <asp:DropDownList ID="ddlLocalidad" runat="server" CssClass="form-control" AppendDataBoundItems="true" required="true" Enabled="false">
-                        <asp:ListItem Text="Seleccione Localidad" Value=""></asp:ListItem>
+                    <asp:ListItem Text="Seleccione Localidad" Value=""></asp:ListItem>
                 </asp:DropDownList>
             </div>
-            
+
             <%-- Dirección/Calle --%>
             <div class="col-md-2">
                 <label for="txtDireccion" class="form-label font-weight-bold text-dark">Calle</label>
-                <asp:TextBox runat="server" ID="txtDireccion" CssClass="form-control" placeholder="Mendoza 123" required="true" />
+                <asp:TextBox runat="server" ID="txtDireccion" CssClass="form-control" placeholder="Mendoza" required="true" />
             </div>
 
             <%-- Altura --%>

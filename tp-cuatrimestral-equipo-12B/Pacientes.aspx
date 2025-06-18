@@ -4,7 +4,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="container-fluid py-4">
-        <h1 class="mb-4">Listado de pacientes</h1>
+        <h1 class="mb-4">Listado de Pacientes</h1>
 
         <%-- Busqueda y Filtros --%>
         <div class="filter-section mb-4">
@@ -54,7 +54,7 @@
                             <td><%= paciente.DescripcionObraSocial %></td>
                             <td class="d-flex justify-content-center align-items-center gap-4">
                                 <%-- Íconos de acciones (Ver, Editar, Eliminar, Dar Turno) --%>
-                                <a href="#" class="action-link" title="Ver Detalles" onclick="alert('Ver paciente ID: <%= paciente.Id %>'); return false;">
+                                <a href="FormularioPaciente.aspx?id=<%= paciente.Id %>&modo=ver" class="action-link" title="Ver Detalles">
                                     <img src="images/icon_view.svg" alt="Ver" class="action-icon-img" />
                                 </a>
                                 <a href="FormularioPaciente.aspx?id=<%= paciente.Id %>" class="action-link" title="Editar Paciente">

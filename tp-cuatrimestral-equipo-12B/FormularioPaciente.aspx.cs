@@ -12,8 +12,28 @@ namespace tp_cuatrimestral_equipo_12B
 {
     public partial class FormularioPaciente : System.Web.UI.Page
     {
+        // Deshabilitar todos los textbox y ddl del formulario
+        private void DeshabilitarCampos()
+        {
+            txtNombre.Enabled = false;
+            txtApellido.Enabled = false;
+            txtDni.Enabled = false;
+            txtFechaNacimiento.Enabled = false;
+            txtEmail.Enabled = false;
+            txtTelefono.Enabled = false;
+            txtNacionalidad.Enabled = false;
+            ddlObraSocial.Enabled = false;
+            ddlProvincia.Enabled = false;
+            ddlLocalidad.Enabled = false;
+            txtDireccion.Enabled = false;
+            txtAltura.Enabled = false;
+            txtCodPostal.Enabled = false;
+            txtDepto.Enabled = false;
+            txtObservaciones.Enabled = false;
+        }
         protected async void Page_Load(object sender, EventArgs e)
         {
+            ///config inicial
             if (!IsPostBack)
             {
                 // Cargar provincias
@@ -32,20 +52,45 @@ namespace tp_cuatrimestral_equipo_12B
                 ddlLocalidad.Enabled = false;
             }
 
+            ///config para modificar
             if (Request.QueryString["id"] != null && !IsPostBack)
             {
+
                 PacienteNegocio negocio = new PacienteNegocio();
                 List<Paciente> lista = negocio.ListarPacientes(int.Parse(Request.QueryString["id"]));
                 Paciente seleccionado = lista[0];
+
+                string idProvincia = seleccionado.Provincia;
+                ddlProvincia.SelectedValue = idProvincia;
+
+                await PopulateLocalidades(idProvincia);
+
+                string idLocalidad = seleccionado.Localidad;
+                ddlLocalidad.SelectedValue = idLocalidad;
+                ddlLocalidad.Enabled = true;
+
 
                 //precarga de datos
 
                 txtNombre.Text = seleccionado.Nombre;
                 txtApellido.Text = seleccionado.Apellido;
                 txtDni.Text = seleccionado.Documento.ToString();
-                txtEmail.Text = seleccionado.Email;
                 txtFechaNacimiento.Text = seleccionado.FechaNacimiento.ToString(("yyyy-MM-dd"));
-                // to-do --> txtDireccion.Text = seleccionado.Direccion;              
+                txtEmail.Text = seleccionado.Email;
+                txtTelefono.Text = seleccionado.Telefono;
+                txtNacionalidad.Text = seleccionado.Nacionalidad;
+                ddlObraSocial.SelectedValue = seleccionado.ObraSocial.ToString();
+                txtDireccion.Text = seleccionado.Calle;
+                txtAltura.Text = seleccionado.Altura.ToString();
+                txtCodPostal.Text = seleccionado.CodPostal;
+                txtDepto.Text = seleccionado.Depto;
+                txtObservaciones.Text = seleccionado.Observaciones;
+
+                if (Request.QueryString["modo"] == "ver")
+                {
+                    DeshabilitarCampos();
+                    btnGuardar.Visible = false;  // Oculta botón de guardar
+                }
             }
         }
 
@@ -122,7 +167,6 @@ namespace tp_cuatrimestral_equipo_12B
             PacienteNegocio negocio = new PacienteNegocio();
             try
             {
-                
 
                 //validacion de fecha nacimiento para que no sea fecha futura 
                 DateTime fechaNacimiento;
@@ -141,8 +185,8 @@ namespace tp_cuatrimestral_equipo_12B
                 pacientenuevo.Email = txtEmail.Text;
                 pacientenuevo.Telefono = txtTelefono.Text;
                 pacientenuevo.Nacionalidad = txtNacionalidad.Text;
-                pacientenuevo.Provincia = int.Parse(ddlProvincia.SelectedValue);
-                pacientenuevo.Localidad = int.Parse(ddlLocalidad.SelectedValue);
+                pacientenuevo.Provincia = ddlProvincia.SelectedValue;
+                pacientenuevo.Localidad = ddlLocalidad.SelectedValue;
                 pacientenuevo.Calle = txtDireccion.Text;
                 pacientenuevo.Altura = int.Parse(txtAltura.Text);
                 pacientenuevo.CodPostal = txtCodPostal.Text;

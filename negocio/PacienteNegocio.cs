@@ -23,7 +23,10 @@ namespace negocio
                                   "ProvinciaId, LocalidadId, Calle, Altura, CodPostal, Depto, " +
                                   "FechaNacimiento, ObraSocialId, Observaciones, Habilitado " +
                                   "FROM PACIENTES WHERE Habilitado = 1 ";
-
+                if (id > 0)
+                {
+                    consulta += " AND Id = " + id;
+                }
 
                 datos.setearConsulta(consulta);
                 datos.ejecutarLectura();
@@ -44,8 +47,8 @@ namespace negocio
                     aux.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
                     aux.ObraSocial = datos.Lector["ObraSocialId"] is DBNull ? 0 : (int)datos.Lector["ObraSocialId"]; 
                     aux.Observaciones = datos.Lector["Observaciones"] is DBNull ? null : (string)datos.Lector["Observaciones"];
-                    aux.Provincia = datos.Lector["ProvinciaId"] is DBNull ? 0 : (int)datos.Lector["ProvinciaId"];
-                    aux.Localidad = datos.Lector["LocalidadId"] is DBNull ? 0 : (int)datos.Lector["LocalidadId"];
+                    aux.Provincia = datos.Lector["ProvinciaId"] is DBNull ? null : (string)datos.Lector["ProvinciaId"];
+                    aux.Localidad = datos.Lector["LocalidadId"] is DBNull ? null : (string)datos.Lector["LocalidadId"];
                     aux.Habilitado = datos.Lector["Habilitado"] is DBNull ? 1 : ((bool)datos.Lector["Habilitado"] ? 1 : 0);
 
 
@@ -118,14 +121,29 @@ namespace negocio
 
             try
             {
-                datos.setearConsulta("Update PACIENTES set Nombre = @nombre, Apellido = @apellido, Documento = @Documento, Email = @email, FechaNacimiento = @fechanacimiento, ObraSocial = @obrasocial WHERE IDPaciente = @id");
+                datos.setearConsulta("Update PACIENTES set Nombre = @nombre, Apellido = @apellido, " +
+                    "Documento = @documento, Email = @email, Telefono = @telefono, " +
+                    "Nacionalidad = @nacionalidad, ProvinciaId = @provinciaid, LocalidadId = @localidadid, " +
+                    "Calle = @calle, Altura = @altura, CodPostal = @codpostal, Depto = @depto, " +
+                    "FechaNacimiento = @fechanacimiento, ObraSocialId = @obrasocialid, " +
+                    "Observaciones = @observaciones, Habilitado = @habilitado WHERE Id = @id");
                 datos.setearParametro("@id", mod.Id);
-                datos.setearParametro("@Nombre", mod.Nombre);
-                datos.setearParametro("@Apellido", mod.Apellido);
-                datos.setearParametro("@Documento", mod.Documento);
-                datos.setearParametro("@Email", mod.Email);
-                datos.setearParametro("@FechaNacimiento", mod.FechaNacimiento);
-                datos.setearParametro("@ObraSocial", mod.ObraSocial);
+                datos.setearParametro("@nombre", mod.Nombre);
+                datos.setearParametro("@apellido", mod.Apellido);
+                datos.setearParametro("@documento", mod.Documento);
+                datos.setearParametro("@email", mod.Email);
+                datos.setearParametro("@telefono", mod.Telefono);
+                datos.setearParametro("@nacionalidad", mod.Nacionalidad);
+                datos.setearParametro("@provinciaid", mod.Provincia);
+                datos.setearParametro("@localidadid", mod.Localidad);
+                datos.setearParametro("@calle", mod.Calle);
+                datos.setearParametro("@altura", mod.Altura);
+                datos.setearParametro("@codpostal", mod.CodPostal);
+                datos.setearParametro("@depto", mod.Depto);
+                datos.setearParametro("@fechanacimiento", mod.FechaNacimiento);
+                datos.setearParametro("@obrasocialid", mod.ObraSocial);
+                datos.setearParametro("@observaciones", mod.Observaciones);
+                datos.setearParametro("@habilitado", mod.Habilitado);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
@@ -145,7 +163,7 @@ namespace negocio
 
             try
             {
-                datos.setearConsulta("Update PACIENTES set Habilitado=0 WHERE Id = @id");
+                datos.setearConsulta("Update PACIENTES set Habilitado = 0 WHERE Id = @id");
                 datos.setearParametro("@id", idPaciente);
 
                 datos.ejecutarAccion();
