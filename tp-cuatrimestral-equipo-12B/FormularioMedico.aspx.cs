@@ -382,17 +382,18 @@ namespace tp_cuatrimestral_equipo_12B
                 medicoNuevo.Matricula = int.Parse(txtMatricula.Text);
                 medicoNuevo.Nombre = txtNombre.Text;
                 medicoNuevo.Apellido = txtApellido.Text;
-                medicoNuevo.Documento = int.Parse(txtDni.Text);
+                medicoNuevo.Documento = int.Parse(txtDni.Text); 
                 medicoNuevo.Email = txtEmail.Text;
                 medicoNuevo.Telefono = txtTelefono.Text;
                 medicoNuevo.Nacionalidad = txtNacionalidad.Text;
                 medicoNuevo.Provincia = ddlProvincia.SelectedValue;
                 medicoNuevo.Localidad = ddlLocalidad.SelectedValue;
-                medicoNuevo.Calle = txtCalle.Text; // Corregido de txtDireccion
+                medicoNuevo.Calle = txtCalle.Text;
                 medicoNuevo.Altura = int.Parse(txtAltura.Text);
                 medicoNuevo.CodPostal = txtCodPostal.Text;
                 medicoNuevo.Depto = txtDepto.Text;
-                medicoNuevo.Habilitado = 1; // Por defecto habilitado 
+                // Habilitado: Por defecto en 1 (true) para nuevos medicoNuevo
+                medicoNuevo.Habilitado = 1;
 
                 // Validar Fecha de Nacimiento
                 DateTime fechaNacimiento;
@@ -405,46 +406,68 @@ namespace tp_cuatrimestral_equipo_12B
                 }
                 medicoNuevo.FechaNacimiento = fechaNacimiento;
 
-                //Asignar Especialidades (desde el ListBox de selección múltiple)
-                medicoNuevo.Especialidades = new List<Especialidad>();
+                // Asignar Especialidades
+                // Recopila los IDs de las especialidades seleccionadas
+                List<string> especialidadesSeleccionadas = new List<string>();
                 foreach (ListItem item in lstEspecialidades.Items)
                 {
                     if (item.Selected)
                     {
-                        // Agrega una nueva Especialidad a la lista del médico
-                        medicoNuevo.Especialidades.Add(new Especialidad { Id = int.Parse(item.Value), Descripcion = item.Text });
+                        especialidadesSeleccionadas.Add(item.Value);
                     }
                 }
+                // Convierte la lista de IDs a una cadena separada por comas
+                medicoNuevo.EspecialidadesIDs = string.Join(",", especialidadesSeleccionadas);
 
 
                 // Asignar Turno de Trabajo
                 if (!string.IsNullOrEmpty(ddlTurnoTrabajo.SelectedValue))
                 {
-                    medicoNuevo.TurnoDeTrabajoAsignado = new TurnoTrabajo();
-                    medicoNuevo.TurnoDeTrabajoAsignado.Id = int.Parse(ddlTurnoTrabajo.SelectedValue);
-                    medicoNuevo.TurnoDeTrabajoAsignado.Descripcion = ddlTurnoTrabajo.SelectedItem.Text;
+                    medicoNuevo.IDTurnoTrabajo = int.Parse(ddlTurnoTrabajo.SelectedValue);
+                }
+                else
+                {
+                    medicoNuevo.IDTurnoTrabajo = null;
                 }
 
-                // Asignar Disponibilidad Horaria
-                if (!string.IsNullOrEmpty(lstDiaSemana.SelectedValue) &&
-                    !string.IsNullOrEmpty(ddlHoraInicioBloque.SelectedValue) && 
-                    !string.IsNullOrEmpty(ddlHoraFinBloque.SelectedValue))    
-                {
-                    DisponibilidadHoraria dh = new DisponibilidadHoraria();
-                    dh.DiaDeLaSemana = int.Parse(lstDiaSemana.SelectedValue);
-                    dh.HoraInicioBloque = TimeSpan.Parse(ddlHoraInicioBloque.SelectedValue); 
-                    dh.HoraFinBloque = TimeSpan.Parse(ddlHoraFinBloque.SelectedValue); 
 
-                    //  validamos el orden.
-                    if (dh.HoraInicioBloque >= dh.HoraFinBloque)
+                //Asignar Días Disponibles
+                //Recopila los IDs de los días seleccionados
+                List<string> diasSeleccionados = new List<string>();
+                foreach (ListItem item in lstDiaSemana.Items)
+                {
+                    if (item.Selected)
+                    {
+                        diasSeleccionados.Add(item.Value);
+                    }
+                }
+                //Convierte la lista de IDs a una cadena separada por comas
+                medicoNuevo.DiasDisponiblesIDs = string.Join(",", diasSeleccionados);
+
+
+                // Asignar Disponibilidad Horaria (HoraInicioBloque, HoraFinBloque)
+                TimeSpan horaInicio;
+                TimeSpan horaFin;
+
+                if (TimeSpan.TryParse(ddlHoraInicioBloque.SelectedValue, out horaInicio) &&
+                    TimeSpan.TryParse(ddlHoraFinBloque.SelectedValue, out horaFin))
+                {
+                    medicoNuevo.HoraInicioBloque = horaInicio;
+                    medicoNuevo.HoraFinBloque = horaFin;
+
+                    // Validamos el orden.
+                    if (medicoNuevo.HoraInicioBloque >= medicoNuevo.HoraFinBloque)
                     {
                         divMensaje.Attributes["class"] = "alert alert-danger";
                         divMensaje.InnerText = "La hora de inicio no puede ser igual o posterior a la hora de fin.";
                         divMensaje.Visible = true;
                         return;
                     }
-
-                    medicoNuevo.HorariosDisponibles.Add(dh);
+                }
+                else
+                {
+                    medicoNuevo.HoraInicioBloque = null;
+                    medicoNuevo.HoraFinBloque = null; 
                 }
 
 
@@ -452,19 +475,19 @@ namespace tp_cuatrimestral_equipo_12B
                 if (Request.QueryString["id"] != null) // Modo Modificar
                 {
                     medicoNuevo.Id = int.Parse(Request.QueryString["id"].ToString()); // Obtener el ID del médico a modificar
-                    negocio.modificarMedico(medicoNuevo); // Llama al método de negocio para modificar
+                    negocio.modificarMedico(medicoNuevo); // Llama a modificar medico
                     divMensaje.Attributes["class"] = "alert alert-success";
                     divMensaje.InnerText = "Modificación realizada con éxito.";
                     divMensaje.Visible = true;
                 }
                 else
                 {
-                    if (negocio.agregarMedico(medicoNuevo)) // Llama al método de negocio para agregar
+                    if (negocio.agregarMedico(medicoNuevo)) // Llama a agregar medico
                     {
                         divMensaje.Attributes["class"] = "alert alert-success";
                         divMensaje.InnerText = "Operación realizada con éxito.";
                         divMensaje.Visible = true;
-                        Response.Redirect("Medicos.aspx", false);
+                        // Response.Redirect("Medicos.aspx", false); 
                     }
                     else
                     {

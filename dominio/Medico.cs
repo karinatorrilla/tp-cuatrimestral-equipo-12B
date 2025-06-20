@@ -28,9 +28,24 @@ namespace dominio
         // Ej: "Turno Mañana" o "Turno Tarde".
         public TurnoTrabajo TurnoDeTrabajoAsignado { get; set; } //cada médico está asociado a un turno de trabajo
 
-        
-
         public List<Especialidad> Especialidades { get; set; }  //cada médico tiene varias especialidades
+
+        // Para las múltiples especialidades seleccionadas en lstEspecialidades
+        public string EspecialidadesIDs { get; set; } // Almacena una cadena como "1,5,10" para los IDs de especialidades.
+
+        // Para el ID del Turno de Trabajo seleccionado en ddlTurnoTrabajo
+        public int? IDTurnoTrabajo { get; set; } // Nullable int para el ID del turno de trabajo.
+
+        // Para los múltiples días de la semana seleccionados en lstDiaSemana
+        public string DiasDisponiblesIDs { get; set; } // Almacena una cadena como "1,3,5" para los IDs de los días.
+
+        // Hora de inicio
+        public TimeSpan? HoraInicioBloque { get; set; }
+
+        // Hora de fin
+        public TimeSpan? HoraFinBloque { get; set; }
+
+        public string DescripcionEspecialidad { get; set; }
 
     }
 }

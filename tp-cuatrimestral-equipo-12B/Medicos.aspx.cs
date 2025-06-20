@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using dominio;
 using negocio;
+using dominio;
 
 namespace tp_cuatrimestral_equipo_12B
 {
@@ -16,19 +15,32 @@ namespace tp_cuatrimestral_equipo_12B
         protected void Page_Load(object sender, EventArgs e)
         {
 
-
-            if (Session["TipoUsuario"] == null)
+            try
             {
-                Session.Add("error", "Debes loguearte para ingresar.");
-                Response.Redirect("Error.aspx", false);
+                if (Session["TipoUsuario"] == null)
+                {
+                    Session.Add("error", "Debes loguearte para ingresar.");
+                    Response.Redirect("Error.aspx", false);
+                    return;
+                }
+
+                if (!IsPostBack)
+                {
+                    MedicosNegocio negocio = new MedicosNegocio();
+                    listaMedico = negocio.ListarMedicos();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Session.Add("error", "Error al cargar el listado de médicos: " + ex.Message);
+                listaMedico = new List<Medico>();
             }
 
-
-            ///se carga la lista actualizada por primera vez o despues de una eliminacion
-            //MedicosNegocio negocio = new MedicosNegocio();
-            //listaMedico = negocio.ListarMedicos();
-
         }
+
+
 
         protected void btnNuevoMedico_Click(object sender, EventArgs e)
         {

@@ -31,6 +31,7 @@
                         <th scope="col">ID</th>
                         <th scope="col">NOMBRE</th>
                         <th scope="col">APELLIDO</th>
+                        <th scope="col">MATRICULA</th>
                         <th scope="col">ESPECIALIDAD</th>
                         <th scope="col">ACCIONES</th>
                     </tr>
@@ -45,7 +46,8 @@
                         <td><%= medico.Id %></td>
                         <td><%= medico.Nombre %></td>
                         <td><%= medico.Apellido %></td>
-                        <td><%= medico.EspecialidadSeleccionada.Descripcion %></td>
+                        <td><%= medico.Matricula %></td>
+                        <td>HOLA</td>
                         <td class="d-flex justify-content-center align-items-center gap-3">
 
                             <%-- Ícono Ver --%>
