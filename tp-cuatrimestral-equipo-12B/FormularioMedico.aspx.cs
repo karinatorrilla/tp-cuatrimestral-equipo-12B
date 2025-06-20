@@ -13,7 +13,7 @@ namespace tp_cuatrimestral_equipo_12B
     public partial class FormularioMedico : System.Web.UI.Page
     {
 
-        // Deshabilitar todos los controles del formulario para el modo "ver" o "solo lectura"
+        // Deshabilitar todos los textbox y ddl del formulario
         private void DeshabilitarCampos()
         {
             txtMatricula.Enabled = false;
@@ -31,8 +31,8 @@ namespace tp_cuatrimestral_equipo_12B
             txtCodPostal.Enabled = false;
             txtDepto.Enabled = false;
             lstEspecialidades.Enabled = false; 
-            ddlTurnoTrabajo.Enabled = false;  
-            ddlDiaSemana.Enabled = false;
+            ddlTurnoTrabajo.Enabled = false;
+            lstDiaSemana.Enabled = false;
             ddlHoraInicioBloque.Enabled = false;
             ddlHoraFinBloque.Enabled = false;  
 
@@ -43,7 +43,7 @@ namespace tp_cuatrimestral_equipo_12B
             ///Config. inicial
             if (!IsPostBack)
             {
-                // Iniciar Clases de negocio para cargar datos en los DropDownLists/ListBox
+                // Iniciar Clases de negocio para cargar datos en los selectores
                 EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
                 TurnoTrabajoNegocio turnoTrabajoNegocio = new TurnoTrabajoNegocio();
 
@@ -53,10 +53,16 @@ namespace tp_cuatrimestral_equipo_12B
 
 
                 // Cargar especialidades en el DropDownList
+
                 lstEspecialidades.DataSource = especialidadNegocio.Listar();
-                lstEspecialidades.DataValueField = "Id"; // Valor que se guarda (ID de la especialidad)
-                lstEspecialidades.DataTextField = "Descripcion";// Texto que se muestra en el DropDownList
+                lstEspecialidades.DataValueField = "Id";
+                lstEspecialidades.DataTextField = "Descripcion";
                 lstEspecialidades.DataBind();
+
+                // Actualizamos el conteo para el estado actual de las selecciones
+                ActualizarConteoEspecialidades();
+                ActualizarConteoDias();
+
 
                 // Cargar Turnos de Trabajo en el DropDownList
                 ddlTurnoTrabajo.DataSource = turnoTrabajoNegocio.Listar();
@@ -78,6 +84,8 @@ namespace tp_cuatrimestral_equipo_12B
                 List<Medico> lista = negocio.ListarMedicos(int.Parse(Request.QueryString["id"]));
                 Medico seleccionado = lista[0];
 
+
+
                 //precarga de datos
 
                 //try
@@ -89,6 +97,18 @@ namespace tp_cuatrimestral_equipo_12B
                 //    if (listaMedicos != null && listaMedicos.Count > 0)
                 //    {
                 //        medicoActual = listaMedicos[0]; // Guardamos el médico en la propiedad de la página
+
+                //if (medicoActual.Especialidades != null)
+                //{
+                //    foreach (Especialidad especialidadMedico in medicoActual.Especialidades)
+                //    {
+                //        ListItem item = lstEspecialidades.Items.FindByValue(especialidadMedico.Id.ToString());
+                //        if (item != null)
+                //        {
+                //            item.Selected = true; // Selecciona la especialidad en el ListBox (ahora DropDownList)
+                //        }
+                //    }
+                //}
 
                 //        // Precarga de Datos Personales y Profesionales
                 //        txtMatricula.Text = medicoActual.Matricula.ToString();
@@ -132,7 +152,7 @@ namespace tp_cuatrimestral_equipo_12B
                 //        if (medicoActual.HorariosDisponibles != null && medicoActual.HorariosDisponibles.Count > 0)
                 //        {
                 //            DisponibilidadHoraria primerHorario = medicoActual.HorariosDisponibles[0];
-                //            ddlDiaSemana.SelectedValue = primerHorario.DiaDeLaSemana.ToString();
+                //            lstDiaSemana.SelectedValue = primerHorario.DiaDeLaSemana.ToString();
                 //            txtHoraInicioBloque.Text = primerHorario.HoraInicioBloque.ToString(@"hh\:mm"); // Formato HH:mm
                 //            txtHoraFinBloque.Text = primerHorario.HoraFinBloque.ToString(@"hh\:mm");     // Formato HH:mm
                 //        }
@@ -159,6 +179,69 @@ namespace tp_cuatrimestral_equipo_12B
                 //}
             }
 
+        }
+
+        protected void lstEspecialidades_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ActualizarConteoEspecialidades(); // Volvemos a calcular el conteo
+        }
+
+        private void ActualizarConteoEspecialidades()
+        {
+            int seleccionadas = 0;
+            foreach (ListItem item in lstEspecialidades.Items)
+            {
+                if (item.Selected)
+                {
+                    seleccionadas++;
+                }
+            }
+
+            if (seleccionadas > 0)
+            {
+                lblCantidadEspecialidadesSeleccionadas.Text = seleccionadas + " seleccionadas";
+                lblCantidadEspecialidadesSeleccionadas.Visible = true;
+            }
+            else
+            {
+                lblCantidadEspecialidadesSeleccionadas.Text = ""; 
+                lblCantidadEspecialidadesSeleccionadas.Visible = false;
+            }
+        }
+
+        protected void lstDiaSemana_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ActualizarConteoDias();
+        }
+
+        //conteo de Das
+        private void ActualizarConteoDias()
+        {
+            int seleccionados = 0;
+
+            if (lstDiaSemana.Items.Count > 0)
+            {
+                foreach (ListItem item in lstDiaSemana.Items)
+                {
+
+                    if (item.Selected && !string.IsNullOrEmpty(item.Value))
+                    {
+                        seleccionados++;
+                    }
+                }
+            }
+
+
+            if (seleccionados > 0)
+            {
+                lblCantidadDiasSeleccionados.Text = seleccionados + " seleccionados";
+                lblCantidadDiasSeleccionados.Visible = true;
+            }
+            else
+            {
+                lblCantidadDiasSeleccionados.Text = "";
+                lblCantidadDiasSeleccionados.Visible = false;
+            }
         }
 
         // --- Lógica para la carga de Provincias y Localidades (reutilizada del FormularioPaciente) ---
@@ -343,12 +426,12 @@ namespace tp_cuatrimestral_equipo_12B
                 }
 
                 // Asignar Disponibilidad Horaria
-                if (!string.IsNullOrEmpty(ddlDiaSemana.SelectedValue) &&
+                if (!string.IsNullOrEmpty(lstDiaSemana.SelectedValue) &&
                     !string.IsNullOrEmpty(ddlHoraInicioBloque.SelectedValue) && 
                     !string.IsNullOrEmpty(ddlHoraFinBloque.SelectedValue))    
                 {
                     DisponibilidadHoraria dh = new DisponibilidadHoraria();
-                    dh.DiaDeLaSemana = int.Parse(ddlDiaSemana.SelectedValue);
+                    dh.DiaDeLaSemana = int.Parse(lstDiaSemana.SelectedValue);
                     dh.HoraInicioBloque = TimeSpan.Parse(ddlHoraInicioBloque.SelectedValue); 
                     dh.HoraFinBloque = TimeSpan.Parse(ddlHoraFinBloque.SelectedValue); 
 

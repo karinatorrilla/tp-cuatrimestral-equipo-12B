@@ -4,18 +4,26 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="container-fluid py-4">
-        <% if (Request.QueryString["modo"] == null)
-            { %>
-        <h1 class="mb-4">Editar Paciente</h1>
-        <%} %>
-        <%if (Request.QueryString["modo"] == "ver")
-            { %>
-        <h1 class="mb-4">Detalles del Paciente</h1>
-        <%} %>
-        <%if (Request.QueryString["id"] == null)
-            { %>
-        <h1 class="mb-4">Agregar Paciente</h1>
-        <%} %>
+        <% 
+            string modo = Request.QueryString["modo"];
+            string id = Request.QueryString["id"];
+
+            if (id == null) // Si no hay ID, es AGREGAR
+            { 
+        %>
+            <h1 class="mb-4">Agregar Paciente</h1>
+        <%  } 
+            else if (modo == "ver") // Si hay ID y el modo es "ver", es para VER DETALLES
+            { 
+        %>
+            <h1 class="mb-4">Detalles del Paciente</h1>
+        <%  } 
+            else // Si hay ID y el modo NO es "ver" o no hay modo, es para EDITAR
+            { 
+        %>
+            <h1 class="mb-4">Editar Paciente</h1>
+        <%  } 
+        %>
     </div>
     <div id="divMensaje" runat="server" class="alert" visible="false"></div>
 

@@ -4,11 +4,26 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="container-fluid py-4">
-        <% if (Request.QueryString["id"] != null) { %>
-            <h1 class="mb-4">Editar Médico</h1>
-        <%} else { %>
+        <% 
+            string modo = Request.QueryString["modo"];
+            string id = Request.QueryString["id"];
+
+            if (id == null) // Si no hay ID, es AGREGAR
+            { 
+        %>
             <h1 class="mb-4">Agregar Médico</h1>
-        <%} %>
+        <%  } 
+            else if (modo == "ver") // Si hay ID y el modo es "ver", es para VER DETALLES
+            { 
+        %>
+            <h1 class="mb-4">Detalles del Médico</h1>
+        <%  } 
+            else // Si hay ID y el modo NO es "ver" o no hay modo, es para EDITAR
+            { 
+        %>
+            <h1 class="mb-4">Editar Médico</h1>
+        <%  } 
+        %>
     </div>
     <div id="divMensaje" runat="server" class="alert" visible="false"></div>
 
@@ -115,33 +130,43 @@
         </div>
 
         <%-- Sección de Especialidades y Turno de Trabajo --%>
-        <h3 class="mb-4 text-dark">Especialidades y Turno de Trabajo</h3>
+        <h3 class="mb-4 text-dark">Especialidades</h3>
         <div class="row g-3 mb-4">
-            <%-- Especialidades (ListBox para selección múltiple) --%>
+            <%-- Especialidades selección múltiple --%>
             <div class="col-md-6">
                 <label for="lstEspecialidades" class="form-label font-weight-bold text-dark">Especialidades</label>
-                <asp:ListBox ID="lstEspecialidades" runat="server" CssClass="form-control" SelectionMode="Multiple" Rows="5" required="true"></asp:ListBox>
+                <asp:ListBox ID="lstEspecialidades" runat="server" 
+                             CssClass="form-control" 
+                             SelectionMode="Multiple" 
+                             Rows="3" 
+                             AutoPostBack="true" OnSelectedIndexChanged="lstEspecialidades_SelectedIndexChanged" required="true">
+                </asp:ListBox>
+                <%-- Mensaje de ayuda para la selección múltiple --%>
+                <p style="font-size: 0.85em; font-weight: bold; color: #6c757d; margin-top: 5px;">
+                    Para seleccionar más de una especialidad mantener apretada la tecla Ctrl y click izquierdo.
+                </p>
+                <%-- Este Label mostrará la cantidad de especialidades seleccionadas --%>
+                <asp:Label ID="lblCantidadEspecialidadesSeleccionadas" runat="server" 
+                           CssClass="badge bg-primary mt-2" 
+                           Visible="false"> </asp:Label>
             </div>
 
-            <%-- Turno de Trabajo (DropDownList) --%>
-            <div class="col-md-6">
-                <label for="ddlTurnoTrabajo" class="form-label font-weight-bold text-dark">Turno de Trabajo Asignado</label>
-                <asp:DropDownList ID="ddlTurnoTrabajo" runat="server" CssClass="form-control" 
-                                  AppendDataBoundItems="true" required="true" 
-                                  AutoPostBack="true" OnSelectedIndexChanged="ddlTurnoTrabajo_SelectedIndexChanged">
-                    <asp:ListItem Text="Seleccione Turno" Value=""></asp:ListItem>
-                </asp:DropDownList>
-            </div>
+            
         </div>
 
         <%-- Sección de Disponibilidad Horaria --%>
         <h3 class="mb-4 text-dark">Disponibilidad Horaria</h3>
         <div class="row g-3 mb-4">
-            <%-- Día de la Semana --%>
-            <div class="col-md-4">
-                <label for="ddlDiaSemana" class="form-label font-weight-bold text-dark">Día de la Semana</label>
-                <asp:DropDownList ID="ddlDiaSemana" runat="server" CssClass="form-control" AppendDataBoundItems="true">
-                    <asp:ListItem Text="Seleccione Día" Value=""></asp:ListItem>
+            <%-- Día de la Semana selección múltiple --%>
+            <div class="col-md-6">
+                <label for="lstDiaSemana" class="form-label font-weight-bold text-dark">Día de la Semana</label>
+                <asp:ListBox ID="lstDiaSemana" runat="server" 
+                                CssClass="form-control" 
+                                SelectionMode="Multiple" 
+                                Rows="3" 
+                                AutoPostBack="true" 
+                                OnSelectedIndexChanged="lstDiaSemana_SelectedIndexChanged" 
+                                required="true">
                     <asp:ListItem Text="Lunes" Value="1"></asp:ListItem>
                     <asp:ListItem Text="Martes" Value="2"></asp:ListItem>
                     <asp:ListItem Text="Miércoles" Value="3"></asp:ListItem>
@@ -149,19 +174,38 @@
                     <asp:ListItem Text="Viernes" Value="5"></asp:ListItem>
                     <asp:ListItem Text="Sábado" Value="6"></asp:ListItem>
                     <asp:ListItem Text="Domingo" Value="7"></asp:ListItem>
+                </asp:ListBox>
+                <%-- Mensaje de ayuda para la selección multiple de das --%>
+                <p style="font-size: 0.85em; font-weight: bold; color: #6c757d; margin-top: 5px;">
+                    Para seleccionar más de un día mantener apretada la tecla Ctrl y click izquierdo.
+                </p>
+                <%-- muestra la cantidad de dias seleccionados --%>
+                <asp:Label ID="lblCantidadDiasSeleccionados" runat="server" 
+                            CssClass="badge bg-primary mt-2" 
+                            Visible="false"> 
+                </asp:Label>
+            </div>
+
+            <%-- Turno de Trabajo --%>
+            <div class="col-md-2">
+                <label for="ddlTurnoTrabajo" class="form-label font-weight-bold text-dark">Turno de Trabajo Asignado</label>
+                <asp:DropDownList ID="ddlTurnoTrabajo" runat="server" CssClass="form-control" 
+                                  AppendDataBoundItems="true" required="true" 
+                                  AutoPostBack="true" OnSelectedIndexChanged="ddlTurnoTrabajo_SelectedIndexChanged">
+                    <asp:ListItem Text="Seleccione Turno" Value=""></asp:ListItem>
                 </asp:DropDownList>
             </div>
 
-            <%-- Hora Inicio Bloque (Ahora un DropDownList) --%>
-            <div class="col-md-4">
+            <%-- Hora Inicio Bloque --%>
+            <div class="col-md-2">
                 <label for="ddlHoraInicioBloque" class="form-label font-weight-bold text-dark">Hora Inicio</label>
                 <asp:DropDownList runat="server" ID="ddlHoraInicioBloque" CssClass="form-control" Enabled="false" AppendDataBoundItems="true">
                     <asp:ListItem Text="--:--" Value=""></asp:ListItem>
                 </asp:DropDownList>
             </div>
 
-            <%-- Hora Fin Bloque (Ahora un DropDownList) --%>
-            <div class="col-md-4">
+            <%-- Hora Fin Bloque --%>
+            <div class="col-md-2">
                 <label for="ddlHoraFinBloque" class="form-label font-weight-bold text-dark">Hora Fin</label>
                 <asp:DropDownList runat="server" ID="ddlHoraFinBloque" CssClass="form-control" Enabled="false" AppendDataBoundItems="true">
                     <asp:ListItem Text="--:--" Value=""></asp:ListItem>

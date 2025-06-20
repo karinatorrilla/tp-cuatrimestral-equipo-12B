@@ -159,6 +159,15 @@ namespace tp_cuatrimestral_equipo_12B
         protected global::System.Web.UI.WebControls.ListBox lstEspecialidades;
 
         /// <summary>
+        /// lblCantidadEspecialidadesSeleccionadas control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCantidadEspecialidadesSeleccionadas;
+
+        /// <summary>
         /// ddlTurnoTrabajo control.
         /// </summary>
         /// <remarks>
@@ -168,13 +177,22 @@ namespace tp_cuatrimestral_equipo_12B
         protected global::System.Web.UI.WebControls.DropDownList ddlTurnoTrabajo;
 
         /// <summary>
-        /// ddlDiaSemana control.
+        /// lstDiaSemana control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlDiaSemana;
+        protected global::System.Web.UI.WebControls.ListBox lstDiaSemana;
+
+        /// <summary>
+        /// lblCantidadDiasSeleccionados control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCantidadDiasSeleccionados;
 
         /// <summary>
         /// ddlHoraInicioBloque control.
