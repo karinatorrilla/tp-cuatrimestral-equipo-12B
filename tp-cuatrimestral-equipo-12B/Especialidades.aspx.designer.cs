@@ -15,12 +15,30 @@ namespace tp_cuatrimestral_equipo_12B
     {
 
         /// <summary>
-        /// dgvEspecialidades control.
+        /// lblMensaje control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView dgvEspecialidades;
+        protected global::System.Web.UI.WebControls.Label lblMensaje;
+
+        /// <summary>
+        /// txtNombreEspecialidad control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNombreEspecialidad;
+
+        /// <summary>
+        /// AgregarEspecialidad control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button AgregarEspecialidad;
     }
 }
