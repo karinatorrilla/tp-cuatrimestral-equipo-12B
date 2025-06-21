@@ -77,8 +77,8 @@
                                                 Nombre:<strong><%= paciente.Nombre %> <%= paciente.Apellido %> DNI:<%= paciente.Documento %></strong>?
                                             </div>
                                             <div class="modal-footer">
-                                                <a href="Pacientes.aspx?eliminar=<%= paciente.Id %>" class="btn btn-danger">Eliminar</a>
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                <a href="Pacientes.aspx?eliminar=<%= paciente.Id %>" class="btn btn-danger">Eliminar</a>
                                             </div>
                                         </div>
                                     </div>

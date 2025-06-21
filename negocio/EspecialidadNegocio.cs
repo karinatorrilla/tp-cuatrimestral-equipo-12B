@@ -29,11 +29,12 @@ namespace negocio
 
             try
             {
-                datos.setearConsulta("select Descripcion from ESPECIALIDADES");
+                datos.setearConsulta("select ID,Descripcion from ESPECIALIDADES");
                 datos.ejecutarLectura();
                 while (datos.Lector.Read())
                 {
                     Especialidad aux = new Especialidad();
+                    aux.Id = (int)datos.Lector["ID"];
                     aux.Descripcion = (string)datos.Lector["Descripcion"];
                     lista.Add(aux);
 

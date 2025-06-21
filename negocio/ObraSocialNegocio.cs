@@ -25,16 +25,17 @@ namespace negocio
 
         public List<ObraSocial> Listar()
         {
-                        List<ObraSocial> lista = new List<ObraSocial>();
+            List<ObraSocial> lista = new List<ObraSocial>();
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta("select Descripcion from OBRASOCIAL");
+                datos.setearConsulta("select ID,Descripcion from OBRASOCIAL ORDER BY Descripcion ASC");
                 datos.ejecutarLectura();
                 while (datos.Lector.Read())
                 {
                     ObraSocial aux = new ObraSocial();
+                    aux.Id = (int)datos.Lector["ID"];
                     aux.Descripcion = (string)datos.Lector["Descripcion"];
 
                     lista.Add(aux);
@@ -72,6 +73,51 @@ namespace negocio
             {
                 return false;
                 throw new Exception("Error al agregar Obra Social: " + ex.Message, ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public bool modificarObraSocial(ObraSocial mod)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE OBRASOCIAL SET Descripcion = @Descripcion WHERE ID = @Id");
+                datos.setearParametro("@Descripcion", mod.Descripcion);
+                datos.setearParametro("@ID", mod.Id);
+                datos.ejecutarAccion();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void eliminarObra(int idObra)   ////////////////////VALIDAMOS ACA???
+        {
+                
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {                                                       
+                datos.setearConsulta("delete from OBRASOCIAL where ID =@id");
+                datos.setearParametro("@id", idObra);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
             }
             finally
             {

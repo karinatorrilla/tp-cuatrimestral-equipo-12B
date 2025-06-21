@@ -15,13 +15,22 @@ namespace tp_cuatrimestral_equipo_12B
     {
 
         /// <summary>
-        /// lblMensaje control.
+        /// btnMostrarFormularioAgregar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMensaje;
+        protected global::System.Web.UI.WebControls.Button btnMostrarFormularioAgregar;
+
+        /// <summary>
+        /// formAgregar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel formAgregar;
 
         /// <summary>
         /// txtNombreObraSocial control.
@@ -33,6 +42,15 @@ namespace tp_cuatrimestral_equipo_12B
         protected global::System.Web.UI.WebControls.TextBox txtNombreObraSocial;
 
         /// <summary>
+        /// lblMensaje control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMensaje;
+
+        /// <summary>
         /// AgregarObraSocial control.
         /// </summary>
         /// <remarks>
@@ -40,5 +58,14 @@ namespace tp_cuatrimestral_equipo_12B
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button AgregarObraSocial;
+
+        /// <summary>
+        /// cerrarForm control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button cerrarForm;
     }
 }
