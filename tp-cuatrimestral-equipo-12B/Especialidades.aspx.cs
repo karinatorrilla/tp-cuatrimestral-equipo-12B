@@ -15,9 +15,9 @@ namespace tp_cuatrimestral_equipo_12B
 
         protected void Page_Load(object sender, EventArgs e)
         {
-                           EspecialidadNegocio negocio = new EspecialidadNegocio();
-                listaEspecialidades = negocio.Listar();
-                    
+            EspecialidadNegocio negocio = new EspecialidadNegocio();
+            listaEspecialidades = negocio.Listar();
+
         }
 
 
@@ -25,7 +25,7 @@ namespace tp_cuatrimestral_equipo_12B
         protected void AgregarEspecialidad_Click(object sender, EventArgs e)
         {
             string descripcion = txtNombreEspecialidad.Text.Trim();
-           
+
 
             if (string.IsNullOrEmpty(descripcion))
             {
@@ -44,8 +44,8 @@ namespace tp_cuatrimestral_equipo_12B
             negocio.agregarEspecialidad(nueva);
             txtNombreEspecialidad.Text = ""; //borramos la caja de texto despues de agregar
 
-            listaEspecialidades=negocio.Listar(); // recargamos la lista
-          
+            listaEspecialidades = negocio.Listar(); // recargamos la lista
+
         }
 
         protected void EliminarEspecialidad_Click(object sender, EventArgs e)

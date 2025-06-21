@@ -81,6 +81,7 @@
     <Content Include="js\index.js" />
     <Content Include="Login.aspx" />
     <Content Include="Medicos.aspx" />
+    <Content Include="ObrasSociales.aspx" />
     <Content Include="Pacientes.aspx" />
     <Content Include="Turnos.aspx" />
     <Content Include="Web.config" />
@@ -151,6 +152,13 @@
     </Compile>
     <Compile Include="Medicos.aspx.designer.cs">
       <DependentUpon>Medicos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ObrasSociales.aspx.cs">
+      <DependentUpon>ObrasSociales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ObrasSociales.aspx.designer.cs">
+      <DependentUpon>ObrasSociales.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pacientes.aspx.cs">
       <DependentUpon>Pacientes.aspx</DependentUpon>
