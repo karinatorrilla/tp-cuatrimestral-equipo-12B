@@ -11,7 +11,6 @@ namespace tp_cuatrimestral_equipo_12B
 {
     public partial class ObrasSociales : Page
     {
-
         public List<ObraSocial> listaObrasSociales;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -19,51 +18,61 @@ namespace tp_cuatrimestral_equipo_12B
             try
             {
                 ObraSocialNegocio negocio = new ObraSocialNegocio();
+
+                //ELIMINACION
                 if (!IsPostBack && Request["eliminar"] != null)
                 {
                     int idEliminar;
                     if (int.TryParse(Request["eliminar"], out idEliminar))
                     {
-
                         negocio.eliminarObra(idEliminar);
                     }
                 }
 
-
-                if (!IsPostBack)
+                //MODIFICACIÓN
+                if (Request.Form["IdObraSocial"] != null && Request.Form["DescripcionModificada"] != null)
                 {
-                    if (Request.Form["IdObraSocial"] != null && Request.Form["DescripcionModificada"] != null)
-                    {
-                        int idObraSocial;
-                        string nuevaDescripcion = Request.Form["DescripcionModificada"].Trim();
+                    int idObraSocial;
+                    string nuevaDescripcion = Request.Form["DescripcionModificada"].Trim();
 
-                        if (int.TryParse(Request.Form["IdObraSocial"], out idObraSocial) && !string.IsNullOrEmpty(nuevaDescripcion))
+                    if (int.TryParse(Request.Form["IdObraSocial"], out idObraSocial) && !string.IsNullOrEmpty(nuevaDescripcion))
+                    {
+                        ObraSocial obraModificada = new ObraSocial();
+                        List<ObraSocial> lista = negocio.Listar();
+
+                        bool yaExiste = lista.Any(o => o.Descripcion.Trim().ToLower() == nuevaDescripcion.ToLower());
+
+                        if (yaExiste)
                         {
-                            ObraSocial obraModificada = new ObraSocial();
+                            lblMensaje.CssClass = "alert alert-warning d-block";
+                            lblMensaje.Text = "Ya existe una obra social con ese nombre.";
+                            lblMensaje.Visible = true;
+                            listaObrasSociales = negocio.Listar();
+                            ///////////ver donde podemos mostrar fuera del modal 
+
+                            return;
+                        }
+                        else
+                        {
+
                             obraModificada.Id = idObraSocial;
                             obraModificada.Descripcion = nuevaDescripcion;
-                            // Llamar a una función para modificar en la base de datos
+
                             bool resultado = negocio.modificarObraSocial(obraModificada);
 
-                            if (resultado)
+                            if (!resultado)
                             {
-                                //recargamos la lista con la modificacion
-                                listaObrasSociales = negocio.Listar();
-                            }
-                            else
-                            {
+
                                 lblMensaje.Text = "Ocurrió un error al modificar la obra social.";
+                                ///////////ver donde podemos mostrar fuera del modal 
                             }
                         }
                     }
                 }
                 listaObrasSociales = negocio.Listar();
-
-
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
@@ -76,10 +85,12 @@ namespace tp_cuatrimestral_equipo_12B
         protected void btnMostrarFormularioAgregar_Click(object sender, EventArgs e)
         {
             formAgregar.Visible = true;
+            lblMensaje.Visible = false;
         }
         protected void cerrarForm_Click(object sender, EventArgs e)
         {
             formAgregar.Visible = false;
+
         }
 
 

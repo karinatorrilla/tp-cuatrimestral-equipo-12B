@@ -15,11 +15,21 @@ namespace tp_cuatrimestral_equipo_12B
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            EspecialidadNegocio negocio = new EspecialidadNegocio();
-
-            //MODIFICACIÓN
-            if (!IsPostBack)
+            try
             {
+                EspecialidadNegocio negocio = new EspecialidadNegocio();
+
+                //ELIMINACIÓN
+                if (!IsPostBack && Request["eliminar"] != null)
+                {
+                    int idEliminar;
+                    if (int.TryParse(Request["eliminar"], out idEliminar))
+                    {
+                        negocio.eliminarEspecialidad(idEliminar);
+                    }
+                }
+
+                //MODIFICACIÓN
                 if (Request.Form["IdEspecialidad"] != null && Request.Form["DescripcionModificada"] != null)
                 {
                     int idEspecialidad;
@@ -28,67 +38,103 @@ namespace tp_cuatrimestral_equipo_12B
                     if (int.TryParse(Request.Form["IdEspecialidad"], out idEspecialidad) && !string.IsNullOrEmpty(nuevaDescripcion))
                     {
                         Especialidad especialidadModificada = new Especialidad();
-                        especialidadModificada.Id = idEspecialidad;
-                        especialidadModificada.Descripcion = nuevaDescripcion;
-                        // Llamar a una función para modificar en la base de datos
-                        bool resultado = negocio.modificarEspecialidad(especialidadModificada);
+                        List<Especialidad> lista = negocio.Listar();
 
-                        if (resultado)
+                        bool yaExiste = lista.Any(o => o.Descripcion.Trim().ToLower() == nuevaDescripcion.ToLower());
+                        if (yaExiste)
                         {
-
-                            Response.Redirect("Especialidades.aspx");
+                            lblMensaje.CssClass = "alert alert-warning d-block";
+                            lblMensaje.Text = "Ya existe una especialidad con ese nombre.";
+                            lblMensaje.Visible = true;
+                            listaEspecialidades = negocio.Listar();
+                            return;
+                            ///////////ver donde podemos mostrar fuera del modal 
                         }
                         else
                         {
-                            lblMensaje.Text = "Ocurrió un error al modificar la especialidad.";
+
+
+                            especialidadModificada.Id = idEspecialidad;
+                            especialidadModificada.Descripcion = nuevaDescripcion;
+
+                            bool resultado = negocio.modificarEspecialidad(especialidadModificada);
+
+                            if (!resultado)
+                            {
+                                lblMensaje.Text = "Ocurrió un error al modificar la especialidad.";
+                                ///////////ver donde podemos mostrar fuera del modal 
+                            }
                         }
                     }
                 }
-            }
 
-            //ELIMINACIÓN
-            if (!IsPostBack && Request["eliminar"] != null)
+                listaEspecialidades = negocio.Listar();
+            }
+            catch (Exception ex)
             {
-                int idEliminar;
-                if (int.TryParse(Request["eliminar"], out idEliminar))
-                {
 
-                    negocio.eliminarEspecialidad(idEliminar);
-                }
+                throw ex;
             }
+        }
 
 
-            listaEspecialidades = negocio.Listar();
+        protected void btnMostrarFormularioAgregar_Click(object sender, EventArgs e)
+        {
+            formAgregar.Visible = true;
+            lblMensaje.Visible = false;
+        }
 
-
+        protected void cerrarForm_Click(object sender, EventArgs e)
+        {
+            formAgregar.Visible = false;
         }
 
 
 
         protected void AgregarEspecialidad_Click(object sender, EventArgs e)
         {
+            string nombre = txtNombreEspecialidad.Text.Trim();
 
-            string descripcion = txtNombreEspecialidad.Text.Trim();
-
-            if (string.IsNullOrEmpty(descripcion))
+            if (string.IsNullOrEmpty(nombre))
             {
-                ///mostrar mensaje de error
-                lblMensaje.Text = "¡Complete el campo!";
+                lblMensaje.CssClass = "alert alert-danger d-block";
+                lblMensaje.Text = "El nombre de la especialidad no puede estar vacío.";
+                lblMensaje.Visible = true;
                 return;
             }
 
             EspecialidadNegocio negocio = new EspecialidadNegocio();
-            Especialidad nueva = new Especialidad();
+            List<Especialidad> lista = negocio.Listar();
 
-            nueva.Descripcion = txtNombreEspecialidad.Text;
-            negocio.agregarEspecialidad(nueva);
+            bool yaExiste = lista.Any(o => o.Descripcion.Trim().ToLower() == nombre.ToLower());
 
-            txtNombreEspecialidad.Text = ""; //borramos la caja de texto despues de agregar
+            if (yaExiste)
+            {
+                lblMensaje.CssClass = "alert alert-warning d-block";
+                lblMensaje.Text = "Ya existe una especialidad con ese nombre.";
+                lblMensaje.Visible = true;
 
-            listaEspecialidades = negocio.Listar(); // recargamos la lista
+                return;
+            }
+
+            Especialidad nuevo = new Especialidad();
+            nuevo.Descripcion = nombre;
+
+            negocio.agregarEspecialidad(nuevo);
+
+            txtNombreEspecialidad.Text = "";
+            lblMensaje.Text = "Especialidad agregada correctamente.";
+            lblMensaje.CssClass = "alert alert-success d-block";
+            lblMensaje.Visible = true;
+
+            //Ocultamos el formulario
+            formAgregar.Visible = false;
+
+            // Cargamos la lista actualizada
+            listaEspecialidades = negocio.Listar();
+
+
 
         }
-
-
     }
 }

@@ -10,27 +10,14 @@ namespace negocio
     public class ObraSocialNegocio
     {
 
-        //public List<ObraSocial> Listar()
-        //{
-        //    List<ObraSocial> lista = new List<ObraSocial>();
-        //    //SE HARCODEA ObraSociales  proximo hacer tabla y traer de DB !!!!!!!!!!!!!!!!
-        //    lista.Add(new ObraSocial { Id = 1, Descripcion = "Particular" });
-        //    lista.Add(new ObraSocial { Id = 2, Descripcion = "OSDE" });
-        //    lista.Add(new ObraSocial { Id = 3, Descripcion = "Swiss Medical" });
-        //    lista.Add(new ObraSocial { Id = 4, Descripcion = "Galeno" });
-        //    lista.Add(new ObraSocial { Id = 5, Descripcion = "Medicus" });
-
-        //    return lista;
-        //}
-
-        public List<ObraSocial> Listar()
+              public List<ObraSocial> Listar()
         {
             List<ObraSocial> lista = new List<ObraSocial>();
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta("select ID,Descripcion from OBRASOCIAL ORDER BY Descripcion ASC");
+                datos.setearConsulta("select ID,Descripcion from OBRASOCIAL where Habilitado=1 ORDER BY Descripcion ASC");
                 datos.ejecutarLectura();
                 while (datos.Lector.Read())
                 {
@@ -87,7 +74,7 @@ namespace negocio
             {
                 datos.setearConsulta("UPDATE OBRASOCIAL SET Descripcion = @Descripcion WHERE ID = @Id");
                 datos.setearParametro("@Descripcion", mod.Descripcion);
-                datos.setearParametro("@ID", mod.Id);
+                datos.setearParametro("@Id", mod.Id);
                 datos.ejecutarAccion();
 
                 return true;
@@ -109,7 +96,7 @@ namespace negocio
 
             try
             {                                                       
-                datos.setearConsulta("delete from OBRASOCIAL where ID =@id");
+                datos.setearConsulta("update OBRASOCIAL set Habilitado=0 where ID=@id");
                 datos.setearParametro("@id", idObra);
 
                 datos.ejecutarAccion();

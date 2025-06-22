@@ -7,6 +7,11 @@
     <div class="container-fluid py-4">
         <h1 class="mb-4">Listado de Especialidades</h1>
 
+        <%--Botón agregar especialidad para abrir el modal--%>
+
+        <asp:Button ID="btnMostrarFormularioAgregar" runat="server" Text="Agregar Especialidad" CssClass="btn btn-success mb-4" OnClick="btnMostrarFormularioAgregar_Click" />
+
+        <%--Tabla con listado de Especialidades--%>
         <div class="table-responsive d-flex justify-content-center">
             <div style="width: 50%;">
                 <table class="table table-striped table-hover table-bordered align-middle">
@@ -90,35 +95,21 @@
 
 
 
-        <!-- Botón agregar especialidad para abrir el modal -->
-        <div class="d-flex justify-content-center align-items-center">
-            <asp:Label ID="lblMensaje" runat="server" CssClass="text-danger"></asp:Label>
 
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarEspecialidadModal">
-                Agregar Especialidad
-            </button>
-        </div>
         <!-- Modal Agregar Especialidad -->
-        <div class="modal fade" id="agregarEspecialidadModal" tabindex="-1" aria-labelledby="agregarEspecialidadModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="agregarEspecialidadModalLabel">Agregar Especialidad</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="txtNombreEspecialidad" class="form-label">Nombre de la especialidad:</label>
-
-                            <asp:TextBox ID="txtNombreEspecialidad" required="true" runat="server" CssClass="form-control" placeholder="Ej. Dentista"></asp:TextBox>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <asp:Button ID="AgregarEspecialidad" runat="server" CssClass="btn btn-primary" Text="Guardar"
-                            OnClick="AgregarEspecialidad_Click" />
-                    </div>
-                </div>
-            </div>
+       <asp:Panel ID="formAgregar" runat="server" Visible="false" CssClass="card mt-4" Style="width: 50%; margin: auto;">
+    <div class="card-header">
+        Agregar Especialidad              
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <label for="txtNombreEspecialidad" class="form-label">Nombre de la especialidad:</label>
+            <asp:TextBox ID="txtNombreEspecialidad" runat="server" CssClass="form-control" placeholder="Ej. Dentista"></asp:TextBox>
         </div>
+        <asp:Label ID="lblMensaje" runat="server" Visible="false" CssClass="alert alert-info d-block"></asp:Label>
+        <asp:Button ID="AgregarEspecialidad" runat="server" CssClass="btn btn-primary" Text="Guardar" OnClick="AgregarEspecialidad_Click" />
+        <asp:Button ID="cerrarForm" runat="server" CssClass="btn btn-secondary" Text="Cerrar" OnClick="cerrarForm_Click" />
+    </div>
+
+</asp:Panel>
 </asp:Content>

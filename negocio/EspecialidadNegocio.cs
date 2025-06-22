@@ -16,7 +16,7 @@ namespace negocio
 
             try
             {
-                datos.setearConsulta("select ID, Descripcion from ESPECIALIDADES");
+                datos.setearConsulta("select ID, Descripcion from ESPECIALIDADES where Habilitado = 1");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -95,7 +95,7 @@ namespace negocio
 
             try
             {
-                datos.setearConsulta("Delete from ESPECIALIDADES WHERE ID = @ID");
+                datos.setearConsulta("UPDATE ESPECIALIDADES SET Habilitado=0 WHERE ID = @ID");
                 datos.setearParametro("@ID", idEspecialidad);
 
                 datos.ejecutarAccion();

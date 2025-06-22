@@ -10,6 +10,7 @@
 
         <%--Botón para mostrar el formulario de agregar--%>
         <asp:Button ID="btnMostrarFormularioAgregar" runat="server" Text="Agregar Obra Social" CssClass="btn btn-success mb-4" OnClick="btnMostrarFormularioAgregar_Click" />
+   
 
 
 
@@ -38,7 +39,7 @@
                                     data-bs-toggle="modal" data-bs-target="#eliminarModal_<%= obra.Id %>" />
                             </td>
 
-                            <!-- Modal dentro del foreach -->
+                            <%--Modal dentro del foreach  modificar--%>
                             <div class="modal fade" id="modificarModal_<%= obra.Id %>" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
@@ -61,6 +62,7 @@
                                 </div>
                             </div>
 
+  
 
                             <%--Modal Eliminar Obra Social--%>
 
@@ -117,8 +119,7 @@
             </div>
 
         </asp:Panel>
-
-
+        
 
 
     </div>

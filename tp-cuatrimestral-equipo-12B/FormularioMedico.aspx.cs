@@ -26,15 +26,15 @@ namespace tp_cuatrimestral_equipo_12B
             txtNacionalidad.Enabled = false;
             ddlProvincia.Enabled = false;
             ddlLocalidad.Enabled = false;
-            txtCalle.Enabled = false; 
+            txtCalle.Enabled = false;
             txtAltura.Enabled = false;
             txtCodPostal.Enabled = false;
             txtDepto.Enabled = false;
-            lstEspecialidades.Enabled = false; 
+            lstEspecialidades.Enabled = false;
             ddlTurnoTrabajo.Enabled = false;
             lstDiaSemana.Enabled = false;
             ddlHoraInicioBloque.Enabled = false;
-            ddlHoraFinBloque.Enabled = false;  
+            ddlHoraFinBloque.Enabled = false;
 
         }
 
@@ -204,7 +204,7 @@ namespace tp_cuatrimestral_equipo_12B
             }
             else
             {
-                lblCantidadEspecialidadesSeleccionadas.Text = ""; 
+                lblCantidadEspecialidadesSeleccionadas.Text = "";
                 lblCantidadEspecialidadesSeleccionadas.Visible = false;
             }
         }
@@ -382,7 +382,7 @@ namespace tp_cuatrimestral_equipo_12B
                 medicoNuevo.Matricula = int.Parse(txtMatricula.Text);
                 medicoNuevo.Nombre = txtNombre.Text;
                 medicoNuevo.Apellido = txtApellido.Text;
-                medicoNuevo.Documento = int.Parse(txtDni.Text); 
+                medicoNuevo.Documento = int.Parse(txtDni.Text);
                 medicoNuevo.Email = txtEmail.Text;
                 medicoNuevo.Telefono = txtTelefono.Text;
                 medicoNuevo.Nacionalidad = txtNacionalidad.Text;
@@ -467,7 +467,7 @@ namespace tp_cuatrimestral_equipo_12B
                 else
                 {
                     medicoNuevo.HoraInicioBloque = null;
-                    medicoNuevo.HoraFinBloque = null; 
+                    medicoNuevo.HoraFinBloque = null;
                 }
 
 
