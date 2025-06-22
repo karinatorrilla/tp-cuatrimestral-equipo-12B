@@ -18,46 +18,46 @@ namespace tp_cuatrimestral_equipo_12B
         {
             try
             {
-            ObraSocialNegocio negocio = new ObraSocialNegocio();
+                ObraSocialNegocio negocio = new ObraSocialNegocio();
                 if (!IsPostBack && Request["eliminar"] != null)
                 {
                     int idEliminar;
                     if (int.TryParse(Request["eliminar"], out idEliminar))
                     {
-                       
+
                         negocio.eliminarObra(idEliminar);
                     }
                 }
-           
 
-            if (!IsPostBack)
-            {
-                if (Request.Form["IdObraSocial"] != null && Request.Form["DescripcionModificada"] != null)
+
+                if (!IsPostBack)
                 {
-                    int idObraSocial;
-                    string nuevaDescripcion = Request.Form["DescripcionModificada"].Trim();
-
-                    if (int.TryParse(Request.Form["IdObraSocial"], out idObraSocial) && !string.IsNullOrEmpty(nuevaDescripcion))
+                    if (Request.Form["IdObraSocial"] != null && Request.Form["DescripcionModificada"] != null)
                     {
-                        ObraSocial obraModificada = new ObraSocial();
-                        obraModificada.Id = idObraSocial;
-                        obraModificada.Descripcion= nuevaDescripcion;
-                        // Llamar a una función para modificar en la base de datos
-                        bool resultado = negocio.modificarObraSocial(obraModificada);
+                        int idObraSocial;
+                        string nuevaDescripcion = Request.Form["DescripcionModificada"].Trim();
 
-                        if (resultado)
+                        if (int.TryParse(Request.Form["IdObraSocial"], out idObraSocial) && !string.IsNullOrEmpty(nuevaDescripcion))
                         {
-                           //recargamos la lista con la modificacion
-                            listaObrasSociales = negocio.Listar();
-                        }
-                        else
-                        {
-                            lblMensaje.Text = "Ocurrió un error al modificar la obra social.";
+                            ObraSocial obraModificada = new ObraSocial();
+                            obraModificada.Id = idObraSocial;
+                            obraModificada.Descripcion = nuevaDescripcion;
+                            // Llamar a una función para modificar en la base de datos
+                            bool resultado = negocio.modificarObraSocial(obraModificada);
+
+                            if (resultado)
+                            {
+                                //recargamos la lista con la modificacion
+                                listaObrasSociales = negocio.Listar();
+                            }
+                            else
+                            {
+                                lblMensaje.Text = "Ocurrió un error al modificar la obra social.";
+                            }
                         }
                     }
                 }
-            }
-            listaObrasSociales = negocio.Listar();
+                listaObrasSociales = negocio.Listar();
 
 
             }
@@ -124,7 +124,7 @@ namespace tp_cuatrimestral_equipo_12B
             formAgregar.Visible = false;
 
             // Cargamos la lista actualizada
-            //listaObrasSociales = negocio.Listar();
+            listaObrasSociales = negocio.Listar();
         }
 
 

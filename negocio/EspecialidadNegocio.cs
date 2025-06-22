@@ -9,19 +9,6 @@ namespace negocio
 {
     public class EspecialidadNegocio
     {
-
-        //public List<Especialidad> Listar()
-        //{
-        //    List<Especialidad> lista = new List<Especialidad>();
-        //    //SE HARCODEA ESPECIALEDADES
-        //    lista.Add(new Especialidad { Id = 1, Descripcion = "Cardiología" });
-        //    lista.Add(new Especialidad { Id = 2, Descripcion = "Pediatría" });
-        //    lista.Add(new Especialidad { Id = 3, Descripcion = "Dermatología" });
-        //    lista.Add(new Especialidad { Id = 4, Descripcion = "Neurología" });
-        //    lista.Add(new Especialidad { Id = 5, Descripcion = "Ginecología" });
-        //    return lista;
-        //}
-
         public List<Especialidad> Listar()
         {
             List<Especialidad> lista = new List<Especialidad>();
@@ -29,15 +16,15 @@ namespace negocio
 
             try
             {
-                datos.setearConsulta("select ID,Descripcion from ESPECIALIDADES");
+                datos.setearConsulta("select ID, Descripcion from ESPECIALIDADES");
                 datos.ejecutarLectura();
+
                 while (datos.Lector.Read())
                 {
                     Especialidad aux = new Especialidad();
                     aux.Id = (int)datos.Lector["ID"];
                     aux.Descripcion = (string)datos.Lector["Descripcion"];
                     lista.Add(aux);
-
                 }
 
                 return lista;
@@ -59,13 +46,10 @@ namespace negocio
 
             try
             {
-              
-               
                 datos.setearConsulta("INSERT INTO ESPECIALIDADES (Descripcion) VALUES(@Especialidad)");
-
                 datos.setearParametro("@Especialidad", nuevo.Descripcion);
-                
                 datos.ejecutarAccion();
+
                 return true;
             }
             catch (Exception ex)
@@ -79,6 +63,54 @@ namespace negocio
             }
         }
 
+        public bool modificarEspecialidad(Especialidad mod)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+
+                datos.setearConsulta("UPDATE ESPECIALIDADES SET Descripcion = @Descripcion WHERE ID = @ID");
+                datos.setearParametro("@Descripcion", mod.Descripcion);
+                datos.setearParametro("@ID", mod.Id);
+                datos.ejecutarAccion();
+
+                return true;
+            }
+            catch (Exception ex) 
+            {
+                return false;
+                throw new Exception("Error al modificar especialidad: " + ex.Message, ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void eliminarEspecialidad(int idEspecialidad)  
+        {
+
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("Delete from ESPECIALIDADES WHERE ID = @ID");
+                datos.setearParametro("@ID", idEspecialidad);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+                throw new Exception("Error al eliminar especialidad: " + ex.Message, ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
 
     }
 }

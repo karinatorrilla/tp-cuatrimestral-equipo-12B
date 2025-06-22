@@ -20,9 +20,7 @@
                     <thead class="table-dark">
                         <tr>
                             <th class="text-center">NOMBRE</th>
-                            <th class="text-center">Acciones</th>
-
-
+                            <th class="text-center">ACCIONES</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -38,52 +36,53 @@
                                     data-bs-target="#modificarModal_<%= obra.Id %>" />
                                 <img src="images/icon_delete.svg" alt="Eliminar" class="action-icon-img" style="cursor: pointer"
                                     data-bs-toggle="modal" data-bs-target="#eliminarModal_<%= obra.Id %>" />
+                            </td>
 
-                                <!-- Modal dentro del foreach -->
-                                <div class="modal fade" id="modificarModal_<%= obra.Id %>" tabindex="-1">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <form method="post" action="ObrasSociales.aspx">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Modificar Obra Social</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <input type="hidden" name="IdObraSocial" value="<%= obra.Id %>" />
-                                                    <label>Nombre</label>
-                                                    <input type="text" name="DescripcionModificada" class="form-control" value="<%= obra.Descripcion %>" />
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <button type="submit" class="btn btn-success">Guardar Modificacion</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <%--Modal Eliminar Obra Social--%>
-
-                                <div class="modal fade" id="eliminarModal_<%= obra.Id %>" tabindex="-1" aria-labelledby="eliminarLabel_<%= obra.Id %>" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
+                            <!-- Modal dentro del foreach -->
+                            <div class="modal fade" id="modificarModal_<%= obra.Id %>" tabindex="-1">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <form method="post" action="ObrasSociales.aspx">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="eliminarLabel_<%= obra.Id %>">Confirmar Eliminación</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                <h5 class="modal-title">Modificar Obra Social</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                             </div>
                                             <div class="modal-body">
-                                                ¿Estás seguro que deseas eliminar la Obra Social:  
-                                                <strong><%= obra.Descripcion%></strong>?
-                
+                                                <input type="hidden" name="IdObraSocial" value="<%= obra.Id %>" />
+                                                <label>Nombre</label>
+                                                <input type="text" name="DescripcionModificada" class="form-control" value="<%= obra.Descripcion %>" />
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                <a href="ObrasSociales.aspx?eliminar=<%= obra.Id %>" class="btn btn-danger">Eliminar</a>
+                                                <button type="submit" class="btn btn-success">Guardar Modificacion</button>
                                             </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <%--Modal Eliminar Obra Social--%>
+
+                            <div class="modal fade" id="eliminarModal_<%= obra.Id %>" tabindex="-1" aria-labelledby="eliminarLabel_<%= obra.Id %>" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="eliminarLabel_<%= obra.Id %>">Confirmar Eliminación</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            ¿Estás seguro que deseas eliminar la Obra Social:  
+                                                <strong><%= obra.Descripcion%></strong>?
+                
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <a href="ObrasSociales.aspx?eliminar=<%= obra.Id %>" class="btn btn-danger">Eliminar</a>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                             </td>
 
                         </tr>
@@ -105,7 +104,7 @@
         <%--Formulario para agregar nueva obra social (oculto al principio)--%>
         <asp:Panel ID="formAgregar" runat="server" Visible="false" CssClass="card mt-4" Style="width: 50%; margin: auto;">
             <div class="card-header">
-                Agregar Nueva Obra Social
+                Agregar Nueva Obra Social               
             </div>
             <div class="card-body">
                 <div class="mb-3">
