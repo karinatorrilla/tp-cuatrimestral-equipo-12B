@@ -1,17 +1,20 @@
-﻿using System;
+﻿using dominio;
+using negocio;
+using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Threading.Tasks;
-using dominio;
-using negocio;
 
 namespace tp_cuatrimestral_equipo_12B
 {
     public partial class FormularioPaciente : System.Web.UI.Page
     {
+
         // Deshabilitar todos los textbox y ddl del formulario
         private void DeshabilitarCampos()
         {
@@ -161,14 +164,77 @@ namespace tp_cuatrimestral_equipo_12B
             }
         }
 
+        private bool validarPaciente()
+        {
+            //validar teléfono con expresión regular
+            string telefono = txtTelefono.Text;
+            if (!Regex.IsMatch(telefono, @"^\d{1,10}$"))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "El teléfono debe contener solo números y tener hasta 10 dígitos.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar que nacionalidad solo sea Argentina
+            if (txtNacionalidad.Text.Trim().ToLower() != "argentina")
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "Solo se permite nacionalidad Argentina.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar máximo de caracteres en codigo postal a 6 y que sea solo números
+            string codigoPostal = txtCodPostal.Text;
+            if (!Regex.IsMatch(codigoPostal, @"^\d{1,6}$"))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "El código postal debe contener solo números y tener hasta 6 dígitos.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar máximo de caracteres en altura a 7 y que sea solo números
+            string altura = txtAltura.Text;
+            if (!Regex.IsMatch(altura, @"^\d{1,7}$"))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "La altura debe contener solo números y tener hasta 7 dígitos.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar que calle sea solo números o letras
+            if (!Regex.IsMatch(txtDireccion.Text, @"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$"))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "La calle debe contener solo números y letras.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar si el paciente existe mediante el documento
+            PacienteNegocio negocio = new PacienteNegocio();
+            List<Paciente> lista = negocio.ListarPacientes();
+            if (lista.Any(p => p.Documento == int.Parse(txtDni.Text)))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "Ya existe un paciente registrado con ese documento.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            return true;
+        }
+
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
             Paciente pacientenuevo = new Paciente();
             PacienteNegocio negocio = new PacienteNegocio();
             try
             {
-
-                //validacion de fecha nacimiento para que no sea fecha futura 
+                //validacion de fecha nacimiento para que no sea fecha futura
                 DateTime fechaNacimiento;
                 if (!DateTime.TryParse(txtFechaNacimiento.Text, out fechaNacimiento) || fechaNacimiento > DateTime.Now)
                 {
@@ -178,50 +244,52 @@ namespace tp_cuatrimestral_equipo_12B
                     return;
                 }
 
-                pacientenuevo.FechaNacimiento = fechaNacimiento;
-                pacientenuevo.Nombre = txtNombre.Text;
-                pacientenuevo.Apellido = txtApellido.Text;
-                pacientenuevo.Documento = int.Parse(txtDni.Text);
-                pacientenuevo.Email = txtEmail.Text;
-                pacientenuevo.Telefono = txtTelefono.Text;
-                pacientenuevo.Nacionalidad = txtNacionalidad.Text;
-                pacientenuevo.Provincia = ddlProvincia.SelectedValue;
-                pacientenuevo.Localidad = ddlLocalidad.SelectedValue;
-                pacientenuevo.Calle = txtDireccion.Text;
-                pacientenuevo.Altura = int.Parse(txtAltura.Text);
-                pacientenuevo.CodPostal = txtCodPostal.Text;
-                pacientenuevo.Depto = txtDepto.Text;
-                pacientenuevo.ObraSocial = int.Parse(ddlObraSocial.SelectedValue);
-
-                pacientenuevo.Observaciones = txtObservaciones.Text;
-
-                // Habilitado: Por defecto en 1 (true) para nuevos pacientes
-                pacientenuevo.Habilitado = 1;
-
-                if (Request.QueryString["id"] != null)
+                if (validarPaciente() == true)
                 {
-                    pacientenuevo.Id = int.Parse(Request.QueryString["id"].ToString()); //le paso el id para modificar
-                    negocio.modificarPaciente(pacientenuevo);
-                    divMensaje.Attributes["class"] = "alert alert-success";
-                    divMensaje.InnerText = "Modificación realizada con éxito.";
-                    divMensaje.Visible = true;
-                }
-                else
-                {
-                    if (negocio.agregarPaciente(pacientenuevo))
+                    pacientenuevo.FechaNacimiento = fechaNacimiento;
+                    pacientenuevo.Nombre = txtNombre.Text;
+                    pacientenuevo.Apellido = txtApellido.Text;
+                    pacientenuevo.Documento = int.Parse(txtDni.Text);
+                    pacientenuevo.Email = txtEmail.Text;
+                    pacientenuevo.Telefono = txtTelefono.Text;
+                    pacientenuevo.Nacionalidad = txtNacionalidad.Text;
+                    pacientenuevo.Provincia = ddlProvincia.SelectedValue;
+                    pacientenuevo.Localidad = ddlLocalidad.SelectedValue;
+                    pacientenuevo.Calle = txtDireccion.Text;
+                    pacientenuevo.Altura = int.Parse(txtAltura.Text);
+                    pacientenuevo.CodPostal = txtCodPostal.Text;
+                    pacientenuevo.Depto = txtDepto.Text;
+                    pacientenuevo.ObraSocial = int.Parse(ddlObraSocial.SelectedValue);
+
+                    pacientenuevo.Observaciones = txtObservaciones.Text;
+
+                    // Habilitado: Por defecto en 1 (true) para nuevos pacientes
+                    pacientenuevo.Habilitado = 1;
+
+                    if (Request.QueryString["id"] != null)
                     {
+                        pacientenuevo.Id = int.Parse(Request.QueryString["id"].ToString()); //le paso el id para modificar
+                        negocio.modificarPaciente(pacientenuevo);
                         divMensaje.Attributes["class"] = "alert alert-success";
-                        divMensaje.InnerText = "Operación realizada con éxito.";
+                        divMensaje.InnerText = "Modificación realizada con éxito.";
+                        divMensaje.Visible = true;
                     }
                     else
                     {
-                        divMensaje.Attributes["class"] = "alert alert-danger";
-                        divMensaje.InnerText = "Ocurrió un error al procesar la operación.";
+                        if (negocio.agregarPaciente(pacientenuevo))
+                        {
+                            divMensaje.Attributes["class"] = "alert alert-success";
+                            divMensaje.InnerText = "Operación realizada con éxito.";
+                        }
+                        else
+                        {
+                            divMensaje.Attributes["class"] = "alert alert-danger";
+                            divMensaje.InnerText = "Ocurrió un error al procesar la operación.";
+                        }
+                        divMensaje.Visible = true;
                     }
-                    divMensaje.Visible = true;
+
                 }
-
-
             }
             catch (Exception)
             {

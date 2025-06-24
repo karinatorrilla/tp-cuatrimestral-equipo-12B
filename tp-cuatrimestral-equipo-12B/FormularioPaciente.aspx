@@ -72,7 +72,7 @@
             <%-- Teléfono --%>
             <div class="col-md-3">
                 <label for="txtTelefono" class="form-label font-weight-bold text-dark">Teléfono</label>
-                <asp:TextBox runat="server" ID="txtTelefono" CssClass="form-control" placeholder="1123456789" required="true" />
+                <asp:TextBox runat="server" ID="txtTelefono" CssClass="form-control" pattern="\d{1,10}" MaxLength="10" placeholder="1123456789" required="true" title="Solo números, máximo 10 cifras" />
             </div>
 
             <%-- Nacionalidad --%>
@@ -122,13 +122,13 @@
             <%-- Altura --%>
             <div class="col-md-1">
                 <label for="txtAltura" class="form-label font-weight-bold text-dark">Altura</label>
-                <asp:TextBox runat="server" ID="txtAltura" CssClass="form-control" placeholder="123" required="true" />
+                <asp:TextBox runat="server" ID="txtAltura" MaxLength="7" CssClass="form-control" placeholder="123" required="true" />
             </div>
 
             <%-- Cod Postal --%>
             <div class="col-md-1">
                 <label for="txtCodPostal" class="form-label font-weight-bold text-dark">Cod. Postal</label>
-                <asp:TextBox runat="server" ID="txtCodPostal" CssClass="form-control" placeholder="1614" required="true" />
+                <asp:TextBox runat="server" ID="txtCodPostal" MaxLength="6" CssClass="form-control" placeholder="1614" required="true" />
             </div>
 
             <%-- Depto --%>
