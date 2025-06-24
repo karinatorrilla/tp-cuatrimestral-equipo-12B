@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Text.RegularExpressions;
 
 namespace tp_cuatrimestral_equipo_12B
 {
@@ -111,6 +112,15 @@ namespace tp_cuatrimestral_equipo_12B
             List<ObraSocial> lista = negocio.Listar();
 
             bool yaExiste = lista.Any(o => o.Descripcion.Trim().ToLower() == nombre.ToLower());
+
+            if (!Regex.IsMatch(txtNombreObraSocial.Text, @"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"))
+            {               
+                lblMensaje.CssClass = "alert alert-warning d-block";
+                lblMensaje.Text = "El nombre de la obra social solo puede contener letras.";
+                lblMensaje.Visible = true;
+
+                return;
+            }
 
             if (yaExiste)
             {

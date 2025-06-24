@@ -1,11 +1,12 @@
-﻿using System;
+﻿using dominio;
+using negocio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using dominio;
-using negocio;
 
 namespace tp_cuatrimestral_equipo_12B
 {
@@ -107,6 +108,15 @@ namespace tp_cuatrimestral_equipo_12B
             List<Especialidad> lista = negocio.Listar();
 
             bool yaExiste = lista.Any(o => o.Descripcion.Trim().ToLower() == nombre.ToLower());
+
+            if (!Regex.IsMatch(txtNombreEspecialidad.Text, @"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"))
+            {
+                lblMensaje.CssClass = "alert alert-warning d-block";
+                lblMensaje.Text = "El nombre de la especialidad solo puede contener letras.";
+                lblMensaje.Visible = true;
+
+                return;
+            }
 
             if (yaExiste)
             {
