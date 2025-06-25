@@ -35,13 +35,13 @@
             <%-- Nombre --%>
             <div class="col-md-3">
                 <label for="txtNombre" class="form-label font-weight-bold text-dark">Nombre</label>
-                <asp:TextBox runat="server" ID="txtNombre" CssClass="form-control" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$" title="No puede contener numeros" placeholder="Pedro" required="true" />
+                <asp:TextBox runat="server" ID="txtNombre" CssClass="form-control" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$" title="El nombre debe contener solo letras, sin espacios ni al principio ni al final." placeholder="Pedro" required="true" />
             </div>
 
             <%-- Apellido --%>
             <div class="col-md-3">
                 <label for="txtApellido" class="form-label font-weight-bold text-dark">Apellido</label>
-                <asp:TextBox runat="server" ID="txtApellido" CssClass="form-control" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$" title="No puede contener numeros" placeholder="Lopez" required="true" />
+                <asp:TextBox runat="server" ID="txtApellido" CssClass="form-control" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$" title="El apellido debe contener solo letras, sin espacios ni al principio ni al final." placeholder="Lopez" required="true" />
             </div>
 
             <%-- DNI --%>
@@ -49,7 +49,7 @@
                 <label for="txtDni" class="form-label font-weight-bold text-dark">Documento</label>
 
                 <asp:TextBox runat="server" ID="txtDni" CssClass="form-control" MaxLength="8" placeholder="12345678" required="true" TextMode="SingleLine" pattern="\d{1,8}"
-                    title="El DNI debe tener entre 1 y 8 dígitos" />
+                    title="El documento debe contener solo números y tener hasta 8 dígitos." />
 
             </div>
 

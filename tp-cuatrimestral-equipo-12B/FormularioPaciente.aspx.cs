@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
@@ -195,6 +196,46 @@ namespace tp_cuatrimestral_equipo_12B
 
         private bool validarPaciente()
         {
+            //validar nombre solo letras y no mayor a 20
+            string nombre = txtNombre.Text;
+            if (!Regex.IsMatch(nombre, @"^(?!.* {2})[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$"))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "El nombre debe contener solo letras, sin espacios ni al principio ni al final.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar apellido solo letras y no mayor a 20
+            string apellido = txtApellido.Text;
+            if (!Regex.IsMatch(apellido, @"^(?!.* {2})[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$"))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "El apellido debe contener solo letras, sin espacios ni al principio ni al final.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar documento solo numeros y no mayor a 8
+            string documento = txtDni.Text;
+            if (!Regex.IsMatch(documento, @"^\d{1,8}$"))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "El documento debe contener solo números y tener hasta 8 dígitos.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar email que contenga formato de mail
+            string email = txtEmail.Text;
+            if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "Ingrese un email válido por favor.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
             //validar teléfono con expresión regular
             string telefono = txtTelefono.Text;
             if (!Regex.IsMatch(telefono, @"^\d{1,10}$"))
@@ -272,7 +313,7 @@ namespace tp_cuatrimestral_equipo_12B
                 //validacion de fecha nacimiento para que no sea fecha futura
                 //y que no sea menor a lo aceptado por SQL Server (1/1/1753)
                 DateTime fechaNacimiento;
-                if (!DateTime.TryParse(txtFechaNacimiento.Text, out fechaNacimiento) || 
+                if (!DateTime.TryParse(txtFechaNacimiento.Text, out fechaNacimiento) ||
                     fechaNacimiento > DateTime.Now ||
                     fechaNacimiento < (DateTime)System.Data.SqlTypes.SqlDateTime.MinValue)
                 {
