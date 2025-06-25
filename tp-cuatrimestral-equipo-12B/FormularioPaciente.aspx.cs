@@ -196,9 +196,16 @@ namespace tp_cuatrimestral_equipo_12B
 
         private bool validarPaciente()
         {
-            //validar nombre solo letras y no mayor a 20
+            //validar nombre solo letras y no mayor a 100
             string nombre = txtNombre.Text;
-            if (!Regex.IsMatch(nombre, @"^(?!.* {2})[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$"))
+            if (nombre.Length > 100)
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "El nombre no puede superar los 100 caracteres.";
+                divMensaje.Visible = true;
+                return false;
+            }
+            if (!Regex.IsMatch(nombre, "^(?!.* {2})(?! )[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*(?<! )$"))
             {
                 divMensaje.Attributes["class"] = "alert alert-danger";
                 divMensaje.InnerText = "El nombre debe contener solo letras, sin espacios ni al principio ni al final.";
@@ -206,9 +213,16 @@ namespace tp_cuatrimestral_equipo_12B
                 return false;
             }
 
-            //validar apellido solo letras y no mayor a 20
-            string apellido = txtApellido.Text;
-            if (!Regex.IsMatch(apellido, @"^(?!.* {2})[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$"))
+            //validar apellido solo letras y no mayor a 100
+            string apellido = txtApellido.Text;            
+            if (apellido.Length > 100)
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "El apellido no puede superar los 100 caracteres.";
+                divMensaje.Visible = true;
+                return false;
+            }
+            if (!Regex.IsMatch(apellido, @"^(?!.* {2})(?! )[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*(?<! )$"))
             {
                 divMensaje.Attributes["class"] = "alert alert-danger";
                 divMensaje.InnerText = "El apellido debe contener solo letras, sin espacios ni al principio ni al final.";
@@ -226,8 +240,15 @@ namespace tp_cuatrimestral_equipo_12B
                 return false;
             }
 
-            //validar email que contenga formato de mail
+            //validar email que contenga formato de mail, validar longitud máxima del mail a 100
             string email = txtEmail.Text;
+            if (email.Length > 100)
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "El email no puede superar los 100 caracteres.";
+                divMensaje.Visible = true;
+                return false;
+            }
             if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
                 divMensaje.Attributes["class"] = "alert alert-danger";
@@ -267,10 +288,10 @@ namespace tp_cuatrimestral_equipo_12B
             }
 
             //validar que calle sea solo números o letras
-            if (!Regex.IsMatch(txtDireccion.Text, @"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$"))
+            if (!Regex.IsMatch(txtDireccion.Text, @"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]{1,30}$"))
             {
                 divMensaje.Attributes["class"] = "alert alert-danger";
-                divMensaje.InnerText = "La calle debe contener solo números y letras.";
+                divMensaje.InnerText = "La calle debe contener solo números y letras. No debe tener más de 30 caracteres.";
                 divMensaje.Visible = true;
                 return false;
             }
