@@ -175,16 +175,7 @@ namespace tp_cuatrimestral_equipo_12B
                 divMensaje.Visible = true;
                 return false;
             }
-
-            //validar que nacionalidad solo sea Argentina
-            if (txtNacionalidad.Text.Trim().ToLower() != "argentina")
-            {
-                divMensaje.Attributes["class"] = "alert alert-danger";
-                divMensaje.InnerText = "Solo se permite nacionalidad Argentina.";
-                divMensaje.Visible = true;
-                return false;
-            }
-
+            
             //validar máximo de caracteres en codigo postal a 6 y que sea solo números
             string codigoPostal = txtCodPostal.Text;
             if (!Regex.IsMatch(codigoPostal, @"^\d{1,6}$"))
