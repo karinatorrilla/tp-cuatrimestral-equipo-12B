@@ -24,7 +24,7 @@ namespace tp_cuatrimestral_equipo_12B
             txtFechaNacimiento.Enabled = false;
             txtEmail.Enabled = false;
             txtTelefono.Enabled = false;
-            txtNacionalidad.Enabled = false;
+            ddlNacionalidad.Enabled = false;
             ddlObraSocial.Enabled = false;
             ddlProvincia.Enabled = false;
             ddlLocalidad.Enabled = false;
@@ -49,6 +49,35 @@ namespace tp_cuatrimestral_equipo_12B
                 ddlObraSocial.DataValueField = "Id";
                 ddlObraSocial.DataTextField = "Descripcion";
                 ddlObraSocial.DataBind();
+
+                // Cargar nacionalidades en el DropDownList (lista hardcodeada)
+                List<string> listanacionalidades = new List<string>()
+                {
+                "Afgana", "Albana", "Alemana", "Andorrana", "Angoleña", "Antiguana", "Saudí", "Argelina", "Argentina", "Armenia",
+                "Australiana", "Austriaca", "Azerbaiyana", "Bahamesa", "Bangladesí", "Bareiní", "Belga", "Beliceña", "Beninesa",
+                "Bielorrusa", "Birmana", "Boliviana", "Bosnia", "Botsuana", "Brasileña", "Bruneana", "Búlgara", "Burkinesa",
+                "Burundesa", "Butanesa", "Cabuverdiana", "Camboyana", "Camerunesa", "Canadiense", "Catarí", "Chadiana", "Chilena",
+                "China", "Chipriota", "Colombiana", "Comorense", "Norcoreana", "Surcoreana", "Marfileña", "Costarricense", "Croata",
+                "Cubana", "Danesa", "Dominica", "Ecuatoriana", "Egipcia", "Salvadoreña", "Emiratí", "Eritrea", "Eslovaca",
+                "Eslovena", "Española", "Estadounidense", "Estonia", "Etíope", "Filipina", "Finlandesa", "Fiyiana", "Francesa",
+                "Gabonense", "Gambiana", "Georgiana", "Ghanesa", "Granadina", "Griega", "Guatemalteca", "Guyanesa", "Guineana",
+                "Bisauguineana", "Ecuatoguineana", "Haitiana", "Hondureña", "Húngara", "India", "Indonesia", "Irakí", "Iraní",
+                "Irlandesa", "Islandesa", "Marshallesa", "Salomonense", "Israelí", "Italiana", "Jamaicana", "Japonesa", "Jordana",
+                "Kazaja", "Keniata", "Kirguisa", "Kiribatiana", "Kuwaití", "Laosiana", "Lesotense", "Letona", "Libanesa", "Liberiana",
+                "Libia", "Liechtensteiniana", "Lituana", "Luxemburguesa", "Macedonia", "Malgache", "Malasia", "Malauí", "Maldiva",
+                "Maliense", "Maltesa", "Marroquí", "Mauriciana", "Mauritana", "Mexicana", "Micronesia", "Moldava", "Monegasca",
+                "Mongola", "Montenegrina", "Mozambiqueña", "Namibia", "Nauruana", "Nepalí", "Nicaragüense", "Nigerina", "Nigeriana",
+                "Noruega", "Neozelandesa", "Omana", "Neerlandesa", "Pakistaní", "Palaosiana", "Panameña", "Papú", "Paraguaya",
+                "Peruana", "Polaca", "Portuguesa", "Británica", "Centroafricana", "Checa", "Congoleña", "Congoleña (Rep. Dem.)",
+                "Dominicana", "Ruandesa", "Rumana", "Rusa", "Samoana", "Sancristobaleña", "Sanmarinense", "Sanvicentina", "Santalucense",
+                "Santotomense", "Senegalesa", "Serbia", "Seychellense", "Sierraleonesa", "Singapurense", "Siria", "Somalí",
+                "Sri Lanka", "Suazi", "Sudafricana", "Sudanesa", "Sursudanesa", "Sueca", "Suiza", "Surinamesa", "Tailandesa",
+                "Tanzana", "Tayika", "Timorense", "Togolesa", "Tongana", "Trinitense", "Tunecina", "Turcomana", "Turca", "Tuvaluana",
+                "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeca", "Vanuatense", "Vaticana", "Venezolana", "Vietnamita", "Yemení",
+                "Yibutiana", "Zambiana", "Zimbabuense"
+                };
+                ddlNacionalidad.DataSource = listanacionalidades;
+                ddlNacionalidad.DataBind();
 
 
                 // Deshabilitar localidad al inicio
@@ -81,7 +110,7 @@ namespace tp_cuatrimestral_equipo_12B
                 txtFechaNacimiento.Text = seleccionado.FechaNacimiento.ToString(("yyyy-MM-dd"));
                 txtEmail.Text = seleccionado.Email;
                 txtTelefono.Text = seleccionado.Telefono;
-                txtNacionalidad.Text = seleccionado.Nacionalidad;
+                ddlNacionalidad.SelectedValue = seleccionado.Nacionalidad;
                 ddlObraSocial.SelectedValue = seleccionado.ObraSocial.ToString();
                 txtDireccion.Text = seleccionado.Calle;
                 txtAltura.Text = seleccionado.Altura.ToString();
@@ -175,7 +204,7 @@ namespace tp_cuatrimestral_equipo_12B
                 divMensaje.Visible = true;
                 return false;
             }
-            
+
             //validar máximo de caracteres en codigo postal a 6 y que sea solo números
             string codigoPostal = txtCodPostal.Text;
             if (!Regex.IsMatch(codigoPostal, @"^\d{1,6}$"))
@@ -208,12 +237,27 @@ namespace tp_cuatrimestral_equipo_12B
             //validar si el paciente existe mediante el documento
             PacienteNegocio negocio = new PacienteNegocio();
             List<Paciente> lista = negocio.ListarPacientes();
-            if (lista.Any(p => p.Documento == int.Parse(txtDni.Text)))
+
+            if (Request.QueryString["id"] != null) //modificando
             {
-                divMensaje.Attributes["class"] = "alert alert-danger";
-                divMensaje.InnerText = "Ya existe un paciente registrado con ese documento.";
-                divMensaje.Visible = true;
-                return false;
+                int idPacienteModificando = int.Parse(Request.QueryString["id"]);
+                if (lista.Any(p => p.Documento == int.Parse(txtDni.Text) && p.Id != idPacienteModificando))
+                {
+                    divMensaje.Attributes["class"] = "alert alert-danger";
+                    divMensaje.InnerText = "Ya existe un paciente registrado con ese documento.";
+                    divMensaje.Visible = true;
+                    return false;
+                }
+            }
+            else //agregando
+            {
+                if (lista.Any(p => p.Documento == int.Parse(txtDni.Text)))
+                {
+                    divMensaje.Attributes["class"] = "alert alert-danger";
+                    divMensaje.InnerText = "Ya existe un paciente registrado con ese documento.";
+                    divMensaje.Visible = true;
+                    return false;
+                }
             }
 
             return true;
@@ -226,8 +270,11 @@ namespace tp_cuatrimestral_equipo_12B
             try
             {
                 //validacion de fecha nacimiento para que no sea fecha futura
+                //y que no sea menor a lo aceptado por SQL Server (1/1/1753)
                 DateTime fechaNacimiento;
-                if (!DateTime.TryParse(txtFechaNacimiento.Text, out fechaNacimiento) || fechaNacimiento > DateTime.Now)
+                if (!DateTime.TryParse(txtFechaNacimiento.Text, out fechaNacimiento) || 
+                    fechaNacimiento > DateTime.Now ||
+                    fechaNacimiento < (DateTime)System.Data.SqlTypes.SqlDateTime.MinValue)
                 {
                     divMensaje.Attributes["class"] = "alert alert-danger";
                     divMensaje.InnerText = "La fecha de nacimiento no es válida.";
@@ -243,7 +290,7 @@ namespace tp_cuatrimestral_equipo_12B
                     pacientenuevo.Documento = int.Parse(txtDni.Text);
                     pacientenuevo.Email = txtEmail.Text;
                     pacientenuevo.Telefono = txtTelefono.Text;
-                    pacientenuevo.Nacionalidad = txtNacionalidad.Text;
+                    pacientenuevo.Nacionalidad = ddlNacionalidad.SelectedValue;
                     pacientenuevo.Provincia = ddlProvincia.SelectedValue;
                     pacientenuevo.Localidad = ddlLocalidad.SelectedValue;
                     pacientenuevo.Calle = txtDireccion.Text;

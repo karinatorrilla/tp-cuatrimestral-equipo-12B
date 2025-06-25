@@ -9,20 +9,20 @@
             string id = Request.QueryString["id"];
 
             if (id == null) // Si no hay ID, es AGREGAR
-            { 
+            {
         %>
-            <h1 class="mb-4">Agregar Paciente</h1>
-        <%  } 
+        <h1 class="mb-4">Agregar Paciente</h1>
+        <%  }
             else if (modo == "ver") // Si hay ID y el modo es "ver", es para VER DETALLES
-            { 
+            {
         %>
-            <h1 class="mb-4">Detalles del Paciente</h1>
-        <%  } 
+        <h1 class="mb-4">Detalles del Paciente</h1>
+        <%  }
             else // Si hay ID y el modo NO es "ver" o no hay modo, es para EDITAR
-            { 
+            {
         %>
-            <h1 class="mb-4">Editar Paciente</h1>
-        <%  } 
+        <h1 class="mb-4">Editar Paciente</h1>
+        <%  }
         %>
     </div>
     <div id="divMensaje" runat="server" class="alert" visible="false"></div>
@@ -77,8 +77,10 @@
 
             <%-- Nacionalidad --%>
             <div class="col-md-3">
-                <label for="txtNacionalidad" class="form-label font-weight-bold text-dark">Nacionalidad</label>
-                <asp:TextBox runat="server" ID="txtNacionalidad" CssClass="form-control" placeholder="Argentina" required="true" />
+                <label for="ddlNacionalidad" class="form-label font-weight-bold text-dark">Nacionalidad</label>
+                <asp:DropDownList ID="ddlNacionalidad" runat="server" CssClass="form-control" AppendDataBoundItems="true" required="true">
+                    <asp:ListItem Text="Seleccione Nacionalidad" Value=""></asp:ListItem>
+                </asp:DropDownList>
             </div>
 
             <%-- Obra Social (DropDownList) --%>
