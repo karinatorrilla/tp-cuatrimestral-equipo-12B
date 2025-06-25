@@ -1,12 +1,13 @@
-﻿using System;
+﻿using dominio;
+using negocio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Threading.Tasks;
-using dominio;
-using negocio;
 
 namespace tp_cuatrimestral_equipo_12B
 {
@@ -23,7 +24,7 @@ namespace tp_cuatrimestral_equipo_12B
             txtFechaNacimiento.Enabled = false;
             txtEmail.Enabled = false;
             txtTelefono.Enabled = false;
-            txtNacionalidad.Enabled = false;
+            ddlNacionalidad.Enabled = false;
             ddlProvincia.Enabled = false;
             ddlLocalidad.Enabled = false;
             txtCalle.Enabled = false;
@@ -73,6 +74,35 @@ namespace tp_cuatrimestral_equipo_12B
                 // Cargar las Provincias
                 await PopulateProvincias();
 
+                // Cargar nacionalidades en el DropDownList (lista hardcodeada)
+                List<string> listanacionalidades = new List<string>()
+                {
+                "Afgana", "Albana", "Alemana", "Andorrana", "Angoleña", "Antiguana", "Saudí", "Argelina", "Argentina", "Armenia",
+                "Australiana", "Austriaca", "Azerbaiyana", "Bahamesa", "Bangladesí", "Bareiní", "Belga", "Beliceña", "Beninesa",
+                "Bielorrusa", "Birmana", "Boliviana", "Bosnia", "Botsuana", "Brasileña", "Bruneana", "Búlgara", "Burkinesa",
+                "Burundesa", "Butanesa", "Cabuverdiana", "Camboyana", "Camerunesa", "Canadiense", "Catarí", "Chadiana", "Chilena",
+                "China", "Chipriota", "Colombiana", "Comorense", "Norcoreana", "Surcoreana", "Marfileña", "Costarricense", "Croata",
+                "Cubana", "Danesa", "Dominica", "Ecuatoriana", "Egipcia", "Salvadoreña", "Emiratí", "Eritrea", "Eslovaca",
+                "Eslovena", "Española", "Estadounidense", "Estonia", "Etíope", "Filipina", "Finlandesa", "Fiyiana", "Francesa",
+                "Gabonense", "Gambiana", "Georgiana", "Ghanesa", "Granadina", "Griega", "Guatemalteca", "Guyanesa", "Guineana",
+                "Bisauguineana", "Ecuatoguineana", "Haitiana", "Hondureña", "Húngara", "India", "Indonesia", "Irakí", "Iraní",
+                "Irlandesa", "Islandesa", "Marshallesa", "Salomonense", "Israelí", "Italiana", "Jamaicana", "Japonesa", "Jordana",
+                "Kazaja", "Keniata", "Kirguisa", "Kiribatiana", "Kuwaití", "Laosiana", "Lesotense", "Letona", "Libanesa", "Liberiana",
+                "Libia", "Liechtensteiniana", "Lituana", "Luxemburguesa", "Macedonia", "Malgache", "Malasia", "Malauí", "Maldiva",
+                "Maliense", "Maltesa", "Marroquí", "Mauriciana", "Mauritana", "Mexicana", "Micronesia", "Moldava", "Monegasca",
+                "Mongola", "Montenegrina", "Mozambiqueña", "Namibia", "Nauruana", "Nepalí", "Nicaragüense", "Nigerina", "Nigeriana",
+                "Noruega", "Neozelandesa", "Omana", "Neerlandesa", "Pakistaní", "Palaosiana", "Panameña", "Papú", "Paraguaya",
+                "Peruana", "Polaca", "Portuguesa", "Británica", "Centroafricana", "Checa", "Congoleña", "Congoleña (Rep. Dem.)",
+                "Dominicana", "Ruandesa", "Rumana", "Rusa", "Samoana", "Sancristobaleña", "Sanmarinense", "Sanvicentina", "Santalucense",
+                "Santotomense", "Senegalesa", "Serbia", "Seychellense", "Sierraleonesa", "Singapurense", "Siria", "Somalí",
+                "Sri Lanka", "Suazi", "Sudafricana", "Sudanesa", "Sursudanesa", "Sueca", "Suiza", "Surinamesa", "Tailandesa",
+                "Tanzana", "Tayika", "Timorense", "Togolesa", "Tongana", "Trinitense", "Tunecina", "Turcomana", "Turca", "Tuvaluana",
+                "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeca", "Vanuatense", "Vaticana", "Venezolana", "Vietnamita", "Yemení",
+                "Yibutiana", "Zambiana", "Zimbabuense"
+                };
+                ddlNacionalidad.DataSource = listanacionalidades;
+                ddlNacionalidad.DataBind();
+
                 // Deshabilitar localidad al inicio si no hay provincia seleccionada
                 ddlLocalidad.Enabled = false;
             }
@@ -118,7 +148,7 @@ namespace tp_cuatrimestral_equipo_12B
                 //        txtFechaNacimiento.Text = medicoActual.FechaNacimiento.ToString("yyyy-MM-dd"); // Formato para input type="date"
                 //        txtEmail.Text = medicoActual.Email;
                 //        txtTelefono.Text = medicoActual.Telefono;
-                //        txtNacionalidad.Text = medicoActual.Nacionalidad;
+                //        ddlNacionalidad.SelectedValue = medicoActual.Nacionalidad;
 
                 //        // Precarga de Domicilio
                 //        ddlProvincia.SelectedValue = medicoActual.Provincia;
@@ -297,7 +327,7 @@ namespace tp_cuatrimestral_equipo_12B
                     ddlLocalidad.Items.Add(new ListItem(localidad.nombre, localidad.id));
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 divMensaje.Visible = true;
                 ddlLocalidad.Enabled = false;
@@ -371,6 +401,148 @@ namespace tp_cuatrimestral_equipo_12B
             }
         }
 
+        private bool validarMedico()
+        {
+            //validar matrícula solo números y no mayor a 6
+            string matricula = txtMatricula.Text;
+            if (!Regex.IsMatch(matricula, @"^\d{1,6}$"))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "La matrícula debe contener solo números y tener hasta 6 dígitos.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar nombre solo letras y no mayor a 100
+            string nombre = txtNombre.Text;
+            if (nombre.Length > 100)
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "El nombre no puede superar los 100 caracteres.";
+                divMensaje.Visible = true;
+                return false;
+            }
+            if (!Regex.IsMatch(nombre, "^(?!.* {2})(?! )[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*(?<! )$"))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "El nombre debe contener solo letras, sin espacios ni al principio ni al final.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar apellido solo letras y no mayor a 100
+            string apellido = txtApellido.Text;
+            if (apellido.Length > 100)
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "El apellido no puede superar los 100 caracteres.";
+                divMensaje.Visible = true;
+                return false;
+            }
+            if (!Regex.IsMatch(apellido, @"^(?!.* {2})(?! )[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*(?<! )$"))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "El apellido debe contener solo letras, sin espacios ni al principio ni al final.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar documento solo numeros y no mayor a 8
+            string documento = txtDni.Text;
+            if (!Regex.IsMatch(documento, @"^\d{1,8}$"))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "El documento debe contener solo números y tener hasta 8 dígitos.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar email que contenga formato de mail, validar longitud máxima del mail a 100
+            string email = txtEmail.Text;
+            if (email.Length > 100)
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "El email no puede superar los 100 caracteres.";
+                divMensaje.Visible = true;
+                return false;
+            }
+            if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "Ingrese un email válido por favor.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar teléfono con expresión regular
+            string telefono = txtTelefono.Text;
+            if (!Regex.IsMatch(telefono, @"^\d{1,10}$"))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "El teléfono debe contener solo números y tener hasta 10 dígitos.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar máximo de caracteres en codigo postal a 6 y que sea solo números
+            string codigoPostal = txtCodPostal.Text;
+            if (!Regex.IsMatch(codigoPostal, @"^\d{1,6}$"))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "El código postal debe contener solo números y tener hasta 6 dígitos.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar máximo de caracteres en altura a 7 y que sea solo números
+            string altura = txtAltura.Text;
+            if (!Regex.IsMatch(altura, @"^\d{1,7}$"))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "La altura debe contener solo números y tener hasta 7 dígitos.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar que calle sea solo números o letras
+            if (!Regex.IsMatch(txtCalle.Text, @"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]{1,30}$"))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "La calle debe contener solo números y letras. No debe tener más de 30 caracteres.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar si el paciente existe mediante el documento
+            MedicosNegocio negocio = new MedicosNegocio();
+            List<Medico> lista = negocio.ListarMedicos();
+
+            if (Request.QueryString["id"] != null) //modificando
+            {
+                int idMedicoModificando = int.Parse(Request.QueryString["id"]);
+                if (lista.Any(m => m.Documento == int.Parse(txtDni.Text) && m.Id != idMedicoModificando))
+                {
+                    divMensaje.Attributes["class"] = "alert alert-danger";
+                    divMensaje.InnerText = "Ya existe un médico registrado con ese documento.";
+                    divMensaje.Visible = true;
+                    return false;
+                }
+            }
+            else //agregando
+            {
+                if (lista.Any(m => m.Documento == int.Parse(txtDni.Text)))
+                {
+                    divMensaje.Attributes["class"] = "alert alert-danger";
+                    divMensaje.InnerText = "Ya existe un médico registrado con ese documento.";
+                    divMensaje.Visible = true;
+                    return false;
+                }
+            }
+
+            return true;
+
+        }
+
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
             Medico medicoNuevo = new Medico(); // Se crea una nueva instancia de Medico
@@ -378,6 +550,19 @@ namespace tp_cuatrimestral_equipo_12B
 
             try
             {
+                //validacion de fecha nacimiento para que no sea fecha futura
+                //y que no sea menor a lo aceptado por SQL Server (1/1/1753)
+                DateTime fechaNacimiento;
+                if (!DateTime.TryParse(txtFechaNacimiento.Text, out fechaNacimiento) ||
+                    fechaNacimiento > DateTime.Now ||
+                    fechaNacimiento < (DateTime)System.Data.SqlTypes.SqlDateTime.MinValue)
+                {
+                    divMensaje.Attributes["class"] = "alert alert-danger";
+                    divMensaje.InnerText = "La fecha de nacimiento no es válida.";
+                    divMensaje.Visible = true;
+                    return;
+                }
+
                 // Obtener datos personales y de domicilio del formulario y asignarlos al objeto Medico
                 medicoNuevo.Matricula = int.Parse(txtMatricula.Text);
                 medicoNuevo.Nombre = txtNombre.Text;
@@ -385,7 +570,7 @@ namespace tp_cuatrimestral_equipo_12B
                 medicoNuevo.Documento = int.Parse(txtDni.Text);
                 medicoNuevo.Email = txtEmail.Text;
                 medicoNuevo.Telefono = txtTelefono.Text;
-                medicoNuevo.Nacionalidad = txtNacionalidad.Text;
+                medicoNuevo.Nacionalidad = ddlNacionalidad.Text;
                 medicoNuevo.Provincia = ddlProvincia.SelectedValue;
                 medicoNuevo.Localidad = ddlLocalidad.SelectedValue;
                 medicoNuevo.Calle = txtCalle.Text;
@@ -394,16 +579,6 @@ namespace tp_cuatrimestral_equipo_12B
                 medicoNuevo.Depto = txtDepto.Text;
                 // Habilitado: Por defecto en 1 (true) para nuevos medicoNuevo
                 medicoNuevo.Habilitado = 1;
-
-                // Validar Fecha de Nacimiento
-                DateTime fechaNacimiento;
-                if (!DateTime.TryParse(txtFechaNacimiento.Text, out fechaNacimiento) || fechaNacimiento > DateTime.Now)
-                {
-                    divMensaje.Attributes["class"] = "alert alert-danger";
-                    divMensaje.InnerText = "La fecha de nacimiento no es válida o es una fecha futura.";
-                    divMensaje.Visible = true;
-                    return;
-                }
                 medicoNuevo.FechaNacimiento = fechaNacimiento;
 
                 // Asignar Especialidades
@@ -496,6 +671,7 @@ namespace tp_cuatrimestral_equipo_12B
                         divMensaje.Visible = true;
                     }
                 }
+
             }
             catch (Exception ex)
             {

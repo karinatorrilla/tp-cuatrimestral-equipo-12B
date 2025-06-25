@@ -366,6 +366,7 @@ namespace tp_cuatrimestral_equipo_12B
                     // Habilitado: Por defecto en 1 (true) para nuevos pacientes
                     pacientenuevo.Habilitado = 1;
 
+                    // Lógica para Agregar o Modificar
                     if (Request.QueryString["id"] != null)
                     {
                         pacientenuevo.Id = int.Parse(Request.QueryString["id"].ToString()); //le paso el id para modificar

@@ -35,13 +35,13 @@
             <%-- Nombre --%>
             <div class="col-md-3">
                 <label for="txtNombre" class="form-label font-weight-bold text-dark">Nombre</label>
-                <asp:TextBox runat="server" ID="txtNombre" CssClass="form-control" MaxLenght="100" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$" title="El nombre debe contener solo letras, sin espacios ni al principio ni al final." placeholder="Pedro" required="true" />
+                <asp:TextBox runat="server" ID="txtNombre" CssClass="form-control" MaxLength="100" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$" title="El nombre debe contener solo letras, sin espacios ni al principio ni al final. El máximo de caracteres es 100." placeholder="Pedro" required="true" />
             </div>
 
             <%-- Apellido --%>
             <div class="col-md-3">
                 <label for="txtApellido" class="form-label font-weight-bold text-dark">Apellido</label>
-                <asp:TextBox runat="server" ID="txtApellido" CssClass="form-control" MaxLenght="100" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$" title="El apellido debe contener solo letras, sin espacios ni al principio ni al final." placeholder="Lopez" required="true" />
+                <asp:TextBox runat="server" ID="txtApellido" CssClass="form-control" MaxLength="100" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$" title="El apellido debe contener solo letras, sin espacios ni al principio ni al final. El máximo de caracteres es 100." placeholder="Lopez" required="true" />
             </div>
 
             <%-- DNI --%>
@@ -66,7 +66,7 @@
             <%-- Email --%>
             <div class="col-md-3">
                 <label for="txtEmail" class="form-label font-weight-bold text-dark">Email</label>
-                <asp:TextBox runat="server" ID="txtEmail" CssClass="form-control" TextMode="Email" MaxLenght="100" placeholder="nombre@gmail.com" required="true" />
+                <asp:TextBox runat="server" ID="txtEmail" CssClass="form-control" TextMode="Email" MaxLength="100" placeholder="nombre@gmail.com" required="true" />
             </div>
 
             <%-- Teléfono --%>
@@ -118,7 +118,7 @@
             <%-- Dirección/Calle --%>
             <div class="col-md-2">
                 <label for="txtDireccion" class="form-label font-weight-bold text-dark">Calle</label>
-                <asp:TextBox runat="server" ID="txtDireccion" MaxLenght="30" CssClass="form-control" placeholder="Mendoza" required="true" />
+                <asp:TextBox runat="server" ID="txtDireccion" MaxLength="30" CssClass="form-control" placeholder="Mendoza" required="true" />
             </div>
 
             <%-- Altura --%>
@@ -136,7 +136,7 @@
             <%-- Depto --%>
             <div class="col-md-1">
                 <label for="txtDepto" class="form-label font-weight-bold text-dark">Depto(Opcional)</label>
-                <asp:TextBox runat="server" ID="txtDepto" MaxLenght="50" CssClass="form-control" placeholder="12B" />
+                <asp:TextBox runat="server" ID="txtDepto" MaxLength="50" CssClass="form-control" placeholder="12B" />
             </div>
         </div>
 
