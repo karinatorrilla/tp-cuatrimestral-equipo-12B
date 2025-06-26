@@ -240,6 +240,42 @@ namespace tp_cuatrimestral_equipo_12B
                 return false;
             }
 
+            //validar que se elija nacionalidad
+            if (string.IsNullOrWhiteSpace(ddlNacionalidad.SelectedValue))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "Debe seleccionar una nacionalidad.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar que se elija obra social
+            if (string.IsNullOrWhiteSpace(ddlObraSocial.SelectedValue))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "Debe seleccionar una obra social.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar que se elija provincia
+            if (string.IsNullOrWhiteSpace(ddlProvincia.SelectedValue))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "Debe seleccionar una provincia.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar que se elija localidad
+            if (string.IsNullOrWhiteSpace(ddlLocalidad.SelectedValue))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "Debe seleccionar una localidad.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
             //validar email que contenga formato de mail, validar longitud máxima del mail a 100
             string email = txtEmail.Text;
             if (email.Length > 100)

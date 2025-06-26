@@ -403,12 +403,64 @@ namespace tp_cuatrimestral_equipo_12B
 
         private bool validarMedico()
         {
+            MedicosNegocio negocio = new MedicosNegocio();
+            List<Medico> lista = negocio.ListarMedicos();
+
             //validar matrícula solo números y no mayor a 6
+            //valida que no se repita la matricula 
             string matricula = txtMatricula.Text;
+            if (Request.QueryString["id"] != null) //modificando
+            {
+                int idMedicoModificando = int.Parse(Request.QueryString["id"]);
+                if (lista.Any(m => m.Matricula == int.Parse(matricula) && m.Id != idMedicoModificando))
+                {
+                    divMensaje.Attributes["class"] = "alert alert-danger";
+                    divMensaje.InnerText = "Ya existe un médico registrado con esa matrícula.";
+                    divMensaje.Visible = true;
+                    return false;
+                }
+            }
+            else //agregando
+            {
+                if (lista.Any(m => m.Matricula == int.Parse(matricula)))
+                {
+                    divMensaje.Attributes["class"] = "alert alert-danger";
+                    divMensaje.InnerText = "Ya existe un médico registrado con esa matrícula.";
+                    divMensaje.Visible = true;
+                    return false;
+                }
+            }
             if (!Regex.IsMatch(matricula, @"^\d{1,6}$"))
             {
                 divMensaje.Attributes["class"] = "alert alert-danger";
                 divMensaje.InnerText = "La matrícula debe contener solo números y tener hasta 6 dígitos.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar que se elija nacionalidad
+            if (string.IsNullOrWhiteSpace(ddlNacionalidad.SelectedValue))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "Debe seleccionar una nacionalidad.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar que se elija provincia
+            if (string.IsNullOrWhiteSpace(ddlProvincia.SelectedValue))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "Debe seleccionar una provincia.";
+                divMensaje.Visible = true;
+                return false;
+            }
+
+            //validar que se elija localidad
+            if (string.IsNullOrWhiteSpace(ddlLocalidad.SelectedValue))
+            {
+                divMensaje.Attributes["class"] = "alert alert-danger";
+                divMensaje.InnerText = "Debe seleccionar una localidad.";
                 divMensaje.Visible = true;
                 return false;
             }
@@ -513,10 +565,7 @@ namespace tp_cuatrimestral_equipo_12B
                 return false;
             }
 
-            //validar si el paciente existe mediante el documento
-            MedicosNegocio negocio = new MedicosNegocio();
-            List<Medico> lista = negocio.ListarMedicos();
-
+            //validar si el paciente existe mediante el documento           
             if (Request.QueryString["id"] != null) //modificando
             {
                 int idMedicoModificando = int.Parse(Request.QueryString["id"]);
@@ -561,7 +610,7 @@ namespace tp_cuatrimestral_equipo_12B
                     divMensaje.InnerText = "La fecha de nacimiento no es válida.";
                     divMensaje.Visible = true;
                     return;
-                }
+                }               
 
                 // Obtener datos personales y de domicilio del formulario y asignarlos al objeto Medico
                 medicoNuevo.Matricula = int.Parse(txtMatricula.Text);
