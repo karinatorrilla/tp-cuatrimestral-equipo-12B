@@ -22,8 +22,7 @@ namespace negocio
             {
                 string consulta = "SELECT Id, Matricula, Nombre, Apellido, Documento, Email, Telefono, Nacionalidad, " +
                                   "Provincia, Localidad, Calle, Altura, CodPostal, Depto, " +
-                                  "FechaNacimiento, EspecialidadesIDs, IDTurnoTrabajo, DiasDisponiblesIDs, " +
-                                  "HoraInicioBloque, HoraFinBloque, Habilitado " +
+                                  "FechaNacimiento, Habilitado " +
                                   "FROM MEDICOS WHERE Habilitado = 1 ";
 
                 if (id > 0)
@@ -45,8 +44,8 @@ namespace negocio
                     aux.Email = datos.Lector["Email"] is DBNull ? null : (string)datos.Lector["Email"];
                     aux.Telefono = datos.Lector["Telefono"] is DBNull ? null : (string)datos.Lector["Telefono"];
                     aux.Nacionalidad = datos.Lector["Nacionalidad"] is DBNull ? null : (string)datos.Lector["Nacionalidad"];
-                    aux.Provincia = datos.Lector["ProvinciaId"] is DBNull ? null : (string)datos.Lector["ProvinciaId"];
-                    aux.Localidad = datos.Lector["LocalidadId"] is DBNull ? null : (string)datos.Lector["LocalidadId"];
+                    aux.Provincia = datos.Lector["Provincia"] is DBNull ? null : (string)datos.Lector["Provincia"];
+                    aux.Localidad = datos.Lector["Localidad"] is DBNull ? null : (string)datos.Lector["Localidad"];
                     aux.Calle = datos.Lector["Calle"] is DBNull ? null : (string)datos.Lector["Calle"];
                     aux.Altura = datos.Lector["Altura"] is DBNull ? 0 : (int)datos.Lector["Altura"];
                     aux.CodPostal = datos.Lector["CodPostal"] is DBNull ? null : (string)datos.Lector["CodPostal"];
@@ -55,12 +54,12 @@ namespace negocio
                     aux.Matricula = (int)datos.Lector["Matricula"];
                     aux.Habilitado = datos.Lector["Habilitado"] is DBNull ? 1 : ((bool)datos.Lector["Habilitado"] ? 1 : 0);
 
-                    //procesar EspecialidadesIDs y obtener los nombres
-                    aux.EspecialidadesIDs = datos.Lector["EspecialidadesIDs"] is DBNull ? null : (string)datos.Lector["EspecialidadesIDs"];
-                    aux.IDTurnoTrabajo = (int)datos.Lector["IDTurnoTrabajo"];
-                    aux.DiasDisponiblesIDs = datos.Lector["DiasDisponiblesIDs"] is DBNull ? null : (string)datos.Lector["DiasDisponiblesIDs"];
-                    aux.HoraInicioBloque = datos.Lector["HoraInicioBloque"] is DBNull ? (TimeSpan?)null : (TimeSpan)datos.Lector["HoraInicioBloque"];
-                    aux.HoraFinBloque = datos.Lector["HoraFinBloque"] is DBNull ? (TimeSpan?)null : (TimeSpan)datos.Lector["HoraFinBloque"];
+                    ////procesar EspecialidadesIDs y obtener los nombres
+                    //aux.EspecialidadesIDs = datos.Lector["EspecialidadesIDs"] is DBNull ? null : (string)datos.Lector["EspecialidadesIDs"];
+                    //aux.IDTurnoTrabajo = (int)datos.Lector["IDTurnoTrabajo"];
+                    //aux.DiasDisponiblesIDs = datos.Lector["DiasDisponiblesIDs"] is DBNull ? null : (string)datos.Lector["DiasDisponiblesIDs"];
+                    //aux.HoraInicioBloque = datos.Lector["HoraInicioBloque"] is DBNull ? (TimeSpan?)null : (TimeSpan)datos.Lector["HoraInicioBloque"];
+                    //aux.HoraFinBloque = datos.Lector["HoraFinBloque"] is DBNull ? (TimeSpan?)null : (TimeSpan)datos.Lector["HoraFinBloque"];
 
                     lista.Add(aux);
                 }
