@@ -31,7 +31,6 @@ namespace tp_cuatrimestral_equipo_12B
             txtAltura.Enabled = false;
             txtCodPostal.Enabled = false;
             txtDepto.Enabled = false;
-            lstEspecialidades.Enabled = false;
             ddlTurnoTrabajo.Enabled = false;
             lstDiaSemana.Enabled = false;
             ddlHoraInicioBloque.Enabled = false;
@@ -45,7 +44,7 @@ namespace tp_cuatrimestral_equipo_12B
             if (!IsPostBack)
             {
                 // Iniciar Clases de negocio para cargar datos en los selectores
-                EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
+                //EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
                 TurnoTrabajoNegocio turnoTrabajoNegocio = new TurnoTrabajoNegocio();
 
                 // Deshabilitar los DropDownLists de hora al inicio
@@ -55,13 +54,13 @@ namespace tp_cuatrimestral_equipo_12B
 
                 // Cargar especialidades en el DropDownList
 
-                lstEspecialidades.DataSource = especialidadNegocio.Listar();
-                lstEspecialidades.DataValueField = "Id";
-                lstEspecialidades.DataTextField = "Descripcion";
-                lstEspecialidades.DataBind();
+                //lstEspecialidades.DataSource = especialidadNegocio.Listar();
+                //lstEspecialidades.DataValueField = "Id";
+                //lstEspecialidades.DataTextField = "Descripcion";
+                //lstEspecialidades.DataBind();
 
                 // Actualizamos el conteo para el estado actual de las selecciones
-                ActualizarConteoEspecialidades();
+                //ActualizarConteoEspecialidades();
                 ActualizarConteoDias();
 
 
@@ -211,33 +210,33 @@ namespace tp_cuatrimestral_equipo_12B
 
         }
 
-        protected void lstEspecialidades_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ActualizarConteoEspecialidades(); // Volvemos a calcular el conteo
-        }
+        //protected void lstEspecialidades_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    ActualizarConteoEspecialidades(); // Volvemos a calcular el conteo
+        //}
 
-        private void ActualizarConteoEspecialidades()
-        {
-            int seleccionadas = 0;
-            foreach (ListItem item in lstEspecialidades.Items)
-            {
-                if (item.Selected)
-                {
-                    seleccionadas++;
-                }
-            }
+        //private void ActualizarConteoEspecialidades()
+        //{
+        //    int seleccionadas = 0;
+        //    foreach (ListItem item in lstEspecialidades.Items)
+        //    {
+        //        if (item.Selected)
+        //        {
+        //            seleccionadas++;
+        //        }
+        //    }
 
-            if (seleccionadas > 0)
-            {
-                lblCantidadEspecialidadesSeleccionadas.Text = seleccionadas + " seleccionadas";
-                lblCantidadEspecialidadesSeleccionadas.Visible = true;
-            }
-            else
-            {
-                lblCantidadEspecialidadesSeleccionadas.Text = "";
-                lblCantidadEspecialidadesSeleccionadas.Visible = false;
-            }
-        }
+        //    if (seleccionadas > 0)
+        //    {
+        //        lblCantidadEspecialidadesSeleccionadas.Text = seleccionadas + " seleccionadas";
+        //        lblCantidadEspecialidadesSeleccionadas.Visible = true;
+        //    }
+        //    else
+        //    {
+        //        lblCantidadEspecialidadesSeleccionadas.Text = "";
+        //        lblCantidadEspecialidadesSeleccionadas.Visible = false;
+        //    }
+        //}
 
         protected void lstDiaSemana_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -632,16 +631,16 @@ namespace tp_cuatrimestral_equipo_12B
 
                 // Asignar Especialidades
                 // Recopila los IDs de las especialidades seleccionadas
-                List<string> especialidadesSeleccionadas = new List<string>();
-                foreach (ListItem item in lstEspecialidades.Items)
-                {
-                    if (item.Selected)
-                    {
-                        especialidadesSeleccionadas.Add(item.Value);
-                    }
-                }
-                // Convierte la lista de IDs a una cadena separada por comas
-                medicoNuevo.EspecialidadesIDs = string.Join(",", especialidadesSeleccionadas);
+                //List<string> especialidadesSeleccionadas = new List<string>();
+                //foreach (ListItem item in lstEspecialidades.Items)
+                //{
+                //    if (item.Selected)
+                //    {
+                //        especialidadesSeleccionadas.Add(item.Value);
+                //    }
+                //}
+                //// Convierte la lista de IDs a una cadena separada por comas
+                //medicoNuevo.EspecialidadesIDs = string.Join(",", especialidadesSeleccionadas);
 
 
                 // Asignar Turno de Trabajo

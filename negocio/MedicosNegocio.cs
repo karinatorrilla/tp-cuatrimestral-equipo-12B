@@ -15,8 +15,6 @@ namespace negocio
             List<Medico> lista = new List<Medico>();
             AccesoDatos datos = new AccesoDatos();
 
-            EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
-            List<Especialidad> todasLasEspecialidades = especialidadNegocio.Listar();
 
             try
             {
@@ -54,12 +52,6 @@ namespace negocio
                     aux.Matricula = (int)datos.Lector["Matricula"];
                     aux.Habilitado = datos.Lector["Habilitado"] is DBNull ? 1 : ((bool)datos.Lector["Habilitado"] ? 1 : 0);
 
-                    ////procesar EspecialidadesIDs y obtener los nombres
-                    //aux.EspecialidadesIDs = datos.Lector["EspecialidadesIDs"] is DBNull ? null : (string)datos.Lector["EspecialidadesIDs"];
-                    //aux.IDTurnoTrabajo = (int)datos.Lector["IDTurnoTrabajo"];
-                    //aux.DiasDisponiblesIDs = datos.Lector["DiasDisponiblesIDs"] is DBNull ? null : (string)datos.Lector["DiasDisponiblesIDs"];
-                    //aux.HoraInicioBloque = datos.Lector["HoraInicioBloque"] is DBNull ? (TimeSpan?)null : (TimeSpan)datos.Lector["HoraInicioBloque"];
-                    //aux.HoraFinBloque = datos.Lector["HoraFinBloque"] is DBNull ? (TimeSpan?)null : (TimeSpan)datos.Lector["HoraFinBloque"];
 
                     lista.Add(aux);
                 }
@@ -183,5 +175,66 @@ namespace negocio
             }
         }
 
+
+        public List<Especialidad> ListarEspecialidadesPorMedico(int idMedico)
+        {
+            List<Especialidad> listaEspecialidades = new List<Especialidad>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                // Consulta para unir MEDICOxESPECIALIDAD con ESPECIALIDADES
+                // para obtener los detalles de la especialidad
+                string consulta = "SELECT E.Id, E.Descripcion " +
+                                  "FROM ESPECIALIDADES E " +
+                                  "INNER JOIN MEDICOxESPECIALIDAD ME ON E.Id = ME.EspecialidadId " +
+                                  "WHERE ME.MedicoId = @idMedico AND ME.Habilitado = 1"; // Filtra solo las especialidades habilitadas
+
+                datos.setearConsulta(consulta);
+                datos.setearParametro("@idMedico", idMedico); // Pasar el ID del médico como parámetro
+
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Especialidad especialidad = new Especialidad();
+                    especialidad.Id = (int)datos.Lector["Id"];
+                    especialidad.Descripcion = (string)datos.Lector["Descripcion"];
+                    // Asume que la clase Especialidad tiene propiedades Id y Descripcion.
+                    // Si tiene otras propiedades que necesites, agrégalas aquí.
+
+                    listaEspecialidades.Add(especialidad);
+                }
+
+                return listaEspecialidades;
+            }
+            catch (Exception ex)
+            {
+                // Propagar la excepción para que pueda ser manejada en la capa superior
+                throw new Exception("Error al listar especialidades por médico: " + ex.Message, ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void AgregarEspecialidadPorMedico(int medicoId, List<int> nuevasEspecialidadesIds)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+               
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
+

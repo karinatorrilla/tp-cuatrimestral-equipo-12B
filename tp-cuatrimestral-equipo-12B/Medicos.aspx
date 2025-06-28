@@ -47,7 +47,14 @@
                         <td><%= medico.Nombre %></td>
                         <td><%= medico.Apellido %></td>
                         <td><%= medico.Matricula %></td>
-                        <td>HOLA</td>
+                         <td>
+                            <%-- Muestra las especialidades separadas por coma --%>
+                            <% if (medico.Especialidades != null && medico.Especialidades.Any()) { %>
+                                <%= string.Join(", ", medico.Especialidades.Select(e => e.Descripcion)) %>
+                            <% } else { %>
+                                Sin Especialidades
+                            <% } %>
+                        </td>
                         <td class="d-flex justify-content-center align-items-center gap-3">
 
                             <%-- Ícono Ver --%>
@@ -58,6 +65,81 @@
                             <a href="FormularioMedico.aspx?id=<%= medico.Id %>" class="action-link" title="Editar Médico">
                                 <img src="images/icon_edit.svg" alt="Editar" class="action-icon-img" />
                             </a>
+                            <%-- Ícono Especialidad --%>
+                            <a href="#" class="action-link" title="Especialidad Médico">
+                                <img src="images/icon_doctor.svg" alt="Especialidad" class="action-icon-img" style="cursor: pointer" data-bs-toggle="modal"
+                                    data-bs-target="#especialidadModal_<%= medico.Id %>" />
+                            </a>
+                            <!--Modal Especialidad-->
+                            <div class="modal fade" id="especialidadModal_<%= medico.Id %>" tabindex="-1" aria-labelledby="especialidadLabel_<%= medico.Id %>" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div>
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Especialidades Dr/Dra <%= medico.Nombre %> <%= medico.Apellido %> </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                    <div class="row g-3 mb-4">
+                                                        <%-- Especialidades selección múltiple --%>
+                                                        <div class="col-md-12">
+                                                            <label for="lstEspecialidades" class="form-label font-weight-bold text-dark">Listado de Especialidades</label>
+                                                            <asp:ListBox ID="lstEspecialidades" runat="server"
+                                                                CssClass="form-control"
+                                                                SelectionMode="Multiple"
+                                                                Rows="4"
+                                                                AutoPostBack="false" 
+                                                                required="true">
+                                                            </asp:ListBox>
+                                                            <asp:HiddenField ID="hfMedicoId" runat="server" Value='<%= medico.Id %>' />
+
+                                                            <%-- Mensaje de ayuda para la selección múltiple --%>
+                                                            <p style="font-size: 0.85em; font-weight: bold; color: #6c757d; margin-top: 10px;">
+                                                                Para seleccionar más de una especialidad mantener apretada la tecla Ctrl + Click Izquierdo por cada una.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped table-hover table-bordered align-middle">
+                                                        <thead class="table-dark">
+                                                            <tr>
+                                                                <th scope="col">ID</th>
+                                                                <th scope="col">ESPECIALIDAD</th>
+                                                                <th scope="col">ACCIONES</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                             <%-- especialidades del médico --%>
+                                                                    <% if (medico.Especialidades != null && medico.Especialidades.Any()) { %>
+                                                                        <% foreach (var especialidad in medico.Especialidades) { %>
+                                                                            <tr>
+                                                                                <td><%= especialidad.Id %></td>
+                                                                                <td><%= especialidad.Descripcion %></td>
+                                                                                <td class="d-flex justify-content-center align-items-center gap-3">
+                                                                                    <a href="#" class="action-link" title="Eliminar Especialidad del médico"
+                                                                                        onclick="if(confirm('¿Estás seguro de eliminar la especialidad <%= especialidad.Descripcion %> del Dr/Dra <%= medico.Apellido %>?')) { window.location.href = 'EliminarEspecialidadMedico.aspx?medicoId=<%= medico.Id %>&especialidadId=<%= especialidad.Id %>'; return false; } else { return false; }">
+                                                                                        <img src="images/icon_delete.svg" alt="Eliminar" class="action-icon-img" />
+                                                                                    </a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        <% } %>
+                                                                    <% } else { %>
+                                                                        <tr>
+                                                                            <td colspan="3" class="text-center py-3">Este médico no tiene especialidades asignadas.</td>
+                                                                        </tr>
+                                                                    <% } %>
+                                                         </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <asp:Button ID="btnGuardarEspecialidades" runat="server" Text="Guardar" CssClass="btn btn-success" OnClick="btnGuardarEspecialidades_Click" CommandArgument='<%= medico.Id %>' />
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <%-- Ícono Eliminar --%>
                             <a href="#" class="action-link" title="Eliminar Médico" onclick="if(confirm('¿Estás seguro de eliminar al médico Perez?')) { alert('Eliminar médico ID: 1'); return true; } else { return false; }">
                                 <img src="images/icon_delete.svg" alt="Eliminar" class="action-icon-img" />

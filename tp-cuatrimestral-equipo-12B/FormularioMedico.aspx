@@ -132,28 +132,26 @@
         </div>
 
         <%-- Sección de Especialidades y Turno de Trabajo --%>
-        <h3 class="mb-4 text-dark">Especialidades</h3>
-        <div class="row g-3 mb-4">
+        <%--<h3 class="mb-4 text-dark">Especialidades</h3>
+        <div class="row g-3 mb-4">--%>
             <%-- Especialidades selección múltiple --%>
-            <div class="col-md-6">
+            <%--<div class="col-md-6">
                 <label for="lstEspecialidades" class="form-label font-weight-bold text-dark">Especialidades</label>
                 <asp:ListBox ID="lstEspecialidades" runat="server"
                     CssClass="form-control"
                     SelectionMode="Multiple"
                     Rows="3"
-                    AutoPostBack="true" OnSelectedIndexChanged="lstEspecialidades_SelectedIndexChanged" required="true"></asp:ListBox>
+                    AutoPostBack="true" OnSelectedIndexChanged="lstEspecialidades_SelectedIndexChanged" required="true"></asp:ListBox>--%>
                 <%-- Mensaje de ayuda para la selección múltiple --%>
-                <p style="font-size: 0.85em; font-weight: bold; color: #6c757d; margin-top: 5px;">
+                <%--<p style="font-size: 0.85em; font-weight: bold; color: #6c757d; margin-top: 5px;">
                     Para seleccionar más de una especialidad mantener apretada la tecla Ctrl + Click Izquierdo.
-                </p>
+                </p>--%>
                 <%-- Este Label mostrará la cantidad de especialidades seleccionadas --%>
-                <asp:Label ID="lblCantidadEspecialidadesSeleccionadas" runat="server"
+                <%--<asp:Label ID="lblCantidadEspecialidadesSeleccionadas" runat="server"
                     CssClass="badge bg-primary mt-2"
                     Visible="false"> </asp:Label>
             </div>
-
-
-        </div>
+        </div>--%>
 
         <%-- Sección de Disponibilidad Horaria --%>
         <h3 class="mb-4 text-dark">Disponibilidad Horaria</h3>
