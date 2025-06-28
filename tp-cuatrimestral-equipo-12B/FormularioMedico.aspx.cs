@@ -31,10 +31,10 @@ namespace tp_cuatrimestral_equipo_12B
             txtAltura.Enabled = false;
             txtCodPostal.Enabled = false;
             txtDepto.Enabled = false;
-            ddlTurnoTrabajo.Enabled = false;
-            lstDiaSemana.Enabled = false;
-            ddlHoraInicioBloque.Enabled = false;
-            ddlHoraFinBloque.Enabled = false;
+            // ddlTurnoTrabajo.Enabled = false;
+            // lstDiaSemana.Enabled = false;
+            // ddlHoraInicioBloque.Enabled = false;
+            // ddlHoraFinBloque.Enabled = false;
 
         }
 
@@ -43,13 +43,14 @@ namespace tp_cuatrimestral_equipo_12B
             ///Config. inicial
             if (!IsPostBack)
             {
+                btnGuardar.Enabled = true;
                 // Iniciar Clases de negocio para cargar datos en los selectores
                 //EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
                 TurnoTrabajoNegocio turnoTrabajoNegocio = new TurnoTrabajoNegocio();
 
                 // Deshabilitar los DropDownLists de hora al inicio
-                ddlHoraInicioBloque.Enabled = false;
-                ddlHoraFinBloque.Enabled = false;
+              //  ddlHoraInicioBloque.Enabled = false;
+              //  ddlHoraFinBloque.Enabled = false;
 
 
                 // Cargar especialidades en el DropDownList
@@ -61,14 +62,14 @@ namespace tp_cuatrimestral_equipo_12B
 
                 // Actualizamos el conteo para el estado actual de las selecciones
                 //ActualizarConteoEspecialidades();
-                ActualizarConteoDias();
+                //ActualizarConteoDias();
 
 
                 // Cargar Turnos de Trabajo en el DropDownList
-                ddlTurnoTrabajo.DataSource = turnoTrabajoNegocio.Listar();
-                ddlTurnoTrabajo.DataValueField = "Id";
-                ddlTurnoTrabajo.DataTextField = "Descripcion";
-                ddlTurnoTrabajo.DataBind();
+              //  ddlTurnoTrabajo.DataSource = turnoTrabajoNegocio.Listar();
+              //  ddlTurnoTrabajo.DataValueField = "Id";
+              //  ddlTurnoTrabajo.DataTextField = "Descripcion";
+              //  ddlTurnoTrabajo.DataBind();
 
                 // Cargar las Provincias
                 await PopulateProvincias();
@@ -240,38 +241,38 @@ namespace tp_cuatrimestral_equipo_12B
 
         protected void lstDiaSemana_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ActualizarConteoDias();
+            //ActualizarConteoDias();
         }
 
         //conteo de Das
-        private void ActualizarConteoDias()
-        {
-            int seleccionados = 0;
+        //private void ActualizarConteoDias()
+        //{
+        //    int seleccionados = 0;
 
-            if (lstDiaSemana.Items.Count > 0)
-            {
-                foreach (ListItem item in lstDiaSemana.Items)
-                {
+        //    if (lstDiaSemana.Items.Count > 0)
+        //    {
+        //        foreach (ListItem item in lstDiaSemana.Items)
+        //        {
 
-                    if (item.Selected && !string.IsNullOrEmpty(item.Value))
-                    {
-                        seleccionados++;
-                    }
-                }
-            }
+        //            if (item.Selected && !string.IsNullOrEmpty(item.Value))
+        //            {
+        //                seleccionados++;
+        //            }
+        //        }
+        //    }
 
 
-            if (seleccionados > 0)
-            {
-                lblCantidadDiasSeleccionados.Text = seleccionados + " seleccionados";
-                lblCantidadDiasSeleccionados.Visible = true;
-            }
-            else
-            {
-                lblCantidadDiasSeleccionados.Text = "";
-                lblCantidadDiasSeleccionados.Visible = false;
-            }
-        }
+        //    if (seleccionados > 0)
+        //    {
+        //        lblCantidadDiasSeleccionados.Text = seleccionados + " seleccionados";
+        //        lblCantidadDiasSeleccionados.Visible = true;
+        //    }
+        //    else
+        //    {
+        //        lblCantidadDiasSeleccionados.Text = "";
+        //        lblCantidadDiasSeleccionados.Visible = false;
+        //    }
+        //}
 
         // --- Lógica para la carga de Provincias y Localidades (reutilizada del FormularioPaciente) ---
         private async Task PopulateProvincias()
@@ -333,72 +334,72 @@ namespace tp_cuatrimestral_equipo_12B
             }
         }
 
-        // Método para cargar los DropDownLists de Turno de Trabajo
-        private void CargarTurnosTrabajo()
-        {
-            TurnoTrabajoNegocio turnoNegocio = new TurnoTrabajoNegocio();
-            List<TurnoTrabajo> listaTurnos = turnoNegocio.Listar();
+        //// Método para cargar los DropDownLists de Turno de Trabajo
+        //private void CargarTurnosTrabajo()
+        //{
+        //    TurnoTrabajoNegocio turnoNegocio = new TurnoTrabajoNegocio();
+        //    List<TurnoTrabajo> listaTurnos = turnoNegocio.Listar();
 
-            ddlTurnoTrabajo.DataSource = listaTurnos;
-            ddlTurnoTrabajo.DataValueField = "Id";
-            ddlTurnoTrabajo.DataTextField = "Descripcion";
-            ddlTurnoTrabajo.DataBind();
-        }
+        //    ddlTurnoTrabajo.DataSource = listaTurnos;
+        //    ddlTurnoTrabajo.DataValueField = "Id";
+        //    ddlTurnoTrabajo.DataTextField = "Descripcion";
+        //    ddlTurnoTrabajo.DataBind();
+        //}
 
-        // Manejador del evento SelectedIndexChanged para ddlTurnoTrabajo
-        protected void ddlTurnoTrabajo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(ddlTurnoTrabajo.SelectedValue))
-            {
-                int idTurnoSeleccionado = int.Parse(ddlTurnoTrabajo.SelectedValue);
-                CargarHorasDisponibilidad(idTurnoSeleccionado);
-                ddlHoraInicioBloque.Enabled = true;
-                ddlHoraFinBloque.Enabled = true;
-            }
-            else
-            {
-                // Si no se selecciona un turno, deshabilitar y limpiar los DDL de horas
-                ddlHoraInicioBloque.ClearSelection();
-                ddlHoraInicioBloque.Items.Clear();
-                ddlHoraInicioBloque.Items.Insert(0, new ListItem("--:--", ""));
-                ddlHoraInicioBloque.Enabled = false;
+        //// Manejador del evento SelectedIndexChanged para ddlTurnoTrabajo
+        //protected void ddlTurnoTrabajo_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    if (!string.IsNullOrEmpty(ddlTurnoTrabajo.SelectedValue))
+        //    {
+        //        int idTurnoSeleccionado = int.Parse(ddlTurnoTrabajo.SelectedValue);
+        //        CargarHorasDisponibilidad(idTurnoSeleccionado);
+        //        ddlHoraInicioBloque.Enabled = true;
+        //        ddlHoraFinBloque.Enabled = true;
+        //    }
+        //    else
+        //    {
+        //        // Si no se selecciona un turno, deshabilitar y limpiar los DDL de horas
+        //        ddlHoraInicioBloque.ClearSelection();
+        //        ddlHoraInicioBloque.Items.Clear();
+        //        ddlHoraInicioBloque.Items.Insert(0, new ListItem("--:--", ""));
+        //        ddlHoraInicioBloque.Enabled = false;
 
-                ddlHoraFinBloque.ClearSelection();
-                ddlHoraFinBloque.Items.Clear();
-                ddlHoraFinBloque.Items.Insert(0, new ListItem("--:--", ""));
-                ddlHoraFinBloque.Enabled = false;
-            }
-        }
+        //        ddlHoraFinBloque.ClearSelection();
+        //        ddlHoraFinBloque.Items.Clear();
+        //        ddlHoraFinBloque.Items.Insert(0, new ListItem("--:--", ""));
+        //        ddlHoraFinBloque.Enabled = false;
+        //    }
+        //}
 
         // Nuevo método para cargar las opciones de hora en los DropDownLists
-        private void CargarHorasDisponibilidad(int idTurno)
-        {
-            TurnoTrabajoNegocio turnoNegocio = new TurnoTrabajoNegocio();
-            TurnoTrabajo turnoSeleccionado = turnoNegocio.Listar().FirstOrDefault(t => t.Id == idTurno);
+        //private void CargarHorasDisponibilidad(int idTurno)
+        //{
+        //    TurnoTrabajoNegocio turnoNegocio = new TurnoTrabajoNegocio();
+        //    TurnoTrabajo turnoSeleccionado = turnoNegocio.Listar().FirstOrDefault(t => t.Id == idTurno);
 
-            // Limpiar y agregar el item por defecto antes de poblar
-            ddlHoraInicioBloque.Items.Clear();
-            ddlHoraInicioBloque.Items.Insert(0, new ListItem("--:--", ""));
-            ddlHoraFinBloque.Items.Clear();
-            ddlHoraFinBloque.Items.Insert(0, new ListItem("--:--", ""));
+        //    // Limpiar y agregar el item por defecto antes de poblar
+        //    ddlHoraInicioBloque.Items.Clear();
+        //    ddlHoraInicioBloque.Items.Insert(0, new ListItem("--:--", ""));
+        //    ddlHoraFinBloque.Items.Clear();
+        //    ddlHoraFinBloque.Items.Insert(0, new ListItem("--:--", ""));
 
-            if (turnoSeleccionado != null)
-            {
-                TimeSpan horaActual = turnoSeleccionado.HoraInicioBase;
-                TimeSpan horaFin = turnoSeleccionado.HoraFinBase;
+        //    if (turnoSeleccionado != null)
+        //    {
+        //        TimeSpan horaActual = turnoSeleccionado.HoraInicioBase;
+        //        TimeSpan horaFin = turnoSeleccionado.HoraFinBase;
 
-                // Aca se puede ajustar el intervalo de tiempo (ej. cada 15, 30, 60 minutos)
-                TimeSpan intervalo = TimeSpan.FromMinutes(60);
+        //        // Aca se puede ajustar el intervalo de tiempo (ej. cada 15, 30, 60 minutos)
+        //        TimeSpan intervalo = TimeSpan.FromMinutes(60);
 
-                while (horaActual <= horaFin)
-                {
-                    string horaTexto = horaActual.ToString(@"hh\:mm");
-                    ddlHoraInicioBloque.Items.Add(new ListItem(horaTexto, horaTexto));
-                    ddlHoraFinBloque.Items.Add(new ListItem(horaTexto, horaTexto));
-                    horaActual = horaActual.Add(intervalo);
-                }
-            }
-        }
+        //        while (horaActual <= horaFin)
+        //        {
+        //            string horaTexto = horaActual.ToString(@"hh\:mm");
+        //            ddlHoraInicioBloque.Items.Add(new ListItem(horaTexto, horaTexto));
+        //            ddlHoraFinBloque.Items.Add(new ListItem(horaTexto, horaTexto));
+        //            horaActual = horaActual.Add(intervalo);
+        //        }
+        //    }
+        //}
 
         private bool validarMedico()
         {
@@ -609,7 +610,7 @@ namespace tp_cuatrimestral_equipo_12B
                     divMensaje.InnerText = "La fecha de nacimiento no es válida.";
                     divMensaje.Visible = true;
                     return;
-                }               
+                }
 
                 // Obtener datos personales y de domicilio del formulario y asignarlos al objeto Medico
                 medicoNuevo.Matricula = int.Parse(txtMatricula.Text);
@@ -643,55 +644,55 @@ namespace tp_cuatrimestral_equipo_12B
                 //medicoNuevo.EspecialidadesIDs = string.Join(",", especialidadesSeleccionadas);
 
 
-                // Asignar Turno de Trabajo
-                if (!string.IsNullOrEmpty(ddlTurnoTrabajo.SelectedValue))
-                {
-                    medicoNuevo.IDTurnoTrabajo = int.Parse(ddlTurnoTrabajo.SelectedValue);
-                }
-                else
-                {
-                    medicoNuevo.IDTurnoTrabajo = null;
-                }
+                //// Asignar Turno de Trabajo
+                //if (!string.IsNullOrEmpty(ddlTurnoTrabajo.SelectedValue))
+                //{
+                //    medicoNuevo.IDTurnoTrabajo = int.Parse(ddlTurnoTrabajo.SelectedValue);
+                //}
+                //else
+                //{
+                //    medicoNuevo.IDTurnoTrabajo = null;
+                //}
 
 
-                //Asignar Días Disponibles
-                //Recopila los IDs de los días seleccionados
-                List<string> diasSeleccionados = new List<string>();
-                foreach (ListItem item in lstDiaSemana.Items)
-                {
-                    if (item.Selected)
-                    {
-                        diasSeleccionados.Add(item.Value);
-                    }
-                }
-                //Convierte la lista de IDs a una cadena separada por comas
-                medicoNuevo.DiasDisponiblesIDs = string.Join(",", diasSeleccionados);
+                ////Asignar Días Disponibles
+                ////Recopila los IDs de los días seleccionados
+                //List<string> diasSeleccionados = new List<string>();
+                //foreach (ListItem item in lstDiaSemana.Items)
+                //{
+                //    if (item.Selected)
+                //    {
+                //        diasSeleccionados.Add(item.Value);
+                //    }
+                //}
+                ////Convierte la lista de IDs a una cadena separada por comas
+                //medicoNuevo.DiasDisponiblesIDs = string.Join(",", diasSeleccionados);
 
 
-                // Asignar Disponibilidad Horaria (HoraInicioBloque, HoraFinBloque)
-                TimeSpan horaInicio;
-                TimeSpan horaFin;
+                //// Asignar Disponibilidad Horaria (HoraInicioBloque, HoraFinBloque)
+                //TimeSpan horaInicio;
+                //TimeSpan horaFin;
 
-                if (TimeSpan.TryParse(ddlHoraInicioBloque.SelectedValue, out horaInicio) &&
-                    TimeSpan.TryParse(ddlHoraFinBloque.SelectedValue, out horaFin))
-                {
-                    medicoNuevo.HoraInicioBloque = horaInicio;
-                    medicoNuevo.HoraFinBloque = horaFin;
+                //if (TimeSpan.TryParse(ddlHoraInicioBloque.SelectedValue, out horaInicio) &&
+                //    TimeSpan.TryParse(ddlHoraFinBloque.SelectedValue, out horaFin))
+                //{
+                //    medicoNuevo.HoraInicioBloque = horaInicio;
+                //    medicoNuevo.HoraFinBloque = horaFin;
 
-                    // Validamos el orden.
-                    if (medicoNuevo.HoraInicioBloque >= medicoNuevo.HoraFinBloque)
-                    {
-                        divMensaje.Attributes["class"] = "alert alert-danger";
-                        divMensaje.InnerText = "La hora de inicio no puede ser igual o posterior a la hora de fin.";
-                        divMensaje.Visible = true;
-                        return;
-                    }
-                }
-                else
-                {
-                    medicoNuevo.HoraInicioBloque = null;
-                    medicoNuevo.HoraFinBloque = null;
-                }
+                //    // Validamos el orden.
+                //    if (medicoNuevo.HoraInicioBloque >= medicoNuevo.HoraFinBloque)
+                //    {
+                //        divMensaje.Attributes["class"] = "alert alert-danger";
+                //        divMensaje.InnerText = "La hora de inicio no puede ser igual o posterior a la hora de fin.";
+                //        divMensaje.Visible = true;
+                //        return;
+                //    }
+                //}
+                //else
+                //{
+                //    medicoNuevo.HoraInicioBloque = null;
+                //    medicoNuevo.HoraFinBloque = null;
+                //}
 
 
                 // Lógica para Agregar o Modificar
@@ -710,6 +711,7 @@ namespace tp_cuatrimestral_equipo_12B
                         divMensaje.Attributes["class"] = "alert alert-success";
                         divMensaje.InnerText = "Operación realizada con éxito.";
                         divMensaje.Visible = true;
+                        btnGuardar.Enabled = false;
                         // Response.Redirect("Medicos.aspx", false); 
                     }
                     else

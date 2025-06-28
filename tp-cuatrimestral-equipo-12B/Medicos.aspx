@@ -47,11 +47,14 @@
                         <td><%= medico.Nombre %></td>
                         <td><%= medico.Apellido %></td>
                         <td><%= medico.Matricula %></td>
-                         <td>
+                        <td>
                             <%-- Muestra las especialidades separadas por coma --%>
-                            <% if (medico.Especialidades != null && medico.Especialidades.Any()) { %>
-                                <%= string.Join(", ", medico.Especialidades.Select(e => e.Descripcion)) %>
-                            <% } else { %>
+                            <% if (medico.Especialidades != null && medico.Especialidades.Any())
+                                { %>
+                            <%= string.Join(", ", medico.Especialidades.Select(e => e.Descripcion)) %>
+                            <% }
+                            else
+                            { %>
                                 Sin Especialidades
                             <% } %>
                         </td>
@@ -80,25 +83,24 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                             </div>
                                             <div class="modal-body">
-                                                    <div class="row g-3 mb-4">
-                                                        <%-- Especialidades selección múltiple --%>
-                                                        <div class="col-md-12">
-                                                            <label for="lstEspecialidades" class="form-label font-weight-bold text-dark">Listado de Especialidades</label>
-                                                            <asp:ListBox ID="lstEspecialidades" runat="server"
-                                                                CssClass="form-control"
-                                                                SelectionMode="Multiple"
-                                                                Rows="4"
-                                                                AutoPostBack="false" 
-                                                                required="true">
-                                                            </asp:ListBox>
-                                                            <asp:HiddenField ID="hfMedicoId" runat="server" Value='<%= medico.Id %>' />
+                                                <div class="row g-3 mb-4">
+                                                    <%-- Especialidades selección múltiple --%>
+                                                    <div class="col-md-12">
+                                                        <label for="lstEspecialidades" class="form-label font-weight-bold text-dark">Listado de Especialidades</label>
+                                                        <asp:ListBox ID="lstEspecialidades" runat="server"
+                                                            CssClass="form-control"
+                                                            SelectionMode="Multiple"
+                                                            Rows="4"
+                                                            AutoPostBack="false"
+                                                            required="true"></asp:ListBox>
+                                                        <asp:HiddenField ID="hfMedicoId" runat="server" Value='<%= medico.Id %>' />
 
-                                                            <%-- Mensaje de ayuda para la selección múltiple --%>
-                                                            <p style="font-size: 0.85em; font-weight: bold; color: #6c757d; margin-top: 10px;">
-                                                                Para seleccionar más de una especialidad mantener apretada la tecla Ctrl + Click Izquierdo por cada una.
-                                                            </p>
-                                                        </div>
+                                                        <%-- Mensaje de ayuda para la selección múltiple --%>
+                                                        <p style="font-size: 0.85em; font-weight: bold; color: #6c757d; margin-top: 10px;">
+                                                            Para seleccionar más de una especialidad mantener apretada la tecla Ctrl + Click Izquierdo por cada una.
+                                                        </p>
                                                     </div>
+                                                </div>
                                                 <div class="table-responsive">
                                                     <table class="table table-striped table-hover table-bordered align-middle">
                                                         <thead class="table-dark">
@@ -109,26 +111,30 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                             <%-- especialidades del médico --%>
-                                                                    <% if (medico.Especialidades != null && medico.Especialidades.Any()) { %>
-                                                                        <% foreach (var especialidad in medico.Especialidades) { %>
-                                                                            <tr>
-                                                                                <td><%= especialidad.Id %></td>
-                                                                                <td><%= especialidad.Descripcion %></td>
-                                                                                <td class="d-flex justify-content-center align-items-center gap-3">
-                                                                                    <a href="#" class="action-link" title="Eliminar Especialidad del médico"
-                                                                                        onclick="if(confirm('¿Estás seguro de eliminar la especialidad <%= especialidad.Descripcion %> del Dr/Dra <%= medico.Apellido %>?')) { window.location.href = 'EliminarEspecialidadMedico.aspx?medicoId=<%= medico.Id %>&especialidadId=<%= especialidad.Id %>'; return false; } else { return false; }">
-                                                                                        <img src="images/icon_delete.svg" alt="Eliminar" class="action-icon-img" />
-                                                                                    </a>
-                                                                                </td>
-                                                                            </tr>
-                                                                        <% } %>
-                                                                    <% } else { %>
-                                                                        <tr>
-                                                                            <td colspan="3" class="text-center py-3">Este médico no tiene especialidades asignadas.</td>
-                                                                        </tr>
-                                                                    <% } %>
-                                                         </tbody>
+                                                            <%-- especialidades del médico --%>
+                                                            <% if (medico.Especialidades != null && medico.Especialidades.Any())
+                                                                { %>
+                                                            <% foreach (var especialidad in medico.Especialidades)
+                                                            { %>
+                                                            <tr>
+                                                                <td><%= especialidad.Id %></td>
+                                                                <td><%= especialidad.Descripcion %></td>
+                                                                <td class="d-flex justify-content-center align-items-center gap-3">
+                                                                    <a href="#" class="action-link" title="Eliminar Especialidad del médico"
+                                                                        onclick="if(confirm('¿Estás seguro de eliminar la especialidad <%= especialidad.Descripcion %> del Dr/Dra <%= medico.Apellido %>?')) { window.location.href = 'EliminarEspecialidadMedico.aspx?medicoId=<%= medico.Id %>&especialidadId=<%= especialidad.Id %>'; return false; } else { return false; }">
+                                                                        <img src="images/icon_delete.svg" alt="Eliminar" class="action-icon-img" />
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                            <% } %>
+                                                            <% }
+                                                            else
+                                                            { %>
+                                                            <tr>
+                                                                <td colspan="3" class="text-center py-3">Este médico no tiene especialidades asignadas.</td>
+                                                            </tr>
+                                                            <% } %>
+                                                        </tbody>
                                                     </table>
                                                 </div>
                                             </div>

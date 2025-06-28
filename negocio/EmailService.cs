@@ -17,7 +17,7 @@ namespace negocio
         public EmailService() //hay que modificar credenciales
         {
             server = new SmtpClient();
-            server.Credentials = new NetworkCredential("programationiii@gmail.com", "programacion3");
+            server.Credentials = new NetworkCredential("grupo12bintegrador@gmail.com", "tpintegrador12b");
             server.EnableSsl = true;
             server.Port = 587;
             server.Host = "smpt.gmail.com";
@@ -26,7 +26,7 @@ namespace negocio
         public void armarCorreo(string emailDestino, string asunto, string cuerpo)
         {
             email = new MailMessage();
-            email.From = new MailAddress("noresponder@clinicaprogramacioniii.com");
+            email.From = new MailAddress("noresponder@grupo12bintegrador.com");
             email.To.Add(emailDestino);
             email.Subject = asunto;
             email.IsBodyHtml = true;

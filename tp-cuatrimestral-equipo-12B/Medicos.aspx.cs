@@ -72,7 +72,7 @@ namespace tp_cuatrimestral_equipo_12B
         protected void btnGuardarEspecialidades_Click(object sender, EventArgs e)
         {
             int medicoIdActual = -1;
-            bool operacionExitosa = false;
+          //  bool operacionExitosa = false;
             try
             {
                  //Revisar porque no lo encuntra
@@ -107,12 +107,12 @@ namespace tp_cuatrimestral_equipo_12B
                 MedicosNegocio medicoNegocio = new MedicosNegocio();
                 medicoNegocio.AgregarEspecialidadPorMedico(medicoIdActual, especialidadesSeleccionadas);
 
-                operacionExitosa = true;
+               // operacionExitosa = true;
             }
             catch (Exception ex)
             {
                 Session.Add("error", "Error al agregar especialidades: " + ex.Message);
-                operacionExitosa = false;
+               // operacionExitosa = false;
             }
 
         }
