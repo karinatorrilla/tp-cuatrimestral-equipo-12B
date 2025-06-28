@@ -34,12 +34,7 @@ namespace tp_cuatrimestral_equipo_12B
                     EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
                     todasLasEspecialidades = especialidadNegocio.Listar();
 
-                    // Cargar especialidades en el DropDownList
-                    lstEspecialidades.DataSource = especialidadNegocio.Listar();
-                    lstEspecialidades.DataValueField = "Id";
-                    lstEspecialidades.DataTextField = "Descripcion";
-                    lstEspecialidades.DataBind();
-
+                   
                     foreach (var medico in listaMedico)
                     {
                         // Llama ListarEspecialidadesPorMedico para traer las especialidades de un médico dado su ID

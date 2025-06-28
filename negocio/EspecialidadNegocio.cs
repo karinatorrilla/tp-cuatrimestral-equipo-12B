@@ -77,7 +77,7 @@ namespace negocio
 
                 return true;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return false;
                 throw new Exception("Error al modificar especialidad: " + ex.Message, ex);
@@ -88,7 +88,7 @@ namespace negocio
             }
         }
 
-        public void eliminarEspecialidad(int idEspecialidad)  
+        public void eliminarEspecialidad(int idEspecialidad)
         {
 
             AccesoDatos datos = new AccesoDatos();
@@ -112,5 +112,70 @@ namespace negocio
             }
         }
 
+        public bool agregarEspecialidadesMedico(int idmedico, List<int> especialidades)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                //borramos las especialidades e ingresamos otra vez todo ///A OPTIMIZAR
+                datos.setearConsulta("DELETE FROM MEDICOxESPECIALIDAD WHERE MedicoId = @MedicoId");
+                datos.setearParametro("@MedicoId", idmedico);
+                datos.ejecutarAccion();
+                datos.limpiarParametros();
+                datos.cerrarConexion();
+
+                foreach (int idEspecialidad in especialidades)
+                {
+                datos.setearConsulta("INSERT INTO MEDICOxESPECIALIDAD (MedicoId,EspecialidadId) VALUES(@MedicoId,@EspecialidadId)");
+
+                    datos.setearParametro("@MedicoId", idmedico);
+                    datos.setearParametro("@EspecialidadId", idEspecialidad);
+                    datos.ejecutarAccion();
+                    datos.limpiarParametros();
+                    datos.cerrarConexion();
+                 
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+               
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+        }
+
+        public List<int> ListarIdsEspecialidadesPorMedico(int idmedico)
+        {
+            List<int> lista = new List<int>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT EspecialidadId FROM MEDICOxESPECIALIDAD WHERE MedicoId = @MedicoId");
+                datos.setearParametro("@MedicoId", idmedico);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    lista.Add((int)datos.Lector["EspecialidadId"]);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

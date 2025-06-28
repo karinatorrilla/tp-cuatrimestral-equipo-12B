@@ -129,17 +129,23 @@ namespace negocio
 
             try
             {
-                datos.setearConsulta("Update MEDICOS set Nombre = @nombre, Apellido = @apellido, IDEspecialidad = @idespecialidad, Matricula = @matricula WHERE IDMedico = @id");
+                datos.setearConsulta("Update MEDICOS set Nombre = @nombre, Apellido = @apellido, Matricula = @matricula, Documento=@documento, Email=@email, Telefono=@telefono,Nacionalidad=@nacionalidad, Provincia=@provincia,Localidad=@localidad,Calle=@calle,Altura=@altura,Depto=@depto,FechaNacimiento=@fechanacimiento WHERE Id = @id");
                 datos.setearParametro("@id", mod.Id);
+                datos.setearParametro("@matricula", mod.Matricula);
                 datos.setearParametro("@nombre", mod.Nombre);
                 datos.setearParametro("@apellido", mod.Apellido);
-                //datos.setearParametro("@Documento", mod.Documento); to-do en bd
-                //datos.setearParametro("@Email", mod.Email); to-do en bd
-                //datos.setearParametro("@Telefono", mod.Telefono); to-do en bd
-                //datos.setearParametro("@FechaNacimiento", mod.FechaNacimiento); to-do en bd
-                //datos.setearParametro("@Calle", mod.Calle); to-do en bd
-                datos.setearParametro("@idespecialidad", mod.EspecialidadSeleccionada.Id);
-                datos.setearParametro("@matricula", mod.Matricula);
+                datos.setearParametro("@documento", mod.Documento);
+                datos.setearParametro("@email", mod.Email); 
+               datos.setearParametro("@telefono", mod.Telefono);
+                datos.setearParametro("@nacionalidad", mod.Nacionalidad);
+                datos.setearParametro("@provincia", mod.Provincia);
+                datos.setearParametro("@localidad", mod.Localidad);
+                datos.setearParametro("@calle", mod.Calle);
+                datos.setearParametro("@altura", mod.Altura);
+                datos.setearParametro("@depto", mod.Depto);
+                datos.setearParametro("@fechanacimiento", mod.FechaNacimiento); 
+
+                //datos.setearParametro("@idespecialidad", mod.EspecialidadSeleccionada.Id);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)

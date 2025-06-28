@@ -86,6 +86,11 @@ namespace negocio
             conexion.Close();
 
         }
+        public void limpiarParametros()
+        {
+            comando.Parameters.Clear();
+        }
+
     }
 }
 
