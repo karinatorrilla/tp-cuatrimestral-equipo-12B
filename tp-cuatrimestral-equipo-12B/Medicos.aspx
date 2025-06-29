@@ -61,7 +61,7 @@
                         <td class="d-flex justify-content-center align-items-center gap-3">
 
                             <%-- Ícono Ver --%>
-                            <a href="#" class="action-link" title="Ver Detalles" onclick="alert('Ver médico ID: 1'); return false;">
+                            <a href="FormularioMedico.aspx?id=<%= medico.Id %>&modo=ver" class="action-link" title="Ver Detalles" return false;">
                                 <img src="images/icon_view.svg" alt="Ver" class="action-icon-img" />
                             </a>
                             <%-- Ícono Editar --%>
@@ -70,7 +70,7 @@
                             </a>
                             <%-- Ícono Especialidad --%>
                                                    
-                             <a href="FormularioMedico.aspx?agregarespecialidad=<%= medico.Id %>"  class="btn btn-danger"><img src="images/icon_doctor.svg" alt="Especialidad" class="action-icon-img" style="cursor: pointer" /></a>
+                             <a href="FormularioMedico.aspx?agregarespecialidad=<%= medico.Id %>"  class="btn"><img src="images/icon_doctor.svg" alt="Especialidad" class="action-icon-img" style="cursor: pointer" /></a>
 
                            
                             <%-- Ícono Eliminar --%>

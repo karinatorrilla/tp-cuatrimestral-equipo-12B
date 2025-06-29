@@ -157,9 +157,9 @@
         <asp:Panel ID="panelEspecialidades" runat="server" CssClass="mb-4">
             <h3 class="mb-3 text-dark">Especialidades del Médico</h3>
             <div id="alertaMensaje" runat="server" class="alert alert-success" role="alert">
-                mensaje
+              
             </div>
-
+            <asp:Literal ID="litEspecialidades" runat="server" Mode="PassThrough" />
             <asp:CheckBoxList ID="chkEspecialidades" runat="server" CssClass="form-check" RepeatDirection="Horizontal" RepeatColumns="3">
             </asp:CheckBoxList>
         </asp:Panel>

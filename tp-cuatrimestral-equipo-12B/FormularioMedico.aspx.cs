@@ -31,6 +31,7 @@ namespace tp_cuatrimestral_equipo_12B
             txtAltura.Enabled = false;
             txtCodPostal.Enabled = false;
             txtDepto.Enabled = false;
+
             // ddlTurnoTrabajo.Enabled = false;
             // lstDiaSemana.Enabled = false;
             // ddlHoraInicioBloque.Enabled = false;
@@ -165,7 +166,28 @@ namespace tp_cuatrimestral_equipo_12B
                         if (Request.QueryString["modo"] == "ver")
                         {
                             DeshabilitarCampos();
+
                             btnGuardar.Visible = false;
+                            // Mostrar panel de especialidades
+                            panelEspecialidades.Visible = true;
+                            alertaMensaje.Visible = false;
+                            // Obtener las especialidades del médico
+                            EspecialidadNegocio negocio = new EspecialidadNegocio();
+                            List<Especialidad> todasEspecialidades = negocio.Listar();
+                            List<int> idsEspecialidadesDelMedico = negocio.ListarIdsEspecialidadesPorMedico(idMedico);
+
+                            // Filtrar las que tiene el médico
+                            var especialidadesDelMedico = todasEspecialidades
+                                .Where(o => idsEspecialidadesDelMedico.Contains(o.Id))
+                                .ToList();
+
+                            // Mostrar como texto (ej: separado por comas)
+                            //   litEspecialidades.Text = string.Join(", ", especialidadesDelMedico.Select(o => o.Descripcion));
+                            litEspecialidades.Text = string.Join(" ", especialidadesDelMedico.Select(o =>
+           $"<span class='badge bg-secondary me-1'>{o.Descripcion}</span>"
+       ));
+                            litEspecialidades.Mode = LiteralMode.PassThrough;
+
                         }
                     }
                     else
@@ -277,7 +299,7 @@ namespace tp_cuatrimestral_equipo_12B
 
         }
 
-       
+
 
         protected void lstDiaSemana_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -654,7 +676,7 @@ namespace tp_cuatrimestral_equipo_12B
                     return;
                 }
 
-                if(validarMedico() == false)
+                if (validarMedico() == false)
                 {
                     return;
                 }
@@ -766,7 +788,7 @@ namespace tp_cuatrimestral_equipo_12B
                     {
                         divMensaje.Attributes["class"] = "alert alert-danger";
                         divMensaje.InnerText = "Ocurrió un error al procesar la operación.";
-                        divMensaje.Visible = true;                       
+                        divMensaje.Visible = true;
                     }
                 }
 
