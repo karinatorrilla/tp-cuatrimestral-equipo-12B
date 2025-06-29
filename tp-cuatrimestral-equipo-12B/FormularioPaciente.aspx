@@ -118,19 +118,19 @@
             <%-- Dirección/Calle --%>
             <div class="col-md-2">
                 <label for="txtDireccion" class="form-label font-weight-bold text-dark">Calle</label>
-                <asp:TextBox runat="server" ID="txtDireccion" MaxLength="30" CssClass="form-control" placeholder="Mendoza" required="true" />
+                <asp:TextBox runat="server" ID="txtDireccion" MaxLength="30" pattern="[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s.,-]{1,30}" title="La calle acepta solo números, letras, puntos, comas y guiones. No debe tener más de 30 caracteres." CssClass="form-control" placeholder="Mendoza" required="true" />
             </div>
 
             <%-- Altura --%>
             <div class="col-md-1">
                 <label for="txtAltura" class="form-label font-weight-bold text-dark">Altura</label>
-                <asp:TextBox runat="server" ID="txtAltura" MaxLength="7" CssClass="form-control" placeholder="123" required="true" />
+                <asp:TextBox runat="server" ID="txtAltura" MaxLength="7" pattern="\d{1,7}" title="La altura debe contener solo números y tener hasta 7 dígitos." CssClass="form-control" placeholder="123" required="true" />
             </div>
 
             <%-- Cod Postal --%>
             <div class="col-md-1">
                 <label for="txtCodPostal" class="form-label font-weight-bold text-dark">Cod. Postal</label>
-                <asp:TextBox runat="server" ID="txtCodPostal" MaxLength="6" CssClass="form-control" placeholder="1614" required="true" />
+                <asp:TextBox runat="server" ID="txtCodPostal" MaxLength="6" pattern="\d{1,6}" title="El código postal debe contener solo números y tener hasta 6 dígitos." CssClass="form-control" placeholder="1614" required="true" />
             </div>
 
             <%-- Depto --%>

@@ -4,27 +4,37 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="container-fluid py-4">
-        <% 
-            string modo = Request.QueryString["modo"];
-            string id = Request.QueryString["id"];
+        <%
+        string modo = Request.QueryString["modo"];
+        string id = Request.QueryString["id"];
+        string idAgregandoEsp = Request.QueryString["agregarespecialidad"];
 
-            if (id == null) // Si no hay ID, es AGREGAR
-            {
-        %>
-        <h1 class="mb-4">Agregar Médico</h1>
-        <%  }
-            else if (modo == "ver") // Si hay ID y el modo es "ver", es para VER DETALLES
-            {
-        %>
-        <h1 class="mb-4">Detalles del Médico</h1>
-        <%  }
-            else // Si hay ID y el modo NO es "ver" o no hay modo, es para EDITAR
-            {
-        %>
-        <h1 class="mb-4">Editar Médico</h1>
-        <%  }
-        %>
-    </div>
+        if (!string.IsNullOrEmpty(idAgregandoEsp))
+        {
+    %>
+            <h1 class="mb-4">Agregar Especialidades al Médico</h1>
+    <%
+        }
+        else if (string.IsNullOrEmpty(id))
+        {
+    %>
+            <h1 class="mb-4">Agregar Médico</h1>
+    <%
+        }
+        else if (modo == "ver")
+        {
+    %>
+            <h1 class="mb-4">Detalles del Médico</h1>
+    <%
+        }
+        else
+        {
+    %>
+            <h1 class="mb-4">Editar Médico</h1>
+    <%
+        }
+    %>
+</div>
     <div id="divMensaje" runat="server" class="alert" visible="false"></div>
 
     <div class="p-4 rounded bg-white shadow-sm">
@@ -35,7 +45,7 @@
             <%-- Matricula (PRIMER CAMPO) --%>
             <div class="col-md-3">
                 <label for="txtMatricula" class="form-label font-weight-bold text-dark">Matrícula</label>
-                <asp:TextBox runat="server" ID="txtMatricula" CssClass="form-control" MaxLength="6" pattern="\d{1,6}" title="La matrícula debe contener solo números y tener hasta 6 dígitos." placeholder="113355" required="true" />
+                <asp:TextBox runat="server" ID="txtMatricula" CssClass="form-control" MaxLength="6" pattern="\d{1,6}" title="La matrícula debe contener solo números y tener hasta 6 dígitos. Sin espacios ni al principio ni al final." placeholder="113355" required="true" />
             </div>
 
             <%-- Nombre --%>
@@ -118,19 +128,19 @@
                 <%-- Dirección/Calle --%>
                 <div class="col-md-2">
                     <label for="txtCalle" class="form-label font-weight-bold text-dark">Calle</label>
-                    <asp:TextBox runat="server" ID="txtCalle" MaxLength="30" CssClass="form-control" placeholder="Mendoza" required="true" />
+                    <asp:TextBox runat="server" ID="txtCalle" MaxLength="30" pattern="[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s.,-]{1,30}" title="La calle acepta solo números, letras, puntos, comas y guiones. No debe tener más de 30 caracteres." CssClass="form-control" placeholder="Mendoza" required="true" />
                 </div>
 
                 <%-- Altura --%>
                 <div class="col-md-1">
                     <label for="txtAltura" class="form-label font-weight-bold text-dark">Altura</label>
-                    <asp:TextBox runat="server" ID="txtAltura" MaxLength="7" CssClass="form-control" placeholder="123" required="true" />
+                    <asp:TextBox runat="server" ID="txtAltura" MaxLength="7" pattern="\d{1,7}" title="La altura debe contener solo números y tener hasta 7 dígitos." CssClass="form-control" placeholder="123" required="true" />
                 </div>
 
                 <%-- Cod Postal --%>
                 <div class="col-md-1">
                     <label for="txtCodPostal" class="form-label font-weight-bold text-dark">Cod. Postal</label>
-                    <asp:TextBox runat="server" ID="txtCodPostal" MaxLength="6" CssClass="form-control" placeholder="1614" required="true" />
+                    <asp:TextBox runat="server" ID="txtCodPostal" pattern="\d{1,6}" title="El código postal debe contener solo números y tener hasta 6 dígitos." MaxLength="6" CssClass="form-control" placeholder="1614" required="true" />
                 </div>
 
                 <%-- Depto --%>
@@ -164,7 +174,7 @@
                 <a href="Medicos.aspx" class="btn btn-secondary px-5">Volver</a>
             </div>
         </asp:Panel>
-                <%-- Contenedor de Botones Guardar Medico Nuevo--%>
+        <%-- Contenedor de Botones Guardar Medico Nuevo--%>
 
 
         <%--Contenedor de botones agregar especialidad--%>

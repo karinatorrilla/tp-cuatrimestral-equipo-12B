@@ -324,10 +324,12 @@ namespace tp_cuatrimestral_equipo_12B
             }
 
             //validar que calle sea solo números o letras
-            if (!Regex.IsMatch(txtDireccion.Text, @"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]{1,30}$"))
+            //permite espacios, puntos, comas y guiones
+            string calle = txtDireccion.Text;
+            if (!Regex.IsMatch(calle, @"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s.,-]{1,30}$"))
             {
                 divMensaje.Attributes["class"] = "alert alert-danger";
-                divMensaje.InnerText = "La calle debe contener solo números y letras. No debe tener más de 30 caracteres.";
+                divMensaje.InnerText = "La calle acepta solo números, letras, puntos, comas y guiones. No debe tener más de 30 caracteres.";
                 divMensaje.Visible = true;
                 return false;
             }

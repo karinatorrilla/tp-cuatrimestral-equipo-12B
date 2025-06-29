@@ -44,7 +44,8 @@ namespace tp_cuatrimestral_equipo_12B
             if (!IsPostBack)
             {
                 btnGuardar.Enabled = true;
-
+                panelEspecialidades.Visible = false;
+                botonesAgregarEspecialidad.Visible = false;
 
                 // Cargar las Provincias
                 await PopulateProvincias();
@@ -185,7 +186,9 @@ namespace tp_cuatrimestral_equipo_12B
             {
                 try
                 {
-                    btnAgregarEspecialidad.Visible = true;
+                    //btnAgregarEspecialidad.Visible = true;
+                    panelEspecialidades.Visible = true;
+                    botonesAgregarEspecialidad.Visible = true;
                     alertaMensaje.Visible = false;
                     Medico medico = new Medico();
                     MedicosNegocio medicosNegocio = new MedicosNegocio();
@@ -460,7 +463,7 @@ namespace tp_cuatrimestral_equipo_12B
             if (!Regex.IsMatch(matricula, @"^\d{1,6}$"))
             {
                 divMensaje.Attributes["class"] = "alert alert-danger";
-                divMensaje.InnerText = "La matrícula debe contener solo números y tener hasta 6 dígitos.";
+                divMensaje.InnerText = "La matrícula debe contener solo números y tener hasta 6 dígitos. Sin espacios ni al principio ni al final.";
                 divMensaje.Visible = true;
                 return false;
             }
@@ -584,10 +587,12 @@ namespace tp_cuatrimestral_equipo_12B
             }
 
             //validar que calle sea solo números o letras
-            if (!Regex.IsMatch(txtCalle.Text, @"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]{1,30}$"))
+            //permite espacios, puntos, comas y guiones
+            string calle = txtCalle.Text;
+            if (!Regex.IsMatch(calle, @"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s.,-]{1,30}$"))
             {
                 divMensaje.Attributes["class"] = "alert alert-danger";
-                divMensaje.InnerText = "La calle debe contener solo números y letras. No debe tener más de 30 caracteres.";
+                divMensaje.InnerText = "La calle acepta solo números, letras, puntos, comas y guiones. No debe tener más de 30 caracteres.";
                 divMensaje.Visible = true;
                 return false;
             }
@@ -636,6 +641,11 @@ namespace tp_cuatrimestral_equipo_12B
                     divMensaje.Attributes["class"] = "alert alert-danger";
                     divMensaje.InnerText = "La fecha de nacimiento no es válida.";
                     divMensaje.Visible = true;
+                    return;
+                }
+
+                if(validarMedico() == false)
+                {
                     return;
                 }
 
