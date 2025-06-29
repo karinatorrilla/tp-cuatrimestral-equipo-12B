@@ -7,10 +7,28 @@
 
     <div class="container-fluid py-4">
         <h1 class="mb-4">Listado de Obras Sociales</h1>
-
+        <asp:Label ID="lblMensaje" runat="server" Visible="false" CssClass="alert alert-info d-block w-50" Style="place-self: center;"></asp:Label>
         <%--Botón para mostrar el formulario de agregar--%>
         <asp:Button ID="btnMostrarFormularioAgregar" runat="server" Text="Agregar Obra Social" CssClass="btn btn-success mb-4" OnClick="btnMostrarFormularioAgregar_Click" />
-   
+
+        <%--Formulario para agregar nueva obra social (oculto al principio)--%>
+        <asp:Panel ID="formAgregar" runat="server" Visible="false" CssClass="card mt-4" Style="width: 50%; margin: auto;">
+            <div class="card-header">
+                Agregar Nueva Obra Social               
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="txtNombreObraSocial" class="form-label">Nombre de la obra social:</label>
+                    <asp:TextBox ID="txtNombreObraSocial" runat="server" CssClass="form-control" placeholder="Ej. OSDE"></asp:TextBox>
+                </div>
+
+                <asp:Button ID="AgregarObraSocial" runat="server" CssClass="btn btn-primary" Text="Guardar" OnClick="AgregarObraSocial_Click" />
+                <asp:Button ID="cerrarForm" runat="server" CssClass="btn btn-secondary" Text="Cerrar" OnClick="cerrarForm_Click" />
+            </div>
+
+        </asp:Panel>
+
+
 
 
 
@@ -62,7 +80,7 @@
                                 </div>
                             </div>
 
-  
+
 
                             <%--Modal Eliminar Obra Social--%>
 
@@ -102,24 +120,6 @@
                 </table>
             </div>
         </div>
-
-        <%--Formulario para agregar nueva obra social (oculto al principio)--%>
-        <asp:Panel ID="formAgregar" runat="server" Visible="false" CssClass="card mt-4" Style="width: 50%; margin: auto;">
-            <div class="card-header">
-                Agregar Nueva Obra Social               
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <label for="txtNombreObraSocial" class="form-label">Nombre de la obra social:</label>
-                    <asp:TextBox ID="txtNombreObraSocial" runat="server" CssClass="form-control" placeholder="Ej. OSDE"></asp:TextBox>
-                </div>
-                <asp:Label ID="lblMensaje" runat="server" Visible="false" CssClass="alert alert-info d-block"></asp:Label>
-                <asp:Button ID="AgregarObraSocial" runat="server" CssClass="btn btn-primary" Text="Guardar" OnClick="AgregarObraSocial_Click" />
-                <asp:Button ID="cerrarForm" runat="server" CssClass="btn btn-secondary" Text="Cerrar" OnClick="cerrarForm_Click" />
-            </div>
-
-        </asp:Panel>
-        
 
 
     </div>

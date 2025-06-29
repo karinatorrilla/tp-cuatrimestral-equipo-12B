@@ -95,7 +95,25 @@ namespace negocio
             AccesoDatos datos = new AccesoDatos();
 
             try
-            {                                                       
+            {
+                /*Verificamos que al querer 'borrar' obra social no este asociada a un paciente */
+                datos.setearConsulta("SELECT COUNT(*) FROM MEDICOxESPECIALIDAD WHERE EspecialidadId = @ID");
+                datos.setearConsulta("select COUNT(*) FROM PACIENTES WHERE ObraSocialId=@ID");
+                datos.setearParametro("@ID", idObra);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    int cantidad = (int)datos.Lector[0];
+                    if (cantidad > 0)
+                    {
+                        throw new Exception("No se puede eliminar la obra social porque está asociada a uno o más pacientes.");
+                    }
+                }
+
+                datos.cerrarConexion();
+                datos.limpiarParametros();
+
                 datos.setearConsulta("update OBRASOCIAL set Habilitado=0 where ID=@id");
                 datos.setearParametro("@id", idObra);
 

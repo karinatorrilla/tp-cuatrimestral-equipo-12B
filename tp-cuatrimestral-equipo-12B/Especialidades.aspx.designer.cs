@@ -15,6 +15,15 @@ namespace tp_cuatrimestral_equipo_12B
     {
 
         /// <summary>
+        /// lblMensaje control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMensaje;
+
+        /// <summary>
         /// btnMostrarFormularioAgregar control.
         /// </summary>
         /// <remarks>
@@ -42,23 +51,14 @@ namespace tp_cuatrimestral_equipo_12B
         protected global::System.Web.UI.WebControls.TextBox txtNombreEspecialidad;
 
         /// <summary>
-        /// lblMensaje control.
+        /// AgregarEspecialidad control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMensaje;
+        protected global::System.Web.UI.WebControls.Button AgregarEspecialidad;
 
-        /// <summary>
-        /// Agregar Especialidad control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-      
-        
         /// <summary>
         /// cerrarForm control.
         /// </summary>

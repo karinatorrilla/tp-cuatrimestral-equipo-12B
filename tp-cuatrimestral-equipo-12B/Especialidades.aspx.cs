@@ -26,7 +26,19 @@ namespace tp_cuatrimestral_equipo_12B
                     int idEliminar;
                     if (int.TryParse(Request["eliminar"], out idEliminar))
                     {
-                        negocio.eliminarEspecialidad(idEliminar);
+                        try
+                        {
+                            negocio.eliminarEspecialidad(idEliminar);
+                            lblMensaje.Visible = true;
+                            lblMensaje.CssClass = "alert alert-warning d-block";
+                            lblMensaje.Text = "Especialidad Eliminada";
+                        }
+                        catch (Exception ex)
+                        {
+                            lblMensaje.Visible = true;
+                            lblMensaje.CssClass = "alert alert-danger d-block";
+                            lblMensaje.Text = ex.Message;
+                        }
                     }
                 }
 
@@ -38,15 +50,16 @@ namespace tp_cuatrimestral_equipo_12B
 
                     if (int.TryParse(Request.Form["IdEspecialidad"], out idEspecialidad) && !string.IsNullOrEmpty(nuevaDescripcion))
                     {
+
                         Especialidad especialidadModificada = new Especialidad();
                         List<Especialidad> lista = negocio.Listar();
 
                         bool yaExiste = lista.Any(o => o.Descripcion.Trim().ToLower() == nuevaDescripcion.ToLower());
                         if (yaExiste)
                         {
+                            lblMensaje.Visible = true;
                             lblMensaje.CssClass = "alert alert-warning d-block";
                             lblMensaje.Text = "Ya existe una especialidad con ese nombre.";
-                            lblMensaje.Visible = true;
                             listaEspecialidades = negocio.Listar();
                             return;
                             ///////////ver donde podemos mostrar fuera del modal 
@@ -64,6 +77,13 @@ namespace tp_cuatrimestral_equipo_12B
                             {
                                 lblMensaje.Text = "Ocurrió un error al modificar la especialidad.";
                                 ///////////ver donde podemos mostrar fuera del modal 
+                            }
+                            else
+                            {
+                                lblMensaje.Visible = true;
+                                lblMensaje.CssClass = "alert alert-success d-block";
+                                lblMensaje.Text = "Especialidad modificada";
+
                             }
                         }
                     }
@@ -88,6 +108,8 @@ namespace tp_cuatrimestral_equipo_12B
         protected void cerrarForm_Click(object sender, EventArgs e)
         {
             formAgregar.Visible = false;
+            txtNombreEspecialidad.Text = "";
+            lblMensaje.Visible = false;
         }
 
 

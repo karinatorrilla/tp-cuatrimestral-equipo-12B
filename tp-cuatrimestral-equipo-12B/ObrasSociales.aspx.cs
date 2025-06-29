@@ -26,7 +26,20 @@ namespace tp_cuatrimestral_equipo_12B
                     int idEliminar;
                     if (int.TryParse(Request["eliminar"], out idEliminar))
                     {
-                        negocio.eliminarObra(idEliminar);
+                        try
+                        {
+                            negocio.eliminarObra(idEliminar);
+                            lblMensaje.Visible = true;
+                            lblMensaje.CssClass = "alert alert-warning d-block";
+                            lblMensaje.Text = "Obra Social Eliminada";
+                        }
+                        catch (Exception ex)
+                        {
+                            lblMensaje.Visible = true;
+                            lblMensaje.CssClass = "alert alert-danger d-block";
+                            lblMensaje.Text = ex.Message;
+                        }
+                       
                     }
                 }
 
@@ -67,6 +80,13 @@ namespace tp_cuatrimestral_equipo_12B
                                 lblMensaje.Text = "Ocurrió un error al modificar la obra social.";
                                 ///////////ver donde podemos mostrar fuera del modal 
                             }
+                            else
+                            {
+                                lblMensaje.Visible = true;
+                                lblMensaje.CssClass = "alert alert-success d-block";
+                                lblMensaje.Text = "Obra Social modificada";
+
+                            }
                         }
                     }
                 }
@@ -91,7 +111,8 @@ namespace tp_cuatrimestral_equipo_12B
         protected void cerrarForm_Click(object sender, EventArgs e)
         {
             formAgregar.Visible = false;
-
+            txtNombreObraSocial.Text = "";
+            lblMensaje.Visible = false;
         }
 
 
@@ -114,7 +135,7 @@ namespace tp_cuatrimestral_equipo_12B
             bool yaExiste = lista.Any(o => o.Descripcion.Trim().ToLower() == nombre.ToLower());
 
             if (!Regex.IsMatch(txtNombreObraSocial.Text, @"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"))
-            {               
+            {
                 lblMensaje.CssClass = "alert alert-warning d-block";
                 lblMensaje.Text = "El nombre de la obra social solo puede contener letras.";
                 lblMensaje.Visible = true;

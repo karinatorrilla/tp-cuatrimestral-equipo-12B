@@ -95,15 +95,35 @@ namespace negocio
 
             try
             {
+
+              /*Verificamos que al querer 'borrar' especialidad no este asociada a un medico */
+                datos.setearConsulta("SELECT COUNT(*) FROM MEDICOxESPECIALIDAD WHERE EspecialidadId = @ID");
+                datos.setearParametro("@ID", idEspecialidad);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    int cantidad = (int)datos.Lector[0];
+                    if (cantidad > 0)
+                    {
+                        throw new Exception("No se puede eliminar la especialidad porque está asociada a uno o más médicos.");
+                    }
+                }
+                                
+                datos.cerrarConexion();
+                datos.limpiarParametros();
+
+
+
                 datos.setearConsulta("UPDATE ESPECIALIDADES SET Habilitado=0 WHERE ID = @ID");
                 datos.setearParametro("@ID", idEspecialidad);
-
                 datos.ejecutarAccion();
+                
             }
             catch (Exception ex)
             {
 
-                throw ex;
+              
                 throw new Exception("Error al eliminar especialidad: " + ex.Message, ex);
             }
             finally
@@ -126,14 +146,14 @@ namespace negocio
 
                 foreach (int idEspecialidad in especialidades)
                 {
-                datos.setearConsulta("INSERT INTO MEDICOxESPECIALIDAD (MedicoId,EspecialidadId) VALUES(@MedicoId,@EspecialidadId)");
+                    datos.setearConsulta("INSERT INTO MEDICOxESPECIALIDAD (MedicoId,EspecialidadId) VALUES(@MedicoId,@EspecialidadId)");
 
                     datos.setearParametro("@MedicoId", idmedico);
                     datos.setearParametro("@EspecialidadId", idEspecialidad);
                     datos.ejecutarAccion();
                     datos.limpiarParametros();
                     datos.cerrarConexion();
-                 
+
                 }
 
                 return true;
@@ -142,7 +162,7 @@ namespace negocio
             {
 
                 throw ex;
-               
+
             }
             finally
             {
