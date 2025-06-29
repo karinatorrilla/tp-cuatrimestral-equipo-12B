@@ -412,6 +412,7 @@ namespace tp_cuatrimestral_equipo_12B
                         divMensaje.Attributes["class"] = "alert alert-success";
                         divMensaje.InnerText = "Modificación realizada con éxito.";
                         divMensaje.Visible = true;
+                        btnGuardar.Visible = false;
                     }
                     else
                     {
@@ -419,11 +420,12 @@ namespace tp_cuatrimestral_equipo_12B
                         {
                             divMensaje.Attributes["class"] = "alert alert-success";
                             divMensaje.InnerText = "Operación realizada con éxito.";
+                            btnGuardar.Visible = false;
                         }
                         else
                         {
                             divMensaje.Attributes["class"] = "alert alert-danger";
-                            divMensaje.InnerText = "Ocurrió un error al procesar la operación.";
+                            divMensaje.InnerText = "Ocurrió un error al procesar la operación.";                           
                         }
                         divMensaje.Visible = true;
                     }

@@ -250,6 +250,16 @@ namespace tp_cuatrimestral_equipo_12B
                     especialidadesSeleccionadas.Add(int.Parse(item.Value));
                 }
             }
+
+            //valida que haya al menos una especialidad seleccionada
+            if (especialidadesSeleccionadas.Count == 0)
+            {
+                alertaMensaje.Attributes["class"] = "alert alert-warning";
+                alertaMensaje.InnerText = "Debe seleccionar al menos una especialidad.";
+                alertaMensaje.Visible = true;
+                return;
+            }
+
             EspecialidadNegocio negocio = new EspecialidadNegocio();
             if (negocio.agregarEspecialidadesMedico(idMedico, especialidadesSeleccionadas))
             {
@@ -740,6 +750,7 @@ namespace tp_cuatrimestral_equipo_12B
                     divMensaje.Attributes["class"] = "alert alert-success";
                     divMensaje.InnerText = "Modificación realizada con éxito.";
                     divMensaje.Visible = true;
+                    btnGuardar.Visible = false;
                 }
                 else
                 {
@@ -748,14 +759,14 @@ namespace tp_cuatrimestral_equipo_12B
                         divMensaje.Attributes["class"] = "alert alert-success";
                         divMensaje.InnerText = "Operación realizada con éxito.";
                         divMensaje.Visible = true;
-                        btnGuardar.Enabled = false;
+                        btnGuardar.Visible = false;
                         // Response.Redirect("Medicos.aspx", false); 
                     }
                     else
                     {
                         divMensaje.Attributes["class"] = "alert alert-danger";
                         divMensaje.InnerText = "Ocurrió un error al procesar la operación.";
-                        divMensaje.Visible = true;
+                        divMensaje.Visible = true;                       
                     }
                 }
 
