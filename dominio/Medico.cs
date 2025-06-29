@@ -17,6 +17,7 @@ namespace dominio
         // los lunes de 9 a 12 y los miércoles de 8 a 11, por ejemplo.
         // La lista privada que contiene los horarios, ahora con una propiedad pública
         public List<DisponibilidadHoraria> HorariosDisponibles { get; set; } = new List<DisponibilidadHoraria>();
+        public List<DisponibilidadHoraria> Disponibilidades { get; set; }
 
 
         public string Especialidad
