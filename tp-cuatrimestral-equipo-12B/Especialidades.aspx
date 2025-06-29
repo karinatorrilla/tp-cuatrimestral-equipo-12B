@@ -5,37 +5,37 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <div class="container-fluid py-4">
-   
-        <h1 class="mb-4">Listado de Especialidades</h1>
-         <asp:Label ID="lblMensaje" runat="server" Visible="false" CssClass="alert alert-info d-block w-50" style="place-self: center;"></asp:Label>
-       
 
-        
+        <h1 class="mb-4">Listado de Especialidades</h1>
+        <asp:Label ID="lblMensaje" runat="server" Visible="false" CssClass="alert alert-info d-block w-50" Style="place-self: center;"></asp:Label>
+
+
+
         <%--Botón agregar especialidad para abrir el modal--%>
 
         <asp:Button ID="btnMostrarFormularioAgregar" runat="server" Text="Agregar Especialidad" CssClass="btn btn-success mb-4" OnClick="btnMostrarFormularioAgregar_Click" />
-              
-        <!-- Modal Agregar Especialidad -->
-       <asp:Panel ID="formAgregar" runat="server" Visible="false" CssClass="card mt-4" Style="width: 50%; margin: auto;">
-    <div class="card-header">
-        Agregar Especialidad              
-    </div>
-    <div class="card-body">
-        <div class="mb-3">
-            <label for="txtNombreEspecialidad" class="form-label">Nombre de la especialidad:</label>
-            <asp:TextBox ID="txtNombreEspecialidad" runat="server" CssClass="form-control" placeholder="Ej. Dentista"></asp:TextBox>
-        </div>
-       
-        <asp:Button ID="AgregarEspecialidad" runat="server" CssClass="btn btn-primary" Text="Guardar" OnClick="AgregarEspecialidad_Click" />
-        <asp:Button ID="cerrarForm" runat="server" CssClass="btn btn-secondary" Text="Cerrar" OnClick="cerrarForm_Click" />
-    </div>
 
-</asp:Panel>
+        <!-- Modal Agregar Especialidad -->
+        <asp:Panel ID="formAgregar" runat="server" Visible="false" CssClass="card mt-4" Style="width: 50%; margin: auto;">
+            <div class="card-header">
+                Agregar Especialidad              
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="txtNombreEspecialidad" class="form-label">Nombre de la especialidad:</label>
+                    <asp:TextBox ID="txtNombreEspecialidad" runat="server" CssClass="form-control" placeholder="Ej. Dentista"></asp:TextBox>
+                </div>
+
+                <asp:Button ID="AgregarEspecialidad" runat="server" CssClass="btn btn-primary" Text="Guardar" OnClick="AgregarEspecialidad_Click" />
+                <asp:Button ID="cerrarForm" runat="server" CssClass="btn btn-secondary" Text="Cerrar" OnClick="cerrarForm_Click" />
+            </div>
+
+        </asp:Panel>
         <%--Tabla con listado de Especialidades--%>
         <div class="table-responsive d-flex justify-content-center">
             <div style="width: 50%;">
-               
-                
+
+
                 <table class="table table-striped table-hover table-bordered align-middle">
                     <thead class="table-dark">
                         <tr>
@@ -88,7 +88,7 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                                         </div>
                                         <div class="modal-body">
-                                            ¿Estás seguro que deseas eliminar la Especialidad:  
+                                            ¿Estás seguro que deseas eliminar la Especialidad: <br /> 
                                              <strong><%= esp.Descripcion%></strong>?         
                                         </div>
                                         <div class="modal-footer">
@@ -112,11 +112,4 @@
                 </table>
             </div>
         </div>
-
-
-
-
-
-        
-        
 </asp:Content>

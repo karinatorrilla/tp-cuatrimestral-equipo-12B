@@ -18,42 +18,46 @@ namespace tp_cuatrimestral_equipo_12B
 
             try
             {
+                MedicosNegocio medicoNegocio = new MedicosNegocio();
                 if (Session["TipoUsuario"] == null)
                 {
                     Session.Add("error", "Debes loguearte para ingresar.");
                     Response.Redirect("Error.aspx", false);
                     return;
                 }
-
+               
                 if (!IsPostBack)
                 {
-                    MedicosNegocio negocio = new MedicosNegocio();
-                    listaMedico = negocio.ListarMedicos();
-
-                    // cargar datos en los selectores
-                    EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
-                    todasLasEspecialidades = especialidadNegocio.Listar();
-
-                   
-                    foreach (var medico in listaMedico)
-                    {
-                        // Llama ListarEspecialidadesPorMedico para traer las especialidades de un médico dado su ID
-                        medico.Especialidades = negocio.ListarEspecialidadesPorMedico(medico.Id);
-                    }
+                    CargarEspecialidades();
+                    CargarMedicos();
                 }
-                else //recargar los datos
+
+                
+                if (Request["eliminar"] != null)
                 {
-                    MedicosNegocio medicoNegocio = new MedicosNegocio();
-                    listaMedico = medicoNegocio.ListarMedicos();
-                    foreach (var medico in listaMedico)
+                    int idEliminar;
+                    if (int.TryParse(Request["eliminar"], out idEliminar))
                     {
-                        medico.Especialidades = medicoNegocio.ListarEspecialidadesPorMedico(medico.Id);
+                        try
+                        {
+                            MedicosNegocio medicosNegocio = new MedicosNegocio();
+                            medicosNegocio.eliminarMedico(idEliminar);
+
+                            lblMensaje.Visible = true;
+                            lblMensaje.CssClass = "alert alert-success d-block";
+                            lblMensaje.Text = "Médico eliminado correctamente.";
+                        }
+                        catch (Exception ex)
+                        {
+                            lblMensaje.Visible = true;
+                            lblMensaje.CssClass = "alert alert-danger d-block";
+                            lblMensaje.Text = "Error al eliminar médico: " + ex.Message;
+                        }
                     }
 
-                    EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
-                    todasLasEspecialidades = especialidadNegocio.Listar();
+                    // Recargar médicos después de eliminar
+                    CargarMedicos();
                 }
-
             }
             catch (Exception ex)
             {
@@ -62,6 +66,22 @@ namespace tp_cuatrimestral_equipo_12B
                 listaMedico = new List<Medico>();
             }
 
+        }
+        private void CargarMedicos()
+        {
+            MedicosNegocio medicoNegocio = new MedicosNegocio();
+            listaMedico = medicoNegocio.ListarMedicos();
+
+            foreach (var medico in listaMedico)
+            {
+                medico.Especialidades = medicoNegocio.ListarEspecialidadesPorMedico(medico.Id);
+            }
+        }
+
+        private void CargarEspecialidades()
+        {
+            EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
+            todasLasEspecialidades = especialidadNegocio.Listar();
         }
 
         protected void btnGuardarEspecialidades_Click(object sender, EventArgs e)

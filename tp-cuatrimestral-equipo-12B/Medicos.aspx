@@ -5,6 +5,8 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="container-fluid py-4">
         <h1 class="mb-4">Listado de Médicos</h1>
+        <asp:Label ID="lblMensaje" runat="server" Visible="false" CssClass="alert alert-info d-block w-50" Style="place-self: center;"></asp:Label>
+
         <%-- Búsqueda y Filtros --%>
         <div class="filter-section mb-4">
             <div class="row g-3 align-items-end">
@@ -61,7 +63,7 @@
                         <td class="d-flex justify-content-center align-items-center gap-3">
 
                             <%-- Ícono Ver --%>
-                            <a href="FormularioMedico.aspx?id=<%= medico.Id %>&modo=ver" class="action-link" title="Ver Detalles" return false;">
+                            <a href="FormularioMedico.aspx?id=<%= medico.Id %>&modo=ver" class="action-link" title="Ver Detalles">
                                 <img src="images/icon_view.svg" alt="Ver" class="action-icon-img" />
                             </a>
                             <%-- Ícono Editar --%>
@@ -69,15 +71,37 @@
                                 <img src="images/icon_edit.svg" alt="Editar" class="action-icon-img" />
                             </a>
                             <%-- Ícono Especialidad --%>
-                                                   
-                             <a href="FormularioMedico.aspx?agregarespecialidad=<%= medico.Id %>"  class="btn"><img src="images/icon_doctor.svg" alt="Especialidad" class="action-icon-img" style="cursor: pointer" /></a>
 
-                           
+                            <a href="FormularioMedico.aspx?agregarespecialidad=<%= medico.Id %>" class="btn">
+                                <img src="images/icon_doctor.svg" alt="Especialidad" class="action-icon-img" style="cursor: pointer" /></a>
+
+
                             <%-- Ícono Eliminar --%>
-                            <a href="#" class="action-link" title="Eliminar Médico" onclick="if(confirm('¿Estás seguro de eliminar al médico Perez?')) { alert('Eliminar médico ID: 1'); return true; } else { return false; }">
-                                <img src="images/icon_delete.svg" alt="Eliminar" class="action-icon-img" />
-                            </a>
+
+                            <img src="images/icon_delete.svg" alt="Eliminar" class="action-icon-img" style="cursor: pointer"
+                                data-bs-toggle="modal" data-bs-target="#eliminarModal_<%= medico.Id %>" />
                         </td>
+                        <%--Modal Eliminar Medico--%>
+                        <div class="modal fade" id="eliminarModal_<%= medico.Id %>" tabindex="-1" aria-labelledby="eliminarLabel_<%= medico.Id %>" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="eliminarLabel_<%= medico.Id %>">Confirmar Eliminación</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                         ¿Estás seguro que deseas eliminar el medico:  <br />
+                                                                         
+                                            Matricula: <strong><%= medico.Matricula%><br />
+                                            </strong>Nombre: <strong><%= medico.Nombre%></strong> <strong><%= medico.Apellido%></strong>?         
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <a href="Medicos.aspx?eliminar=<%= medico.Id %>" class="btn btn-danger">Eliminar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </tr>
                     <% } %>
                     <% }

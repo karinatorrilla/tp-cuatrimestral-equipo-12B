@@ -92,7 +92,7 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                                         </div>
                                         <div class="modal-body">
-                                            ¿Estás seguro que deseas eliminar la Obra Social:  
+                                            ¿Estás seguro que deseas eliminar la Obra Social:  <br />
                                                 <strong><%= obra.Descripcion%></strong>?
                 
                                         </div>
