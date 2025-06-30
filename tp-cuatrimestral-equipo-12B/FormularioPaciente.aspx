@@ -7,12 +7,20 @@
         <% 
             string modo = Request.QueryString["modo"];
             string id = Request.QueryString["id"];
+            string idpacienteTurno = Request.QueryString["darturno"];
 
-            if (id == null) // Si no hay ID, es AGREGAR
+            if (!string.IsNullOrEmpty(idpacienteTurno)) // Si no hay ID, es AGREGAR
+            {
+        %>
+        <h1 class="mb-4">Asignacion de Turno</h1>
+
+        <%  }
+            else if (id == null)
             {
         %>
         <h1 class="mb-4">Agregar Paciente</h1>
-        <%  }
+        <%
+            }
             else if (modo == "ver") // Si hay ID y el modo es "ver", es para VER DETALLES
             {
         %>
@@ -61,100 +69,180 @@
 
         </div>
 
-        <%-- Sección de Contacto  --%>
-        <div class="row align-items-end g-4 mb-4">
-            <%-- Email --%>
-            <div class="col-md-3">
-                <label for="txtEmail" class="form-label font-weight-bold text-dark">Email</label>
-                <asp:TextBox runat="server" ID="txtEmail" CssClass="form-control" TextMode="Email" MaxLength="100" placeholder="nombre@gmail.com" required="true" />
+        <asp:Panel ID="panelAgregarPaciente" runat="server">
+            <%-- Sección de Contacto  --%>
+            <div class="row align-items-end g-4 mb-4">
+                <%-- Email --%>
+                <div class="col-md-3">
+                    <label for="txtEmail" class="form-label font-weight-bold text-dark">Email</label>
+                    <asp:TextBox runat="server" ID="txtEmail" CssClass="form-control" TextMode="Email" MaxLength="100" placeholder="nombre@gmail.com" required="true" />
+                </div>
+
+                <%-- Teléfono --%>
+                <div class="col-md-3">
+                    <label for="txtTelefono" class="form-label font-weight-bold text-dark">Teléfono</label>
+                    <asp:TextBox runat="server" ID="txtTelefono" CssClass="form-control" pattern="\d{1,10}" MaxLength="10" placeholder="1123456789" required="true" title="Solo números, máximo 10 cifras." />
+                </div>
+                <%-- Nacionalidad --%>
+                <div class="col-md-3">
+                    <label for="ddlNacionalidad" class="form-label font-weight-bold text-dark">Nacionalidad</label>
+                    <asp:DropDownList ID="ddlNacionalidad" runat="server" CssClass="form-control" AppendDataBoundItems="true" required="true">
+                        <asp:ListItem Text="Seleccione Nacionalidad" Value=""></asp:ListItem>
+                    </asp:DropDownList>
+                </div>
+
+                <%-- Obra Social (DropDownList) --%>
+                <div class="col-md-3">
+                    <label for="ddlObraSocial" class="form-label font-weight-bold text-dark">Obra Social</label>
+                    <asp:DropDownList ID="ddlObraSocial" runat="server" CssClass="form-control" AppendDataBoundItems="true" required="true">
+                        <asp:ListItem Text="Seleccione Obra Social" Value=""></asp:ListItem>
+                    </asp:DropDownList>
+                </div>
             </div>
 
-            <%-- Teléfono --%>
-            <div class="col-md-3">
-                <label for="txtTelefono" class="form-label font-weight-bold text-dark">Teléfono</label>
-                <asp:TextBox runat="server" ID="txtTelefono" CssClass="form-control" pattern="\d{1,10}" MaxLength="10" placeholder="1123456789" required="true" title="Solo números, máximo 10 cifras." />
+
+
+            <%-- Sección domicilio --%>
+            <h3 class="mb-4 text-dark">Datos de Domicilio</h3>
+            <div class="row align-items-end g-5 mb-4">
+
+                <%-- Provincia (DropDownList) --%>
+                <div class="col-md-3">
+                    <label for="ddlProvincia" class="form-label font-weight-bold text-dark">Provincia</label>
+                    <asp:DropDownList ID="ddlProvincia" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlProvincia_SelectedIndexChanged" AppendDataBoundItems="true" required="true">
+                        <asp:ListItem Text="Seleccione Provincia" Value=""></asp:ListItem>
+                    </asp:DropDownList>
+                </div>
+
+                <%-- Localidad (DropDownList) --%>
+                <div class="col-md-3">
+                    <label for="ddlLocalidad" class="form-label font-weight-bold text-dark">Localidad</label>
+                    <asp:DropDownList ID="ddlLocalidad" runat="server" CssClass="form-control" AppendDataBoundItems="true" required="true" Enabled="false">
+                        <asp:ListItem Text="Seleccione Localidad" Value=""></asp:ListItem>
+                    </asp:DropDownList>
+                </div>
+
+                <%-- Dirección/Calle --%>
+                <div class="col-md-2">
+                    <label for="txtDireccion" class="form-label font-weight-bold text-dark">Calle</label>
+                    <asp:TextBox runat="server" ID="txtDireccion" MaxLength="30" pattern="[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s.,-]{1,30}" title="La calle acepta solo números, letras, puntos, comas y guiones. No debe tener más de 30 caracteres." CssClass="form-control" placeholder="Mendoza" required="true" />
+                </div>
+
+                <%-- Altura --%>
+                <div class="col-md-1">
+                    <label for="txtAltura" class="form-label font-weight-bold text-dark">Altura</label>
+                    <asp:TextBox runat="server" ID="txtAltura" MaxLength="7" pattern="\d{1,7}" title="La altura debe contener solo números y tener hasta 7 dígitos." CssClass="form-control" placeholder="123" required="true" />
+                </div>
+
+                <%-- Cod Postal --%>
+                <div class="col-md-1">
+                    <label for="txtCodPostal" class="form-label font-weight-bold text-dark">Cod. Postal</label>
+                    <asp:TextBox runat="server" ID="txtCodPostal" MaxLength="6" pattern="\d{1,6}" title="El código postal debe contener solo números y tener hasta 6 dígitos." CssClass="form-control" placeholder="1614" required="true" />
+                </div>
+
+                <%-- Depto --%>
+                <div class="col-md-1">
+                    <label for="txtDepto" class="form-label font-weight-bold text-dark">Depto(Opcional)</label>
+                    <asp:TextBox runat="server" ID="txtDepto" MaxLength="50" CssClass="form-control" placeholder="12B" />
+                </div>
             </div>
 
-            <%-- Nacionalidad --%>
-            <div class="col-md-3">
-                <label for="ddlNacionalidad" class="form-label font-weight-bold text-dark">Nacionalidad</label>
-                <asp:DropDownList ID="ddlNacionalidad" runat="server" CssClass="form-control" AppendDataBoundItems="true" required="true">
-                    <asp:ListItem Text="Seleccione Nacionalidad" Value=""></asp:ListItem>
-                </asp:DropDownList>
+            <%-- Sección Observaciones --%>
+            <h3 class="mb-4 text-dark">Observaciones</h3>
+            <div class="row g-3 mb-4">
+                <div class="col-md-12">
+                    <label for="txtObservaciones" class="form-label font-weight-bold text-dark">Notas adicionales</label>
+                    <asp:TextBox ID="txtObservaciones" runat="server" TextMode="MultiLine" Rows="5" CssClass="form-control" />
+                </div>
             </div>
 
-            <%-- Obra Social (DropDownList) --%>
-            <div class="col-md-3">
-                <label for="ddlObraSocial" class="form-label font-weight-bold text-dark">Obra Social</label>
-                <asp:DropDownList ID="ddlObraSocial" runat="server" CssClass="form-control" AppendDataBoundItems="true" required="true">
-                    <asp:ListItem Text="Seleccione Obra Social" Value=""></asp:ListItem>
-                </asp:DropDownList>
+            <%-- Contenedor de Botones --%>
+            <div class="d-flex justify-content-center mt-4">
+                <asp:Button Text="Guardar" ID="btnGuardar" CssClass="btn btn-primary px-5 me-3" runat="server" OnClick="btnGuardar_Click" />
+                <a href="Pacientes.aspx" class="btn btn-secondary px-5">Volver</a>
             </div>
 
-        </div>
 
 
+        </asp:Panel>
+        <asp:Panel ID="panelAsignarTurno" runat="server">
+            <!-- Acordeon de turno paciente-->
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Especialidad
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                        <div class="accordion-body" style="place-self:center">
+                           
 
-        <%-- Sección domicilio --%>
-        <h3 class="mb-4 text-dark">Datos de Domicilio</h3>
-        <div class="row align-items-end g-5 mb-4">
+          <asp:Repeater ID="repEspecialidades" runat="server">
+              <ItemTemplate>
+                  <div class="form-check form-check-inline align-items-center ">
+                      <input class="form-check-input" type="radio" name="especialidad"
+                          id="esp_<%# Eval("Id") %>" value='<%# Eval("Id") %>' />
+                      <label class="form-check-label" for="esp_<%# Eval("Id") %>">
+                          <%# Eval("Descripcion") %>
+                      </label>
+                  </div>
+              </ItemTemplate>
+          </asp:Repeater>
 
-            <%-- Provincia (DropDownList) --%>
-            <div class="col-md-3">
-                <label for="ddlProvincia" class="form-label font-weight-bold text-dark">Provincia</label>
-                <asp:DropDownList ID="ddlProvincia" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlProvincia_SelectedIndexChanged" AppendDataBoundItems="true" required="true">
-                    <asp:ListItem Text="Seleccione Provincia" Value=""></asp:ListItem>
-                </asp:DropDownList>
+                        </div>
+                        <button type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">*ok* cerrar 1 y abrir 2</button>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Sugerencias
+           
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <strong>3 HORARIOS</strong>
+
+                        </div>
+                        <button type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">*ok* cerrar 2 y abrir 3</button>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Medico carga manual
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            Seleccionar Medico DIA Y HORARIO
+
+                        </div>
+                        <button type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">*ok* cerrar 2 y abrir 3</button>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            TURNO ASIGNADO
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            Observaciones y nro de turno
+                        </div>
+                        <button>resumen</button>
+                    </div>
+                </div>
             </div>
-
-            <%-- Localidad (DropDownList) --%>
-            <div class="col-md-3">
-                <label for="ddlLocalidad" class="form-label font-weight-bold text-dark">Localidad</label>
-                <asp:DropDownList ID="ddlLocalidad" runat="server" CssClass="form-control" AppendDataBoundItems="true" required="true" Enabled="false">
-                    <asp:ListItem Text="Seleccione Localidad" Value=""></asp:ListItem>
-                </asp:DropDownList>
-            </div>
-
-            <%-- Dirección/Calle --%>
-            <div class="col-md-2">
-                <label for="txtDireccion" class="form-label font-weight-bold text-dark">Calle</label>
-                <asp:TextBox runat="server" ID="txtDireccion" MaxLength="30" pattern="[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s.,-]{1,30}" title="La calle acepta solo números, letras, puntos, comas y guiones. No debe tener más de 30 caracteres." CssClass="form-control" placeholder="Mendoza" required="true" />
-            </div>
-
-            <%-- Altura --%>
-            <div class="col-md-1">
-                <label for="txtAltura" class="form-label font-weight-bold text-dark">Altura</label>
-                <asp:TextBox runat="server" ID="txtAltura" MaxLength="7" pattern="\d{1,7}" title="La altura debe contener solo números y tener hasta 7 dígitos." CssClass="form-control" placeholder="123" required="true" />
-            </div>
-
-            <%-- Cod Postal --%>
-            <div class="col-md-1">
-                <label for="txtCodPostal" class="form-label font-weight-bold text-dark">Cod. Postal</label>
-                <asp:TextBox runat="server" ID="txtCodPostal" MaxLength="6" pattern="\d{1,6}" title="El código postal debe contener solo números y tener hasta 6 dígitos." CssClass="form-control" placeholder="1614" required="true" />
-            </div>
-
-            <%-- Depto --%>
-            <div class="col-md-1">
-                <label for="txtDepto" class="form-label font-weight-bold text-dark">Depto(Opcional)</label>
-                <asp:TextBox runat="server" ID="txtDepto" MaxLength="50" CssClass="form-control" placeholder="12B" />
-            </div>
-        </div>
-
-        <%-- Sección Observaciones --%>
-        <h3 class="mb-4 text-dark">Observaciones</h3>
-        <div class="row g-3 mb-4">
-            <div class="col-md-12">
-                <label for="txtObservaciones" class="form-label font-weight-bold text-dark">Notas adicionales</label>
-                <asp:TextBox ID="txtObservaciones" runat="server" TextMode="MultiLine" Rows="5" CssClass="form-control" />
-            </div>
-        </div>
-
-        <%-- Contenedor de Botones --%>
-        <div class="d-flex justify-content-center mt-4">
-            <asp:Button Text="Guardar" ID="btnGuardar" CssClass="btn btn-primary px-5 me-3" runat="server" OnClick="btnGuardar_Click" />
-            <a href="Pacientes.aspx" class="btn btn-secondary px-5">Volver</a>
-        </div>
+            <!-- Acordeon de Turno Paciente -->
+        </asp:Panel>
     </div>
+
+
+
 
 
 </asp:Content>

@@ -63,3 +63,6 @@ window.limpiarCamposModalDisponibilidad = function (medicoId) {
     $('#hdnDisponibilidadId_' + medicoId).val('');
     $('#btnAgregarDisponibilidad_' + medicoId).text('Agregar');
 };
+
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))

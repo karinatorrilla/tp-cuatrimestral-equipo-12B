@@ -88,43 +88,91 @@ namespace tp_cuatrimestral_equipo_12B
             ///config para modificar
             if (Request.QueryString["id"] != null && !IsPostBack)
             {
-
-                PacienteNegocio negocio = new PacienteNegocio();
-                List<Paciente> lista = negocio.ListarPacientes(int.Parse(Request.QueryString["id"]));
-                Paciente seleccionado = lista[0];
-
-                string idProvincia = seleccionado.Provincia;
-                ddlProvincia.SelectedValue = idProvincia;
-
-                await PopulateLocalidades(idProvincia);
-
-                string idLocalidad = seleccionado.Localidad;
-                ddlLocalidad.SelectedValue = idLocalidad;
-                ddlLocalidad.Enabled = true;
-
-
-                //precarga de datos
-
-                txtNombre.Text = seleccionado.Nombre;
-                txtApellido.Text = seleccionado.Apellido;
-                txtDni.Text = seleccionado.Documento.ToString();
-                txtFechaNacimiento.Text = seleccionado.FechaNacimiento.ToString(("yyyy-MM-dd"));
-                txtEmail.Text = seleccionado.Email;
-                txtTelefono.Text = seleccionado.Telefono;
-                ddlNacionalidad.SelectedValue = seleccionado.Nacionalidad;
-                ddlObraSocial.SelectedValue = seleccionado.ObraSocial.ToString();
-                txtDireccion.Text = seleccionado.Calle;
-                txtAltura.Text = seleccionado.Altura.ToString();
-                txtCodPostal.Text = seleccionado.CodPostal;
-                txtDepto.Text = seleccionado.Depto;
-                txtObservaciones.Text = seleccionado.Observaciones;
-
-                if (Request.QueryString["modo"] == "ver")
+                try
                 {
-                    DeshabilitarCampos();
-                    btnGuardar.Visible = false;  // Oculta botón de guardar
+                    panelAsignarTurno.Visible = false;
+                    panelAgregarPaciente.Visible = true;
+
+                    PacienteNegocio negocio = new PacienteNegocio();
+                    List<Paciente> lista = negocio.ListarPacientes(int.Parse(Request.QueryString["id"]));
+                    Paciente seleccionado = lista[0];
+
+                    string idProvincia = seleccionado.Provincia;
+                    ddlProvincia.SelectedValue = idProvincia;
+
+                    await PopulateLocalidades(idProvincia);
+
+                    string idLocalidad = seleccionado.Localidad;
+                    ddlLocalidad.SelectedValue = idLocalidad;
+                    ddlLocalidad.Enabled = true;
+
+
+                    //precarga de datos
+
+                    txtNombre.Text = seleccionado.Nombre;
+                    txtApellido.Text = seleccionado.Apellido;
+                    txtDni.Text = seleccionado.Documento.ToString();
+                    txtFechaNacimiento.Text = seleccionado.FechaNacimiento.ToString(("yyyy-MM-dd"));
+                    txtEmail.Text = seleccionado.Email;
+                    txtTelefono.Text = seleccionado.Telefono;
+                    ddlNacionalidad.SelectedValue = seleccionado.Nacionalidad;
+                    ddlObraSocial.SelectedValue = seleccionado.ObraSocial.ToString();
+                    txtDireccion.Text = seleccionado.Calle;
+                    txtAltura.Text = seleccionado.Altura.ToString();
+                    txtCodPostal.Text = seleccionado.CodPostal;
+                    txtDepto.Text = seleccionado.Depto;
+                    txtObservaciones.Text = seleccionado.Observaciones;
+
+                    if (Request.QueryString["modo"] == "ver")
+                    {
+                        DeshabilitarCampos();
+                        btnGuardar.Visible = false;  // Oculta botón de guardar
+                    }
+
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
                 }
             }
+
+
+            //Asignacion de turno
+            if (!IsPostBack && Request["darturno"] != null)
+            {
+                try
+                {
+                    /* Datos del paciente */
+                    panelAgregarPaciente.Visible = false;
+                    DeshabilitarCampos();
+                    PacienteNegocio negocio = new PacienteNegocio();
+                    List<Paciente> lista = negocio.ListarPacientes(int.Parse(Request.QueryString["darturno"]));
+                    Paciente seleccionado = lista[0];
+
+                    txtNombre.Text = seleccionado.Nombre;
+                    txtApellido.Text = seleccionado.Apellido;
+                    txtDni.Text = seleccionado.Documento.ToString();
+                    txtFechaNacimiento.Text = seleccionado.FechaNacimiento.ToString(("yyyy-MM-dd"));
+                    /* Datos del paciente */
+
+                    /* Especialidad */
+                    panelAsignarTurno.Visible = true;
+                    EspecialidadNegocio negocioEsp = new EspecialidadNegocio();
+                    List<Especialidad> listaEsp = negocioEsp.Listar();
+                    repEspecialidades.DataSource = listaEsp;
+                    repEspecialidades.DataBind();
+                    /* Especialidad */
+
+
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
+            }
+
         }
 
         private async Task PopulateProvincias()
@@ -214,7 +262,7 @@ namespace tp_cuatrimestral_equipo_12B
             }
 
             //validar apellido solo letras y no mayor a 100
-            string apellido = txtApellido.Text;            
+            string apellido = txtApellido.Text;
             if (apellido.Length > 100)
             {
                 divMensaje.Attributes["class"] = "alert alert-danger";
@@ -425,7 +473,7 @@ namespace tp_cuatrimestral_equipo_12B
                         else
                         {
                             divMensaje.Attributes["class"] = "alert alert-danger";
-                            divMensaje.InnerText = "Ocurrió un error al procesar la operación.";                           
+                            divMensaje.InnerText = "Ocurrió un error al procesar la operación.";
                         }
                         divMensaje.Visible = true;
                     }
