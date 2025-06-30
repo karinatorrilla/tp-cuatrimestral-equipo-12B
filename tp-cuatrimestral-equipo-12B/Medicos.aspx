@@ -117,7 +117,8 @@
                                         <h5 class="modal-title" id="modalDisponibilidadMedicoLabel_<%= medico.Id %>">
                                             Administrar Disponibilidad Horaria de <%= medico.Apellido %> <%= medico.Nombre %>
                                         </h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                            onclick="limpiarCamposModalDisponibilidad('<%= medico.Id %>');"></button>
                                     </div>
 
                                     <%-- Cuerpo del Modal --%>
@@ -148,7 +149,11 @@
                                                 <%-- Botón para agregar disponibilidad horaria que envía datos por URL --%>
                                                 <a id="btnAgregarDisponibilidad_<%= medico.Id %>" 
                                                    href="#" class="btn btn-success w-100" 
-                                                   onclick="return generarEnlaceDisponibilidad('<%= medico.Id %>');">Agregar</a>
+                                                   onclick="return generarEnlaceDisponibilidad('<%= medico.Id %>');">
+                                                    Agregar
+                                                </a>
+                                                <%-- Campo oculto para guardar el ID de la disponibilidad que se está editando --%>
+                        <input type="hidden" id="hdnDisponibilidadId_<%= medico.Id %>" value="" />
                                             </div>
 
                                         </div>
@@ -157,7 +162,7 @@
                                         <%-- Tabla Listado de hrarios disponibles --%>
                                         <div class="list-group">
                                             
-                                            <div class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center fw-bold py-2">
+                                            <div class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center fw-bold py-2" style="background-color: #000;color: #fff;border-radius: 0;">
                                                 <span style="flex: 0 0 5%;">ID</span>
                                                 <span style="flex: 0 0 25%;">DÍA DE LA SEMANA</span>
                                                 <span style="flex: 0 0 20%;">INICIO HORARIO</span>
@@ -169,16 +174,36 @@
                                             <% if (medico.Disponibilidades != null && medico.Disponibilidades.Any()) { %>
                                                 <% foreach (var disp in medico.Disponibilidades) { %>
                                                     <div class="list-group-item d-flex justify-content-between align-items-center py-2">
-                                                        <span style="flex: 0 0 5%;"><%= disp.Id %></span>
-                                                        <span style="flex: 0 0 25%;"><%= disp.DiaSemanaDescripcion %></span>
+                                                        <span style="flex: 0 0 5%;" data-disponibilidad-id="<%= disp.Id %>"><%= disp.Id %></span>
+                                                        <span style="flex: 0 0 25%;" data-dia-numero="<%= disp.DiaDeLaSemana %>"><%= disp.DiaSemanaDescripcion %></span>
                                                         <span style="flex: 0 0 20%;"><%= disp.HoraInicioBloque.ToString("hh':'mm") %></span>
                                                         <span style="flex: 0 0 20%;"><%= disp.HoraFinBloque.ToString("hh':'mm") %></span>
-                                                        <span style="flex: 0 0 10%; text-align: center;">
+                                                        <div style="flex: 0 0 10%; text-align: center; display: flex; justify-content: center; align-items: center;">
+                                                            <%-- Icono de editar para la disponibilidad horaria --%>
+                                                            <button type="button" class="action-link" style="margin-right: 5px;background-color: transparent; border: none;" title="Editar Disponibilidad"
+                                                               onclick="
+                                                                var row = this.closest('.list-group-item');
+                                                                var dispId = row.querySelector('[data-disponibilidad-id]').innerText;
+                                                                var diaNum = row.querySelector('[data-dia-numero]').dataset.diaNumero;
+                                                                var horaInicio = row.children[2].innerText;
+                                                                var horaFin = row.children[3].innerText;
+
+                                                                editarDisponibilidad(
+                                                                    '<%= medico.Id %>',
+                                                                    dispId,
+                                                                    diaNum,
+                                                                    horaInicio,
+                                                                    horaFin
+                                                                );
+                                                                return false;
+                                                            ">
+                                                                <img src="images/icon_edit.svg" alt="Editar" class="action-icon-img" style="cursor: pointer; width: 24px; height: 24px;" />
+                                                            </button>
                                                             <%-- Icono de eliminar para la disponibilidad horaria --%>
                                                             <a href="Medicos.aspx?eliminarDisponibilidad=<%= disp.Id %>&idMedico=<%= medico.Id %>" class="action-link" title="Eliminar Disponibilidad">
                                                                 <img src="images/icon_delete.svg" alt="Eliminar" class="action-icon-img" style="cursor: pointer" />
                                                             </a>
-                                                        </span>
+                                                        </div>
                                                     </div>
                                                 <% } %>
                                             <% } else { %>

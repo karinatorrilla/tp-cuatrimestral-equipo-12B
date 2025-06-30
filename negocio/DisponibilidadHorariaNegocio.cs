@@ -27,8 +27,37 @@ namespace negocio
             }
             catch (Exception ex)
             {
-                // Aquí podrías loggear el error o re-lanzar una excepción más específica
                 throw new Exception("Error al agregar disponibilidad horaria: " + ex.Message, ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        // Método para agregar una nueva disponibilidad horaria
+        public bool ModificarDisponibilidadHoraria(DisponibilidadHoraria disponibilidadAEditar)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE MEDICOxDISPONIBILIDADHORARIA SET " +
+                                     "DiaDeLaSemana = @DiaDeLaSemana, " +
+                                     "HoraInicioBloque = @HoraInicioBloque, " +
+                                     "HoraFinBloque = @HoraFinBloque " +
+                                     "WHERE Id = @Id");
+
+                datos.setearParametro("@DiaDeLaSemana", disponibilidadAEditar.DiaDeLaSemana);
+                datos.setearParametro("@HoraInicioBloque", disponibilidadAEditar.HoraInicioBloque);
+                datos.setearParametro("@HoraFinBloque", disponibilidadAEditar.HoraFinBloque);
+                datos.setearParametro("@Id", disponibilidadAEditar.Id);
+
+                datos.ejecutarAccion();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al modificar disponibilidad horaria: " + ex.Message, ex);
             }
             finally
             {

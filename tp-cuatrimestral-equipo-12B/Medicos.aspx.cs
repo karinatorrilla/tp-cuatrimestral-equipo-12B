@@ -32,6 +32,7 @@ namespace tp_cuatrimestral_equipo_12B
                     CargarMedicos();
                 }
 
+                // --- Lógica para AGREGAR o ACTUALIZAR Disponibilidad ---
                 if (Request["medicoId"] != null && Request["dia"] != null && Request["horaInicio"] != null && Request["horaFin"] != null)
                 {
                     int medicoId;
@@ -39,7 +40,7 @@ namespace tp_cuatrimestral_equipo_12B
                     TimeSpan horaInicio;
                     TimeSpan horaFin;
 
-                    // Intentar para  parsear todos los parámetros
+                    // Intentar parsear todos los parámetros recibidos
                     if (int.TryParse(Request["medicoId"], out medicoId) &&
                         int.TryParse(Request["dia"], out diaSemana) &&
                         TimeSpan.TryParse(Request["horaInicio"], out horaInicio) &&
@@ -47,7 +48,8 @@ namespace tp_cuatrimestral_equipo_12B
                     {
                         try
                         {
-                            DisponibilidadHoraria nuevaDisponibilidad = new DisponibilidadHoraria
+                            DisponibilidadHorariaNegocio dhNegocio = new DisponibilidadHorariaNegocio();
+                            DisponibilidadHoraria disponibilidad = new DisponibilidadHoraria
                             {
                                 MedicoId = medicoId,
                                 DiaDeLaSemana = diaSemana,
@@ -55,19 +57,44 @@ namespace tp_cuatrimestral_equipo_12B
                                 HoraFinBloque = horaFin
                             };
 
-                            DisponibilidadHorariaNegocio dhNegocio = new DisponibilidadHorariaNegocio();
-                            dhNegocio.AgregarDisponibilidadHoraria(nuevaDisponibilidad);
+                            // Lógica CLAVE: Detectar si es ACTUALIZAR o AGREGAR 
+                            // Verificamos si el parámetro 'actualizarDisponibilidad' existe en la URL
+                            if (Request["actualizarDisponibilidad"] != null)
+                            {
+                                // Estamos en modo ACTUALIZAR
+                                int idDisponibilidadAActualizar;
+                                if (int.TryParse(Request["actualizarDisponibilidad"], out idDisponibilidadAActualizar))
+                                {
+                                    disponibilidad.Id = idDisponibilidadAActualizar; // Asigna el ID de la disponibilidad a modificar
+                                    dhNegocio.ModificarDisponibilidadHoraria(disponibilidad); // Llama al método de modificación
 
-                            lblMensaje.Visible = true;
-                            lblMensaje.CssClass = "alert alert-success d-block";
-                            lblMensaje.Text = "Disponibilidad horaria agregada correctamente.";
+                                    lblMensaje.Visible = true;
+                                    lblMensaje.CssClass = "alert alert-success d-block";
+                                    lblMensaje.Text = "Disponibilidad horaria actualizada correctamente.";
+                                }
+                                else
+                                {
+                                    // El ID de actualización no es válido
+                                    lblMensaje.Visible = true;
+                                    lblMensaje.CssClass = "alert alert-danger d-block";
+                                    lblMensaje.Text = "Error: ID de disponibilidad para actualizar no válido.";
+                                }
+                            }
+                            else
+                            {
+                                // No hay parámetro 'actualizarDisponibilidad', estamos en modo AGREGAR
+                                dhNegocio.AgregarDisponibilidadHoraria(disponibilidad);
 
+                                lblMensaje.Visible = true;
+                                lblMensaje.CssClass = "alert alert-success d-block";
+                                lblMensaje.Text = "Disponibilidad horaria agregada correctamente.";
+                            }
                         }
                         catch (Exception ex)
                         {
                             lblMensaje.Visible = true;
                             lblMensaje.CssClass = "alert alert-danger d-block";
-                            lblMensaje.Text = "Error al agregar disponibilidad: " + ex.Message;
+                            lblMensaje.Text = "Error en la operación de disponibilidad: " + ex.Message;
                         }
                     }
                     else
@@ -77,7 +104,6 @@ namespace tp_cuatrimestral_equipo_12B
                         lblMensaje.Text = "Los parámetros de disponibilidad no son válidos.";
                     }
 
-                    // Recargar médicos y sus disponibilidades después de la operación
                     CargarMedicos();
                 }
 
