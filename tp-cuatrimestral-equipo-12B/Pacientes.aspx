@@ -91,7 +91,7 @@
                             </div>
 
                             <%--Dar turno--%>
-                            <a href="FormularioPaciente.aspx?darturno=<%= paciente.Id %>" class="action-link" title="Dar Turno">
+                            <a href="FormularioTurnos.aspx?darturno=<%= paciente.Id %>" class="action-link" title="Dar Turno">
                                 <img src="images/icon_turno.svg" alt="Dar Turno!" class="action-icon-img" />
                             </a>
                         </td>

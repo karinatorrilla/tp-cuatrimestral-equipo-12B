@@ -90,8 +90,7 @@ namespace tp_cuatrimestral_equipo_12B
             {
                 try
                 {
-                    panelAsignarTurno.Visible = false;
-                    panelAgregarPaciente.Visible = true;
+                   
 
                     PacienteNegocio negocio = new PacienteNegocio();
                     List<Paciente> lista = negocio.ListarPacientes(int.Parse(Request.QueryString["id"]));
@@ -138,40 +137,7 @@ namespace tp_cuatrimestral_equipo_12B
             }
 
 
-            //Asignacion de turno
-            if (!IsPostBack && Request["darturno"] != null)
-            {
-                try
-                {
-                    /* Datos del paciente */
-                    panelAgregarPaciente.Visible = false;
-                    DeshabilitarCampos();
-                    PacienteNegocio negocio = new PacienteNegocio();
-                    List<Paciente> lista = negocio.ListarPacientes(int.Parse(Request.QueryString["darturno"]));
-                    Paciente seleccionado = lista[0];
-
-                    txtNombre.Text = seleccionado.Nombre;
-                    txtApellido.Text = seleccionado.Apellido;
-                    txtDni.Text = seleccionado.Documento.ToString();
-                    txtFechaNacimiento.Text = seleccionado.FechaNacimiento.ToString(("yyyy-MM-dd"));
-                    /* Datos del paciente */
-
-                    /* Especialidad */
-                    panelAsignarTurno.Visible = true;
-                    EspecialidadNegocio negocioEsp = new EspecialidadNegocio();
-                    List<Especialidad> listaEsp = negocioEsp.Listar();
-                    repEspecialidades.DataSource = listaEsp;
-                    repEspecialidades.DataBind();
-                    /* Especialidad */
-
-
-                }
-                catch (Exception ex)
-                {
-
-                    throw ex;
-                }
-            }
+            
 
         }
 
