@@ -69,6 +69,42 @@ namespace negocio
 
         }
 
+        public List<Medico> listarMedicosPorEspecialidad(int idEspecialidad)
+        {
+            List<Medico> lista = new List<Medico>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT M.Id, M.Nombre, M.Apellido FROM MEDICOS M " +
+                    "INNER JOIN MEDICOxESPECIALIDAD ME ON M.Id = ME.MedicoId WHERE ME.EspecialidadId = @idEspecialidad " +
+                    "AND M.Habilitado = 1 AND ME.Habilitado = 1");
+
+                datos.setearParametro("@idEspecialidad", idEspecialidad);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Medico aux = new Medico();
+                    aux.Id = (int)datos.Lector["Id"];
+                    aux.Nombre = datos.Lector["Nombre"].ToString();
+                    aux.Apellido = datos.Lector["Apellido"].ToString();                  
+
+                    lista.Add(aux);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al listar médicos por especialidad: " + ex.Message, ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+        }
+
         public bool agregarMedico(Medico nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -135,15 +171,15 @@ namespace negocio
                 datos.setearParametro("@nombre", mod.Nombre);
                 datos.setearParametro("@apellido", mod.Apellido);
                 datos.setearParametro("@documento", mod.Documento);
-                datos.setearParametro("@email", mod.Email); 
-               datos.setearParametro("@telefono", mod.Telefono);
+                datos.setearParametro("@email", mod.Email);
+                datos.setearParametro("@telefono", mod.Telefono);
                 datos.setearParametro("@nacionalidad", mod.Nacionalidad);
                 datos.setearParametro("@provincia", mod.Provincia);
                 datos.setearParametro("@localidad", mod.Localidad);
                 datos.setearParametro("@calle", mod.Calle);
                 datos.setearParametro("@altura", mod.Altura);
                 datos.setearParametro("@depto", mod.Depto);
-                datos.setearParametro("@fechanacimiento", mod.FechaNacimiento); 
+                datos.setearParametro("@fechanacimiento", mod.FechaNacimiento);
 
                 //datos.setearParametro("@idespecialidad", mod.EspecialidadSeleccionada.Id);
                 datos.ejecutarAccion();
@@ -230,7 +266,7 @@ namespace negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-               
+
             }
             catch (Exception ex)
             {
@@ -241,6 +277,8 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+
+
     }
 }
 
