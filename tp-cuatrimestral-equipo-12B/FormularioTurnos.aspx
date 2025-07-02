@@ -7,9 +7,14 @@
             opacity: 0.6; /* se ve más gris */
             filter: grayscale(100%);
         }
+
+    
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <%--para el updatepanel--%>
+    <asp:ScriptManager ID="ScriptManager1" runat="server" />
+
     <div class="container-fluid py-4">
         <% 
             string idpacienteTurno = Request.QueryString["darturno"];
@@ -65,30 +70,20 @@
         </div>
 
 
+
         <asp:Panel ID="panelAsignarTurno" runat="server">
+
+
             <!-- Acordeon de turno paciente-->
             <div class="accordion" id="accordionExample">
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <button class="accordion-button "  type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                             Especialidad
                         </button>
                     </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                    <div id="collapseOne" class="accordion-collapse collapse show">
                         <div class="accordion-body">
-
-
-                            <%--<asp:Repeater ID="repEspecialidades" runat="server">
-                             <ItemTemplate>
-                                 <div class="form-check form-check-inline align-items-center ">
-                                     <input class="form-check-input" type="radio" name="especialidad"
-                                         id="esp_<%# Eval("Id") %>" value='<%# Eval("Id") %>' />
-                                     <label class="form-check-label" for="esp_<%# Eval("Id") %>">
-                                         <%# Eval("Descripcion") %>
-                                     </label>
-                                 </div>
-                             </ItemTemplate>
-                         </asp:Repeater>--%>
 
                             <!-- Seleccionar especialidad!! -->
                             <div class="col-md-4 mb-3">
@@ -113,7 +108,7 @@
         
                         </button>
                     </h2>
-                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div id="collapseTwo" class="accordion-collapse collapse">
                         <div class="accordion-body">
                             <strong>3 HORARIOS</strong>
 
@@ -127,35 +122,43 @@
                             CARGA MANUAL DEL MÉDICO A PARTIR DE LA ESPECIALIDAD SELECCIONADA (si no le sirven los 3 horarios sugeridos)
                         </button>
                     </h2>
-                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
+                    <div id="collapseThree" class="accordion-collapse collapse">
 
-                            <!-- Médico (aparece después de elegir la especialidad!!) -->
-                            <div class="col-md-4 mb-3">
-                                <label for="ddlMedicos" class="form-label font-weight-bold text-dark">Médico</label>
-                                <asp:DropDownList ID="ddlMedicos" runat="server" CssClass="form-control" AppendDataBoundItems="true" required="true" AutoPostBack="true" OnSelectedIndexChanged="ddlMedicos_SelectedIndexChanged">
-                                    <asp:ListItem Text="Seleccione Médico" Value=""></asp:ListItem>
-                                </asp:DropDownList>
-                            </div>
+                        <%--encerramos el calendario para que no recargue toda la pagina--%>
+                        <asp:UpdatePanel runat="server">
+                            <ContentTemplate>
 
-                            <!-- Fecha del turno (ver disponibilidad horaria del médico seleccionado en la fecha seleccionada ) -->
-                            <div class="col-md-4 mb-3">
-                                <label for="calTurno" class="form-label font-weight-bold text-dark">Fecha del Turno</label>
-                                <asp:Calendar ID="calTurno" runat="server" OnDayRender="calTurno_DayRender"
-                                    OnSelectionChanged="calTurno_SelectionChanged"
-                                    CssClass="form-control"
-                                    Visible="true" />
-                            </div>
+                                <div class="accordion-body">
 
-                            <!-- Mostrar las horas disponibles de ese médico para ese día -->
-                            <div class="col-md-4 mb-3">
-                                <label for="ddlHorarios" class="form-label font-weight-bold text-dark">Horario del Turno</label>
-                                <asp:DropDownList ID="ddlHorarios" AppendDataBoundItems="true" required="true" runat="server" CssClass="form-control">
-                                    <asp:ListItem Text="Seleccione Horario" Value=""></asp:ListItem>
-                                </asp:DropDownList>
-                            </div>
+                                    <!-- Médico (aparece después de elegir la especialidad!!) -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="ddlMedicos" class="form-label font-weight-bold text-dark">Médico</label>
+                                        <asp:DropDownList ID="ddlMedicos" runat="server" CssClass="form-control" AppendDataBoundItems="true" required="true" AutoPostBack="true" OnSelectedIndexChanged="ddlMedicos_SelectedIndexChanged">
+                                            <asp:ListItem Text="Seleccione Médico" Value=""></asp:ListItem>
+                                        </asp:DropDownList>
+                                    </div>
 
-                        </div>
+                                    <!-- Fecha del turno (ver disponibilidad horaria del médico seleccionado en la fecha seleccionada ) -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="calTurno" class="form-label font-weight-bold text-dark">Fecha del Turno</label>
+                                        <asp:Calendar ID="calTurno" runat="server" OnDayRender="calTurno_DayRender"
+                                            OnSelectionChanged="calTurno_SelectionChanged"
+                                            CssClass="form-control"
+                                            Visible="true" />
+                                    </div>
+
+                                    <!-- Mostrar las horas disponibles de ese médico para ese día -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="ddlHorarios" class="form-label font-weight-bold text-dark">Horario del Turno</label>
+                                        <asp:DropDownList ID="ddlHorarios" AppendDataBoundItems="true" required="true" runat="server" CssClass="form-control">
+                                            <asp:ListItem Text="Seleccione Horario" Value=""></asp:ListItem>
+                                        </asp:DropDownList>
+                                    </div>
+
+                                </div>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                        <%--encerramos el calendario para que no recargue toda la pagina--%>
                         <button type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">*ok* cerrar 2 y abrir 3</button>
                     </div>
                 </div>
@@ -165,7 +168,7 @@
                             TURNO ASIGNADO
                         </button>
                     </h2>
-                    <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div id="collapseFour" class="accordion-collapse collapse">
                         <div class="accordion-body">
                             Observaciones y nro de turno
                         </div>
@@ -175,6 +178,14 @@
             </div>
             <!-- Acordeon de Turno Paciente -->
         </asp:Panel>
+
+
+
+
+
     </div>
+
+
+
 
 </asp:Content>
