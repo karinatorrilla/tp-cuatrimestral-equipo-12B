@@ -59,7 +59,7 @@ namespace tp_cuatrimestral_equipo_12B
                     /* Especialidad */
                     panelAsignarTurno.Visible = true;
                     EspecialidadNegocio negocioEsp = new EspecialidadNegocio();
-                    List<Especialidad> listaEsp = negocioEsp.Listar();
+                    List<Especialidad> listaEsp = negocioEsp.ListaEspecialidadesAsignadas();
                     ddlMedicos.Enabled = false;
                     calTurno.CssClass += " calendar-disabled";
                     ddlHorarios.Enabled = false;

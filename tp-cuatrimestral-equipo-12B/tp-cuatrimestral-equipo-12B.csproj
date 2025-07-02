@@ -73,7 +73,6 @@
     <Content Include="css\styles.css" />
     <Content Include="Error.aspx" />
     <Content Include="Especialidades.aspx" />
-    <Content Include="FomularioTurnos.aspx" />
     <Content Include="FormularioMedico.aspx" />
     <Content Include="FormularioPaciente.aspx" />
     <Content Include="FormularioTurnos.aspx" />
@@ -108,13 +107,6 @@
     </Compile>
     <Compile Include="Especialidades.aspx.designer.cs">
       <DependentUpon>Especialidades.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="FomularioTurnos.aspx.cs">
-      <DependentUpon>FomularioTurnos.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="FomularioTurnos.aspx.designer.cs">
-      <DependentUpon>FomularioTurnos.aspx</DependentUpon>
     </Compile>
     <Compile Include="FormularioMedico.aspx.cs">
       <DependentUpon>FormularioMedico.aspx</DependentUpon>

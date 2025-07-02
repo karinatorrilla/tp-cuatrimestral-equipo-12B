@@ -1,9 +1,10 @@
-﻿using System;
+﻿using dominio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using dominio;
 
 namespace negocio
 {
@@ -184,6 +185,35 @@ namespace negocio
                 while (datos.Lector.Read())
                 {
                     lista.Add((int)datos.Lector["EspecialidadId"]);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public List<Especialidad> ListaEspecialidadesAsignadas()
+        {
+            List<Especialidad> lista = new List<Especialidad>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT DISTINCT E.ID, E.Descripcion FROM ESPECIALIDADES AS E INNER JOIN MEDICOxESPECIALIDAD AS ME ON E.ID = ME.EspecialidadId");
+          
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Especialidad aux = new Especialidad();
+                    aux.Id = (int)datos.Lector["ID"];
+                    aux.Descripcion = (string)datos.Lector["Descripcion"];
+                    lista.Add(aux);
                 }
 
                 return lista;
