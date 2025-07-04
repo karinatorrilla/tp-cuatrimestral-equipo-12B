@@ -4,11 +4,15 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using negocio;
+using dominio;
 
 namespace tp_cuatrimestral_equipo_12B
 {
     public partial class Inicio : System.Web.UI.Page
     {
+        public List<Paciente> listaPaciente;
+        public List<Medico> listaMedico;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["TipoUsuario"] != null)
@@ -45,6 +49,23 @@ namespace tp_cuatrimestral_equipo_12B
                     //Selecciona por defecto
                     ddlFiltrarPor.SelectedIndex = 0;
                 }
+            }
+
+            
+            //Muestra total de pacientes y medicos en las cards
+            if (!IsPostBack)
+            {
+                PacienteNegocio negocio = new PacienteNegocio();
+                MedicosNegocio medicoNegocio = new MedicosNegocio();
+
+                listaPaciente = negocio.ListarPacientes();
+                lblTotalPacientes.Text = listaPaciente.Count.ToString();
+
+
+                
+                listaMedico = medicoNegocio.ListarMedicos();
+                lblTotalMedicos.Text = listaMedico.Count.ToString();
+
             }
 
 

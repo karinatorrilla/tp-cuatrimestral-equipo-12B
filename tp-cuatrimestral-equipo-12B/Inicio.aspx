@@ -25,7 +25,7 @@
             <%-- Card 1: Pacientes --%>
             <div class="dashboard-card">
                 <img src="images/icon_people.svg" alt="Icono Pacientes" />
-                <div class="card-number">100</div>
+                <div class="card-number"><asp:Label ID="lblTotalPacientes" runat="server" Text="0"></asp:Label></div>
                 <div class="card-title">Pacientes</div>
             </div>
 
@@ -34,8 +34,8 @@
                { %>
                 <div class="dashboard-card">
                     <img src="images/icon_doctor.svg" alt="Icono Médicos" /> 
-                    <div class="card-number">15</div>
-                        <div class="card-title">Médicos</div>
+                    <div class="card-number"><asp:Label ID="lblTotalMedicos" runat="server" Text="0"></asp:Label></div>
+                    <div class="card-title">Médicos</div>
                 </div>
                 <%   }%>
             
