@@ -159,7 +159,7 @@ namespace tp_cuatrimestral_equipo_12B
                 diaSemana = 7;
             }
 
-            if (e.Day.Date < DateTime.Today) //si el día es anterior a hoy, deshabilitar
+            if (e.Day.Date <= DateTime.Today) //si el día es anterior o igual a hoy, deshabilitar
             {
                 e.Day.IsSelectable = false;
                 e.Cell.ForeColor = System.Drawing.Color.LightGray;

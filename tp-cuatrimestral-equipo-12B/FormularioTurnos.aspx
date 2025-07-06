@@ -140,7 +140,7 @@
 
                                     <!-- Fecha del turno (ver disponibilidad horaria del médico seleccionado en la fecha seleccionada ) -->
                                     <div class="col-md-4 mb-3">
-                                        <label for="calTurno" class="form-label font-weight-bold text-dark">Fecha del Turno</label>
+                                        <label for="calTurno" class="form-label font-weight-bold text-dark">Fecha del turno</label>
                                         <asp:Calendar ID="calTurno" runat="server" OnDayRender="calTurno_DayRender"
                                             OnSelectionChanged="calTurno_SelectionChanged"
                                             CssClass="form-control"
@@ -149,7 +149,7 @@
 
                                     <!-- Mostrar las horas disponibles de ese médico para ese día -->
                                     <div class="col-md-4 mb-3">
-                                        <label for="ddlHorarios" class="form-label font-weight-bold text-dark">Horario del Turno</label>
+                                        <label for="ddlHorarios" class="form-label font-weight-bold text-dark">Horario del turno</label>
                                         <asp:DropDownList ID="ddlHorarios" AppendDataBoundItems="true" required="true" runat="server" CssClass="form-control">
                                             <asp:ListItem Text="Seleccione Horario" Value=""></asp:ListItem>
                                         </asp:DropDownList>
