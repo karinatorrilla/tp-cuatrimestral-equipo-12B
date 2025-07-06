@@ -25,7 +25,7 @@ namespace tp_cuatrimestral_equipo_12B
                     Response.Redirect("Error.aspx", false);
                     return;
                 }
-               
+
                 if (!IsPostBack)
                 {
                     CargarEspecialidades();
@@ -156,7 +156,7 @@ namespace tp_cuatrimestral_equipo_12B
                             lblMensaje.Visible = true;
                             lblMensaje.CssClass = "alert alert-danger d-block";
                             lblMensaje.Text = "Error al eliminar disponibilidad horaria: " + ex.Message;
-                            
+
                         }
 
                         // Recargar en caso de error
@@ -171,7 +171,7 @@ namespace tp_cuatrimestral_equipo_12B
                     }
                 }
 
-                
+
             }
             catch (Exception ex)
             {
@@ -205,10 +205,10 @@ namespace tp_cuatrimestral_equipo_12B
         protected void btnGuardarEspecialidades_Click(object sender, EventArgs e)
         {
             int medicoIdActual = -1;
-          //  bool operacionExitosa = false;
+            //  bool operacionExitosa = false;
             try
             {
-                 //Revisar porque no lo encuntra
+                //Revisar porque no lo encuntra
                 HiddenField hfMedicoIdControl = (HiddenField)this.FindControl("hfMedicoId");
                 if (hfMedicoIdControl != null && !string.IsNullOrEmpty(hfMedicoIdControl.Value))
                 {
@@ -240,12 +240,12 @@ namespace tp_cuatrimestral_equipo_12B
                 MedicosNegocio medicoNegocio = new MedicosNegocio();
                 medicoNegocio.AgregarEspecialidadPorMedico(medicoIdActual, especialidadesSeleccionadas);
 
-               // operacionExitosa = true;
+                // operacionExitosa = true;
             }
             catch (Exception ex)
             {
                 Session.Add("error", "Error al agregar especialidades: " + ex.Message);
-               // operacionExitosa = false;
+                // operacionExitosa = false;
             }
 
         }
@@ -254,6 +254,59 @@ namespace tp_cuatrimestral_equipo_12B
         protected void btnNuevoMedico_Click(object sender, EventArgs e)
         {
             Response.Redirect("FormularioMedico.aspx", false);
+        }
+
+        protected void btnBuscar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string filtrarPor = ddlFiltro.SelectedValue;
+                string textoBusqueda = txtFiltro.Text.Trim().ToLower();
+                             
+                CargarMedicos(); //inicializo lista con todos los médicos, especialidades y disponibilidad
+                CargarEspecialidades();
+
+                if (string.IsNullOrWhiteSpace(textoBusqueda)) //si el campo de busqueda esta vacío, recarga toda la grilla nuevamente
+                {
+                    CargarMedicos();
+                    CargarEspecialidades();
+                }
+
+                List<Medico> filtrados = new List<Medico>(); //inicializo otra lista para guardar los filtrados
+
+                switch (filtrarPor)
+                {
+                    case "Nombre":
+                        filtrados = listaMedico.Where(m => m.Nombre != null && m.Nombre.ToLower().Contains(textoBusqueda)).ToList();
+                        break;
+                    case "Apellido":
+                        filtrados = listaMedico.Where(m => m.Apellido != null && m.Apellido.ToLower().Contains(textoBusqueda)).ToList();
+                        break;
+                    case "Matricula":
+                        filtrados = listaMedico.Where(m => m.Matricula.ToString().Contains(textoBusqueda)).ToList();
+                        break;
+                    case "Especialidad":
+                        filtrados = listaMedico.Where(m => m.Especialidades != null && m.Especialidades.Any(esp => esp.Descripcion != null && esp.Descripcion.ToLower().Contains(textoBusqueda))).ToList();
+                        break;
+                }
+
+                listaMedico = filtrados;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        protected void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            //limpio controles
+            ddlFiltro.SelectedIndex = 0;
+            txtFiltro.Text = "";
+
+            //se vuelven a cargar médicos con sus especialidades y disponibilidad
+            CargarMedicos();
+            CargarEspecialidades();
         }
     }
 }

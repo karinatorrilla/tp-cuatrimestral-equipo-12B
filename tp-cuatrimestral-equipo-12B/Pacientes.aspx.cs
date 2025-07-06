@@ -17,7 +17,6 @@ namespace tp_cuatrimestral_equipo_12B
             try
             {
 
-
                 if (Session["TipoUsuario"] == null)
                 {
                     Session.Add("error", "Debes loguearte para ingresar.");

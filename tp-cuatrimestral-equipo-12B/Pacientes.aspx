@@ -19,8 +19,8 @@
                                 <asp:ListItem Text="Nombre" />
                                 <asp:ListItem Text="Apellido" />
                                 <asp:ListItem Text="Documento" />
-                                <asp:ListItem Text="Obra Social" />
                                 <asp:ListItem Text="Email" />
+                                <asp:ListItem Text="Obra Social" />
                             </asp:DropDownList>
                         </div>
                         <div class="col-md-3">
