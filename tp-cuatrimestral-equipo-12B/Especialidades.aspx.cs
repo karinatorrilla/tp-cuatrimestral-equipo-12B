@@ -46,7 +46,32 @@ namespace tp_cuatrimestral_equipo_12B
                             lblMensaje.CssClass = "alert alert-danger d-block";
                             lblMensaje.Text = ex.Message;
                         }
+                       
+
                     }
+
+                }
+                //Habilitacion
+                if (!IsPostBack && Request["habilitar"] != null)
+                {
+                    int idHabilitar;
+                    if (int.TryParse(Request["habilitar"], out idHabilitar))
+                    {
+                        try
+                        {
+                            negocio.habilitarEspecialidad(idHabilitar);
+                            lblMensaje.Visible = true;
+                            lblMensaje.CssClass = "alert alert-success d-block";
+                            lblMensaje.Text = "Especialidad Habilitada";
+                        }
+                        catch (Exception ex)
+                        {
+                            lblMensaje.Visible = true;
+                            lblMensaje.CssClass = "alert alert-danger d-block";
+                            lblMensaje.Text = ex.Message;
+                        }
+                    }
+                    Response.Redirect("Especialidades.aspx");
                 }
 
                 //MODIFICACIÓN
@@ -193,6 +218,7 @@ namespace tp_cuatrimestral_equipo_12B
                 listaEspecialidades = todas
                     .Where(es => es.Descripcion.ToLower().Contains(txtBusqueda))
                     .ToList();
+                lblMensaje.Visible = false;
             }
             catch (Exception ex)
             {

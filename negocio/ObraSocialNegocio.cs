@@ -10,21 +10,24 @@ namespace negocio
     public class ObraSocialNegocio
     {
 
-              public List<ObraSocial> Listar()
+        public List<ObraSocial> Listar(bool incluirDeshabilitadas = false)
         {
             List<ObraSocial> lista = new List<ObraSocial>();
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta("select ID,Descripcion from OBRASOCIAL where Habilitado=1 ORDER BY Descripcion ASC");
+                string consulta = incluirDeshabilitadas
+          ? "SELECT ID, Descripcion, Habilitado FROM OBRASOCIAL ORDER BY Descripcion ASC"
+          : "SELECT ID, Descripcion, Habilitado FROM OBRASOCIAL WHERE Habilitado = 1 ORDER BY Descripcion ASC";
+                datos.setearConsulta(consulta);
                 datos.ejecutarLectura();
                 while (datos.Lector.Read())
                 {
                     ObraSocial aux = new ObraSocial();
                     aux.Id = (int)datos.Lector["ID"];
                     aux.Descripcion = (string)datos.Lector["Descripcion"];
-
+                    aux.Habilitado = Convert.ToInt32(datos.Lector["Habilitado"]);
                     lista.Add(aux);
                 }
 
@@ -39,6 +42,30 @@ namespace negocio
                 datos.cerrarConexion();
             }
 
+        }
+        public void habilitarObraSocial(int idObra)
+        {
+
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+
+                datos.setearConsulta("UPDATE OBRASOCIAL SET Habilitado=1 WHERE ID = @ID");
+                datos.setearParametro("@ID", idObra);
+                datos.ejecutarAccion();
+
+            }
+            catch (Exception ex)
+            {
+
+
+                throw new Exception("Error al habilitar Obra Social: " + ex.Message, ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
         }
 
 
@@ -91,7 +118,7 @@ namespace negocio
 
         public void eliminarObra(int idObra)   ////////////////////VALIDAMOS ACA???
         {
-                
+
             AccesoDatos datos = new AccesoDatos();
 
             try

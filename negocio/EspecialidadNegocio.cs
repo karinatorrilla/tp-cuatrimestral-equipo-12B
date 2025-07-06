@@ -135,6 +135,32 @@ namespace negocio
             }
         }
 
+        public void habilitarEspecialidad(int idEspecialidad)
+        {
+
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                             
+                datos.setearConsulta("UPDATE ESPECIALIDADES SET Habilitado=1 WHERE ID = @ID");
+                datos.setearParametro("@ID", idEspecialidad);
+                datos.ejecutarAccion();
+
+            }
+            catch (Exception ex)
+            {
+
+
+                throw new Exception("Error al habilitar especialidad: " + ex.Message, ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+
         public bool agregarEspecialidadesMedico(int idmedico, List<int> especialidades)
         {
             AccesoDatos datos = new AccesoDatos();

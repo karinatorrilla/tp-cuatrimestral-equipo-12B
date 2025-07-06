@@ -1,6 +1,13 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Dashboard.Master" AutoEventWireup="true" CodeBehind="ObrasSociales.aspx.cs" Inherits="tp_cuatrimestral_equipo_12B.ObrasSociales" %>
 
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <style>
+    .form-check {
+        padding-top: 0.5em;
+        padding-left: 2.7em;
+    }
+</style>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -8,9 +15,35 @@
     <div class="container-fluid py-4">
         <h1 class="mb-4">Listado de Obras Sociales</h1>
         <asp:Label ID="lblMensaje" runat="server" Visible="false" CssClass="alert alert-info d-block w-50" Style="place-self: center;"></asp:Label>
-        <%--Botón para mostrar el formulario de agregar--%>
-        <asp:Button ID="btnMostrarFormularioAgregar" runat="server" Text="Agregar Obra Social" CssClass="btn btn-success mb-4" OnClick="btnMostrarFormularioAgregar_Click" />
 
+        <%//para borrar el label a los 3 seg
+            string script = "setTimeout(function() { var elem = document.getElementById('" + lblMensaje.ClientID + "'); elem.classList.remove('d-block'); elem.classList.add('fade'); elem.style.opacity = 0; }, 3000);";
+            ClientScript.RegisterStartupScript(this.GetType(), "ocultarLabel", script, true);
+        %>
+
+        <%--Botón para mostrar el formulario de agregar--%>
+        <div class="filter-section mb-4">
+    <div class="row align-items-center">
+        <div class="col-md-4">
+            <asp:TextBox runat="server" ID="txtBuscarOS" CssClass="form-control" placeholder="Buscar Obra Social..." />
+        </div>
+        <div class="col-md-2">
+            <asp:Button Text="Buscar" runat="server" CssClass="btn btn-primary w-75" ID="btnBuscarObra" OnClick="btnBuscarObra_Click" />
+        </div>
+        <div class="col-md-2">
+            <asp:Button Text="Limpiar" runat="server" CssClass="btn btn-primary w-75" ID="btnLimpiarBusqueda" OnClick="btnLimpiarBusqueda_Click" />
+        </div>
+        <div class="col-md-3 ms-auto">
+            <asp:Button ID="btnMostrarFormularioAgregar" runat="server" Text="Agregar Obra Social" CssClass="btn btn-success w-75" OnClick="btnMostrarFormularioAgregar_Click" />
+        </div>
+    </div>
+    <div class="form-check">
+        <asp:CheckBox runat="server" AutoPostBack="true" OnCheckedChanged="chkVerDeshabilitadas_CheckedChanged" ID="chkVerDeshabilitadas" />
+        <label class="form-check-label" for="<%= chkVerDeshabilitadas.ClientID %>">Ver deshabilitadas</label>
+    </div>
+</div>
+
+        </div>
         <%--Formulario para agregar nueva obra social (oculto al principio)--%>
         <asp:Panel ID="formAgregar" runat="server" Visible="false" CssClass="card mt-4" Style="width: 50%; margin: auto;">
             <div class="card-header">
@@ -50,13 +83,44 @@
                         <tr>
 
                             <td class="text-center"><%= obra.Descripcion %></td>
-                            <td>
+                            <td class="d-flex justify-content-center align-items-center gap-3">
+                                <% if (obra.Habilitado == 1)
+                                    { %>
                                 <img src="images/icon_edit.svg" style="cursor: pointer" data-bs-toggle="modal"
                                     data-bs-target="#modificarModal_<%= obra.Id %>" />
                                 <img src="images/icon_delete.svg" alt="Eliminar" class="action-icon-img" style="cursor: pointer"
                                     data-bs-toggle="modal" data-bs-target="#eliminarModal_<%= obra.Id %>" />
+                                <% }
+                                    else
+                                    {
+                                %>
+                                <img src="images/icon_habilitar.svg" alt="Habilitar" class="action-icon-img" style="cursor: pointer"
+                                    data-bs-toggle="modal" data-bs-target="#habilitarModal<%= obra.Id %>" />
+                                <% } %>
                             </td>
-
+                            <!--Modal Habilitar Especialidad-->
+                            <div class="modal fade" id="habilitarModal<%= obra.Id %>" tabindex="-1" aria-labelledby="habilitarModalLabel_<%= obra.Id %>" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <form method="post" action="ObrasSociales.aspx">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Habilitar Obra Social</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                ¿Estás seguro que deseas habilitar la Obra Social:
+                                                <br />
+                                                <strong><%= obra.Descripcion%></strong>?  
+                
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                <a href="ObrasSociales.aspx?habilitar=<%= obra.Id %>" class="btn btn-success">Habilitar</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                             <%--Modal dentro del foreach  modificar--%>
                             <div class="modal fade" id="modificarModal_<%= obra.Id %>" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered">
@@ -92,8 +156,9 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                                         </div>
                                         <div class="modal-body">
-                                            ¿Estás seguro que deseas eliminar la Obra Social:  <br />
-                                                <strong><%= obra.Descripcion%></strong>?
+                                            ¿Estás seguro que deseas eliminar la Obra Social: 
+                                            <br />
+                                            <strong><%= obra.Descripcion%></strong>?
                 
                                         </div>
                                         <div class="modal-footer">
@@ -122,6 +187,6 @@
         </div>
 
 
-    </div>
+    
 
 </asp:Content>

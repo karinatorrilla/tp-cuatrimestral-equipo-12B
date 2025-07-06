@@ -2,7 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
-        .form-switch {
+        .form-check {
             padding-top: 0.5em;
             padding-left: 2.7em;
         }
@@ -11,13 +11,15 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <div class="container-fluid py-4">
-
         <h1 class="mb-4">Listado de Especialidades</h1>
         <asp:Label ID="lblMensaje" runat="server" Visible="false" CssClass="alert alert-info d-block w-50" Style="place-self: center;"></asp:Label>
 
+        <%//para borrar el label a los 3 seg
+            string script = "setTimeout(function() { var elem = document.getElementById('" + lblMensaje.ClientID + "'); elem.classList.remove('d-block'); elem.classList.add('fade'); elem.style.opacity = 0; }, 3000);";
+            ClientScript.RegisterStartupScript(this.GetType(), "ocultarLabel", script, true);
+        %>
 
-
-        <%--Botón agregar especialidad para abrir el modal--%>
+        <%--Botón agregar especialidad para abrir el modal y busqueda o limpieza--%>
         <div class="filter-section mb-4">
             <div class="row align-items-center">
                 <div class="col-md-4">
@@ -29,11 +31,12 @@
                 <div class="col-md-2">
                     <asp:Button Text="Limpiar" runat="server" CssClass="btn btn-primary w-75" ID="btnLimpiarBusqueda" OnClick="btnLimpiarBusqueda_Click" />
                 </div>
+
                 <div class="col-md-3 ms-auto">
                     <asp:Button ID="btnMostrarFormularioAgregar" runat="server" Text="Agregar Especialidad" CssClass="btn btn-success w-75" OnClick="btnMostrarFormularioAgregar_Click" />
                 </div>
             </div>
-            <div class="form-check form-switch">
+            <div class="form-check">
                 <asp:CheckBox runat="server" AutoPostBack="true" OnCheckedChanged="chkVerDeshabilitadas_CheckedChanged" ID="chkVerDeshabilitadas" />
                 <label class="form-check-label" for="<%= chkVerDeshabilitadas.ClientID %>">Ver deshabilitadas</label>
             </div>
@@ -113,7 +116,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                            <button type="submit" class="btn btn-success">Habilitar</button>
+                                            <a href="Especialidades.aspx?habilitar=<%= esp.Id %>" class="btn btn-success">Habilitar Especialidad</a>
                                         </div>
                                     </form>
                                 </div>
@@ -175,4 +178,5 @@
             </table>
         </div>
     </div>
+
 </asp:Content>

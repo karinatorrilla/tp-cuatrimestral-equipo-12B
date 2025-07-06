@@ -1,6 +1,12 @@
 ﻿<%@ Page Async="true" Title="" Language="C#" MasterPageFile="~/Dashboard.Master" AutoEventWireup="true" CodeBehind="FormularioMedico.aspx.cs" Inherits="tp_cuatrimestral_equipo_12B.FormularioMedico" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+        <style>
+    td {
+        padding-top: 0.5em;
+        padding-left: 2.7em;
+    }
+</style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="container-fluid py-4">

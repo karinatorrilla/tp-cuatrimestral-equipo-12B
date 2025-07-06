@@ -24,6 +24,33 @@ namespace tp_cuatrimestral_equipo_12B
         protected global::System.Web.UI.WebControls.Label lblMensaje;
 
         /// <summary>
+        /// txtBuscarOS control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtBuscarOS;
+
+        /// <summary>
+        /// btnBuscarObra control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnBuscarObra;
+
+        /// <summary>
+        /// btnLimpiarBusqueda control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnLimpiarBusqueda;
+
+        /// <summary>
         /// btnMostrarFormularioAgregar control.
         /// </summary>
         /// <remarks>
@@ -31,6 +58,15 @@ namespace tp_cuatrimestral_equipo_12B
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnMostrarFormularioAgregar;
+
+        /// <summary>
+        /// chkVerDeshabilitadas control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkVerDeshabilitadas;
 
         /// <summary>
         /// formAgregar control.
