@@ -10,14 +10,17 @@ namespace negocio
 {
     public class EspecialidadNegocio
     {
-        public List<Especialidad> Listar()
+        public List<Especialidad> Listar(bool incluirDeshabilitadas = false)
         {
             List<Especialidad> lista = new List<Especialidad>();
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta("select ID, Descripcion from ESPECIALIDADES where Habilitado = 1");
+                string consulta = incluirDeshabilitadas
+            ? "SELECT ID, Descripcion, Habilitado FROM ESPECIALIDADES"
+            : "SELECT ID, Descripcion, Habilitado FROM ESPECIALIDADES WHERE Habilitado = 1";
+                datos.setearConsulta(consulta);
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -25,6 +28,7 @@ namespace negocio
                     Especialidad aux = new Especialidad();
                     aux.Id = (int)datos.Lector["ID"];
                     aux.Descripcion = (string)datos.Lector["Descripcion"];
+                    aux.Habilitado = Convert.ToInt32(datos.Lector["Habilitado"]);
                     lista.Add(aux);
                 }
 
@@ -113,8 +117,6 @@ namespace negocio
                                 
                 datos.cerrarConexion();
                 datos.limpiarParametros();
-
-
 
                 datos.setearConsulta("UPDATE ESPECIALIDADES SET Habilitado=0 WHERE ID = @ID");
                 datos.setearParametro("@ID", idEspecialidad);

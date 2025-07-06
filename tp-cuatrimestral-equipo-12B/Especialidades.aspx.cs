@@ -20,6 +20,13 @@ namespace tp_cuatrimestral_equipo_12B
             {
                 EspecialidadNegocio negocio = new EspecialidadNegocio();
 
+
+                if (!IsPostBack)
+                {
+                    listaEspecialidades = negocio.Listar();
+                    Session["ListaEspecialidades"] = listaEspecialidades;
+                }
+
                 //ELIMINACIÓN
                 if (!IsPostBack && Request["eliminar"] != null)
                 {
@@ -43,7 +50,10 @@ namespace tp_cuatrimestral_equipo_12B
                 }
 
                 //MODIFICACIÓN
-                if (Request.Form["IdEspecialidad"] != null && Request.Form["DescripcionModificada"] != null)
+                string target = Request["__EVENTTARGET"];
+
+                if (target == null && Request.Form["IdEspecialidad"] != null && Request.Form["DescripcionModificada"] != null)
+
                 {
                     int idEspecialidad;
                     string nuevaDescripcion = Request.Form["DescripcionModificada"].Trim();
@@ -85,11 +95,14 @@ namespace tp_cuatrimestral_equipo_12B
                                 lblMensaje.Text = "Especialidad modificada";
 
                             }
+
+                            listaEspecialidades = negocio.Listar();
+                            Session["ListaEspecialidades"] = listaEspecialidades;
                         }
                     }
                 }
-
-                listaEspecialidades = negocio.Listar();
+                if (listaEspecialidades == null)
+                    listaEspecialidades = (List<Especialidad>)Session["ListaEspecialidades"];
             }
             catch (Exception ex)
             {
@@ -167,6 +180,49 @@ namespace tp_cuatrimestral_equipo_12B
 
 
 
+        }
+
+        protected void btnBuscarEspecialidad_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string txtBusqueda = txtBuscarEsp.Text.Trim().ToLower();
+
+                List<Especialidad> todas = (List<Especialidad>)Session["ListaEspecialidades"];
+
+                listaEspecialidades = todas
+                    .Where(es => es.Descripcion.ToLower().Contains(txtBusqueda))
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        protected void btnLimpiarBusqueda_Click(object sender, EventArgs e)
+        {
+            txtBuscarEsp.Text = "";
+            listaEspecialidades = (List<Especialidad>)Session["ListaEspecialidades"];
+        }
+
+        protected void chkVerDeshabilitadas_CheckedChanged(object sender, EventArgs e)
+        {
+            EspecialidadNegocio negocio = new EspecialidadNegocio();
+
+            if (chkVerDeshabilitadas.Checked)
+            {
+                // Mostrar todas
+                listaEspecialidades = negocio.Listar(true);
+            }
+            else
+            {
+                // Mostrar solo habilitadas
+                listaEspecialidades = negocio.Listar();
+            }
+
+            Session["ListaEspecialidades"] = listaEspecialidades;
         }
     }
 }
