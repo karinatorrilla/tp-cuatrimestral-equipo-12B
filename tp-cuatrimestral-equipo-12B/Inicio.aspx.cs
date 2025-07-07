@@ -13,6 +13,42 @@ namespace tp_cuatrimestral_equipo_12B
     {
         public List<Paciente> listaPaciente;
         public List<Medico> listaMedico;
+        private void CargarMedicos()
+        {
+            MedicosNegocio medicoNegocio = new MedicosNegocio();
+            listaMedico = medicoNegocio.ListarMedicos();
+            DisponibilidadHorariaNegocio dhNegocio = new DisponibilidadHorariaNegocio();
+
+            foreach (var medico in listaMedico)
+            {
+                medico.Especialidades = medicoNegocio.ListarEspecialidadesPorMedico(medico.Id);
+                // Cargar las disponibilidades horarias para cada médico
+                medico.Disponibilidades = dhNegocio.ListarPorMedico(medico.Id);
+            }
+
+            //guardo en session la lista
+            Session["Medicos"] = listaMedico;
+        }
+
+        private void CargarPacientes()
+        {
+            PacienteNegocio negocio = new PacienteNegocio();
+            listaPaciente = negocio.ListarPacientes();
+
+            List<ObraSocial> obrasSociales = new ObraSocialNegocio().Listar();
+            // Recorrer la lista de pacientes para enriquecer los datos a mostrar
+            foreach (var paciente in listaPaciente)
+            {
+                // Obtener la descripción de la Obra Social
+                var os = obrasSociales.FirstOrDefault(x => x.Id == paciente.ObraSocial);
+                paciente.DescripcionObraSocial = os != null ? os.Descripcion : "-";
+
+            }
+
+            //guardo en session la lista
+            Session["Pacientes"] = listaPaciente;
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["TipoUsuario"] != null)
@@ -21,24 +57,24 @@ namespace tp_cuatrimestral_equipo_12B
             }
             else
             {
-                Session.Add("error", "Debes loguearte para ingresar.");               
+                Session.Add("error", "Debes loguearte para ingresar.");
                 Response.Redirect("Error.aspx", false);
             }
 
-           
-
-            if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 1)
+            if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 1) //visión del admin
             {
-                divListadoGeneral.Visible = false; // Ocultar la tabla de filtro
+                divListadoGeneral.Visible = false; //ocultar la tabla de filtro
                 pnlGraficoAdmin.Visible = true;
             }
             else
             {
-                divListadoGeneral.Visible = true; // muestra la tabla de filtro
+                divListadoGeneral.Visible = true; //visión del recepcionista
                 pnlGraficoAdmin.Visible = false;
 
                 if (!IsPostBack)
                 {
+                    CargarPacientes();
+                    CargarMedicos();
 
                     ddlFiltrarPor.Items.Clear();
 
@@ -48,26 +84,32 @@ namespace tp_cuatrimestral_equipo_12B
 
                     //Selecciona por defecto
                     ddlFiltrarPor.SelectedIndex = 0;
+
                 }
             }
 
-            
+            //if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 3) //visión del médico
+            //{
+            //    divListadoGeneral.Visible = true;
+            //    pnlGraficoAdmin.Visible = false;
+            //    panelTurnosMedico.Visible = true;
+
+            //    if (!IsPostBack)
+            //    {
+
+            //    }
+            //}
+
+            //recupero las listas desde session
+            listaPaciente = (List<Paciente>)Session["Pacientes"];
+            listaMedico = (List<Medico>)Session["Medicos"];
+
             //Muestra total de pacientes y medicos en las cards
             if (!IsPostBack)
             {
-                PacienteNegocio negocio = new PacienteNegocio();
-                MedicosNegocio medicoNegocio = new MedicosNegocio();
-
-                listaPaciente = negocio.ListarPacientes();
                 lblTotalPacientes.Text = listaPaciente.Count.ToString();
-
-
-                
-                listaMedico = medicoNegocio.ListarMedicos();
                 lblTotalMedicos.Text = listaMedico.Count.ToString();
-
             }
-
 
         }
 
@@ -84,6 +126,29 @@ namespace tp_cuatrimestral_equipo_12B
         protected void btnIrPacientes_Click(object sender, EventArgs e)
         {
             Response.Redirect("Pacientes.aspx", false);
+        }
+
+        protected void ddlFiltrarPor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            try
+            {
+                if (ddlFiltrarPor.SelectedValue == "0") //pacientes
+                {
+                    CargarPacientes();
+
+                }
+                else if (ddlFiltrarPor.SelectedValue == "1") //médicos
+                {
+                    CargarMedicos();
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
     }
 }

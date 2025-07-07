@@ -6,7 +6,7 @@
     <div>
         <div class="bienvenida-panel">
             <div class="bienvenida-texto">
-                <asp:Label  Text="text" ID="lblTipoUsuario" runat="server" CssClass="h1 mb-3" />
+                <asp:Label Text="text" ID="lblTipoUsuario" runat="server" CssClass="h1 mb-3" />
                 <p class="lead mt-3">
                     <%= 
                         Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 1 
@@ -25,20 +25,24 @@
             <%-- Card 1: Pacientes --%>
             <div class="dashboard-card">
                 <img src="images/icon_people.svg" alt="Icono Pacientes" />
-                <div class="card-number"><asp:Label ID="lblTotalPacientes" runat="server" Text="0"></asp:Label></div>
+                <div class="card-number">
+                    <asp:Label ID="lblTotalPacientes" runat="server" Text="0"></asp:Label>
+                </div>
                 <div class="card-title">Pacientes</div>
             </div>
 
             <%-- Card 2: Médicos --%>
             <%if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] != 3)
-               { %>
-                <div class="dashboard-card">
-                    <img src="images/icon_doctor.svg" alt="Icono Médicos" /> 
-                    <div class="card-number"><asp:Label ID="lblTotalMedicos" runat="server" Text="0"></asp:Label></div>
-                    <div class="card-title">Médicos</div>
+                { %>
+            <div class="dashboard-card">
+                <img src="images/icon_doctor.svg" alt="Icono Médicos" />
+                <div class="card-number">
+                    <asp:Label ID="lblTotalMedicos" runat="server" Text="0"></asp:Label>
                 </div>
-                <%   }%>
-            
+                <div class="card-title">Médicos</div>
+            </div>
+            <%   }%>
+
 
             <%-- Card 3: Turnos del Día --%>
             <div class="dashboard-card">
@@ -50,14 +54,14 @@
 
 
         <%-- Listado con filtros de turnos de Pacientes o Medicos con consulta a la DB con la fecha de HOY --%>
-         <div class="content-listado-card" runat="server" id="divListadoGeneral">
-              <div class="listado-card mt-4"> 
+        <div class="content-listado-card" runat="server" id="divListadoGeneral">
+            <div class="listado-card mt-4">
                 <div class="row mb-3 align-items-center">
                     <div class="col-md-2">
                         <label for="ddlFiltrarPor" class="form-label mb-0">Filtrar por:</label>
                     </div>
                     <div class="col-md-4">
-                        <asp:DropDownList ID="ddlFiltrarPor" runat="server" CssClass="form-select" AutoPostBack="true"></asp:DropDownList>
+                        <asp:DropDownList ID="ddlFiltrarPor" runat="server" CssClass="form-select" OnSelectedIndexChanged="ddlFiltrarPor_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
                     </div>
                 </div>
 
@@ -75,38 +79,46 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <%-- Ejemplo Hardcodeado para Paciente --%>
+                            <% if (ddlFiltrarPor.SelectedValue == "0" && listaPaciente != null)
+                                {
+                                    foreach (var p in listaPaciente)
+                                    { %>
                             <tr>
-                                <td>1</td>
-                                <td>
-                                    <%= ddlFiltrarPor.SelectedIndex == 0 ? "" : "Dr." %>
-                                    Juan
-
-                                </td>
-                                <td>Pérez</td>
-                                <td>1123456789</td>
-                                <td>
-                                    <%= ddlFiltrarPor.SelectedIndex == 0 ? "OSDE" : "Odontología" %>
+                                <td><%= p.Id %></td>
+                                <td><%= p.Nombre %></td>
+                                <td><%= p.Apellido %></td>
+                                <td><%= p.Telefono %></td>
+                                <td><%= p.DescripcionObraSocial %></td>
+                            </tr>
+                            <%     }
+                                }
+                                else if (ddlFiltrarPor.SelectedValue == "1" && listaMedico != null)
+                                {
+                                    foreach (var m in listaMedico)
+                                    { %>
+                            <tr>
+                                <td><%= m.Id %></td>
+                                <td><%= m.Nombre %></td>
+                                <td><%= m.Apellido %></td>
+                                <td><%= m.Telefono %></td>
+                                <td><%-- Muestra las especialidades separadas por coma --%>
+                                    <% if (m.Especialidades != null && m.Especialidades.Any())
+                                        { %>
+                                    <%= string.Join(", ", m.Especialidades.Select(e => e.Descripcion)) %>
+                                    <% }
+                                    else
+                                    { %>
+                                         Sin Especialidades
+                                    <% } %>
                                 </td>
                             </tr>
-                            <%-- Ejemplo Hardcodeado para Médico --%>
-                            <tr>
-                                <td>2</td>
-                                <td>
-                                    <%= ddlFiltrarPor.SelectedIndex == 0 ? "" : "Dra." %>
-                                     Ana
-                                </td>
-                                <td>Gómez</td>
-                                <td>1198765432</td>
-                                <td>
-                                     <%= ddlFiltrarPor.SelectedIndex == 0 ? "GALENO" : "Cardiología" %>
-                                </td>
-                            </tr>
+                            <%     }
+                                } %>
                         </tbody>
                     </table>
                 </div>
             </div>
-         </div>
+        </div>
 
         <%-- Gráfico de estadisticas de turnos estados --%>
         <asp:Panel ID="pnlGraficoAdmin" runat="server" CssClass="listado-card mt-4" Visible="false">
@@ -117,7 +129,7 @@
                 </div>
             </div>
         </asp:Panel>
-       
+
     </div>
     <script>
         function renderTurnosChart() {
