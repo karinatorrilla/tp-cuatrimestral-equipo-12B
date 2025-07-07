@@ -170,3 +170,13 @@
     height: 400px;
     width: 800px;
 }
+
+.btn-custom-suggestion {
+    color: #333;
+}
+
+.btn-custom-suggestion:hover,
+.btn-custom-suggestion:focus {
+    background-color: #21457a;
+    border-color: #21457a;
+    color: #ffffff;

@@ -233,7 +233,7 @@ namespace negocio
                                   "WHERE ME.MedicoId = @idMedico AND ME.Habilitado = 1"; // Filtra solo las especialidades habilitadas
 
                 datos.setearConsulta(consulta);
-                datos.setearParametro("@idMedico", idMedico); // Pasar el ID del médico como parámetro
+                datos.setearParametro("@idMedico", idMedico);
 
                 datos.ejecutarLectura();
 
@@ -242,8 +242,6 @@ namespace negocio
                     Especialidad especialidad = new Especialidad();
                     especialidad.Id = (int)datos.Lector["Id"];
                     especialidad.Descripcion = (string)datos.Lector["Descripcion"];
-                    // Asume que la clase Especialidad tiene propiedades Id y Descripcion.
-                    // Si tiene otras propiedades que necesites, agrégalas aquí.
 
                     listaEspecialidades.Add(especialidad);
                 }
@@ -252,7 +250,6 @@ namespace negocio
             }
             catch (Exception ex)
             {
-                // Propagar la excepción para que pueda ser manejada en la capa superior
                 throw new Exception("Error al listar especialidades por médico: " + ex.Message, ex);
             }
             finally

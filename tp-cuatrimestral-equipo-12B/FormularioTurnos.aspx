@@ -37,32 +37,38 @@
 
     <div class="p-4 rounded bg-white shadow-sm">
         <%-- Sección de Datos Personales --%>
-        <h3 class="mb-4 text-dark">Datos Personales</h3>
+        <h3 class="mb-4 text-dark">Datos del Paciente</h3>
         <div class="row align-items-end g-4 mb-4">
 
             <%-- Nombre --%>
-            <div class="col-md-3">
+            <div class="col-auto p-3 mb-2 flex-grow-1">
                 <label for="txtNombre" class="form-label font-weight-bold text-dark">Nombre</label>
                 <asp:TextBox runat="server" ID="txtNombre" CssClass="form-control" MaxLength="100" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$" title="El nombre debe contener solo letras, sin espacios ni al principio ni al final. El máximo de caracteres es 100." placeholder="Pedro" required="true" />
             </div>
 
             <%-- Apellido --%>
-            <div class="col-md-3">
+            <div class="col-auto p-3 mb-2 flex-grow-1">
                 <label for="txtApellido" class="form-label font-weight-bold text-dark">Apellido</label>
                 <asp:TextBox runat="server" ID="txtApellido" CssClass="form-control" MaxLength="100" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$" title="El apellido debe contener solo letras, sin espacios ni al principio ni al final. El máximo de caracteres es 100." placeholder="Lopez" required="true" />
             </div>
 
             <%-- DNI --%>
-            <div class="col-md-3">
+            <div class="col-auto p-3 mb-2 flex-grow-1">
                 <label for="txtDni" class="form-label font-weight-bold text-dark">Documento</label>
 
                 <asp:TextBox runat="server" ID="txtDni" CssClass="form-control" MaxLength="8" placeholder="12345678" required="true" TextMode="SingleLine" pattern="\d{1,8}"
                     title="El documento debe contener solo números y tener hasta 8 dígitos." />
 
             </div>
+            <%-- Email --%>
+            <div class="col-auto p-3 mb-2 flex-grow-1">
+                <label for="txtEmail" class="form-label font-weight-bold text-dark">Email</label>
+                <asp:TextBox runat="server" ID="txtEmail" CssClass="form-control" TextMode="Email" MaxLength="100" placeholder="nombre@gmail.com" required="true" />
+            </div>
+
 
             <%-- Fecha de Nacimiento --%>
-            <div class="col-md-3">
+            <div class="col-auto p-3 mb-2 flex-grow-1">
                 <label for="txtFechaNacimiento" class="form-label font-weight-bold text-dark">Fecha de Nacimiento</label>
                 <asp:TextBox runat="server" ID="txtFechaNacimiento" CssClass="form-control" TextMode="Date" required="true" />
             </div>
@@ -75,54 +81,67 @@
 
 
             <!-- Acordeon de turno paciente-->
-            <div class="accordion" id="accordionExample">
+            <div class="accordion" id="accordionPanelsStayOpenExample">
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button "  type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            Especialidad
+                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            Seleccione una especialidad:
                         </button>
                     </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show">
+                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
                         <div class="accordion-body">
 
                             <!-- Seleccionar especialidad!! -->
                             <div class="col-md-4 mb-3">
-                                <label for="ddlEspecialidades" class="form-label font-weight-bold text-dark">Especialidad</label>
+                                <%--<label for="ddlEspecialidades" class="form-label font-weight-bold text-dark">Especialidad</label>--%>
                                 <asp:DropDownList ID="ddlEspecialidades" runat="server" CssClass="form-control"
                                     AutoPostBack="true" AppendDataBoundItems="true" required="true" OnSelectedIndexChanged="ddlEspecialidades_SelectedIndexChanged">
-                                    <asp:ListItem Text="Seleccione Especialidad" Value=""></asp:ListItem>
+                                    <asp:ListItem Text="-" Value=""></asp:ListItem>
                                 </asp:DropDownList>
                             </div>
 
-                            <!-- luego de esto, el sistema debería sugerir tres horarios posibles con su respectivo médico -->
+                            
 
                         </div>
-                        <button type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">Siguiente paso</button>
                     </div>
                 </div>
-
+                <!-- luego de la seleccion de especialidad, el sistema debería sugerir tres horarios posibles con su respectivo médico -->
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
                             Sugerencias de horarios
         
                         </button>
                     </h2>
-                    <div id="collapseTwo" class="accordion-collapse collapse">
+                    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
                         <div class="accordion-body">
-                            <strong>3 HORARIOS</strong>
+                            <%--<h5>Si desea puede seleccionar uno de estos 3 horarios sugeridos o cargar de manera manual en el siguiente paso:</h5>--%>
+                           <!--Inserta 3 horarios proximos sugeridos por el sistema -->
+                           
+                            <asp:UpdatePanel ID="updSugerencias" runat="server" UpdateMode="Conditional">
+                                <ContentTemplate>
+                                    <asp:Panel ID="panelSugerencias" runat="server" CssClass="mt-3">
+                                        <div id="divContenedorSugerencias" runat="server" class="d-flex flex-wrap">
+                                            <%-- Aca se cargan los botones de sugerencia --%>
+                                        </div>
+                                    </asp:Panel>
+                                </ContentTemplate>
+                                <Triggers>
+                                    <%-- Se actualiza cuando cambia el ddlEspecialidades --%>
+                                    <asp:AsyncPostBackTrigger ControlID="ddlEspecialidades" EventName="SelectedIndexChanged" />
+                                </Triggers>
+                            </asp:UpdatePanel>
 
                         </div>
-                        <button type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">*ok* cerrar 2 y abrir 3</button>
                     </div>
                 </div>
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
                             CARGA MANUAL DEL MÉDICO A PARTIR DE LA ESPECIALIDAD SELECCIONADA (si no le sirven los 3 horarios sugeridos)
                         </button>
                     </h2>
-                    <div id="collapseThree" class="accordion-collapse collapse">
+                    <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
 
                         <%--encerramos el calendario para que no recargue toda la pagina--%>
                         <asp:UpdatePanel runat="server">
@@ -164,13 +183,19 @@
                 </div>
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                            TURNO ASIGNADO
+                       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
+                            Observaciones
                         </button>
                     </h2>
-                    <div id="collapseFour" class="accordion-collapse collapse">
+                    <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse">
                         <div class="accordion-body">
-                            Observaciones y nro de turno
+                            <%-- Sección Observaciones --%>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-12">
+                                    <label for="txtObservaciones" class="form-label font-weight-bold text-dark">Notas del turno</label>
+                                    <asp:TextBox ID="txtObservaciones" runat="server" TextMode="MultiLine" Rows="5" CssClass="form-control" />
+                                </div>
+                            </div>
                         </div>
                         <button>resumen</button>
                     </div>
@@ -178,6 +203,8 @@
             </div>
             <!-- Acordeon de Turno Paciente -->
         </asp:Panel>
+
+        
 
 
 

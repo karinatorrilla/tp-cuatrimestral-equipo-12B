@@ -38,5 +38,41 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+
+        // Lista disponibilidad de los medicos en la semana
+        public List<DisponibilidadHoraria> ListarDisponibilidadMedico(int idMedico, int diaDeLaSemana)
+        {
+            List<DisponibilidadHoraria> listaBloques = new List<DisponibilidadHoraria>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("SELECT Id, MedicoId, DiaDeLaSemana, HoraInicioBloque, HoraFinBloque FROM MEDICOxDISPONIBILIDADHORARIA WHERE MedicoId = @idMedico AND DiaDeLaSemana = @diaDeLaSemana AND Habilitado = 1");
+                datos.setearParametro("@idMedico", idMedico);
+                datos.setearParametro("@diaDeLaSemana", diaDeLaSemana);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    dominio.DisponibilidadHoraria bloque = new dominio.DisponibilidadHoraria();
+                    bloque.Id = (int)datos.Lector["Id"];
+                    bloque.MedicoId = (int)datos.Lector["MedicoId"];
+                    bloque.DiaDeLaSemana = (int)datos.Lector["DiaDeLaSemana"];
+                    bloque.HoraInicioBloque = (TimeSpan)datos.Lector["HoraInicioBloque"];
+                    bloque.HoraFinBloque = (TimeSpan)datos.Lector["HoraFinBloque"];
+                    listaBloques.Add(bloque);
+                }
+
+                return listaBloques;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al listar disponibilidad del médico: " + ex.Message, ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
