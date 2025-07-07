@@ -39,7 +39,8 @@
         <%-- Sección de Datos Personales --%>
         <h3 class="mb-4 text-dark">Datos del Paciente</h3>
         <div class="row align-items-end g-4 mb-4">
-
+            
+      
             <%-- Nombre --%>
             <div class="col-auto p-3 mb-2 flex-grow-1">
                 <label for="txtNombre" class="form-label font-weight-bold text-dark">Nombre</label>
