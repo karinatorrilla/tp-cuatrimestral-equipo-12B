@@ -65,11 +65,13 @@ namespace tp_cuatrimestral_equipo_12B
             {
                 divListadoGeneral.Visible = false; //ocultar la tabla de filtro
                 pnlGraficoAdmin.Visible = true;
+                panelTurnosMedico.Visible = false;
             }
             else
             {
                 divListadoGeneral.Visible = true; //visión del recepcionista
                 pnlGraficoAdmin.Visible = false;
+                panelTurnosMedico.Visible = false;
 
                 if (!IsPostBack)
                 {
@@ -88,17 +90,17 @@ namespace tp_cuatrimestral_equipo_12B
                 }
             }
 
-            //if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 3) //visión del médico
-            //{
-            //    divListadoGeneral.Visible = true;
-            //    pnlGraficoAdmin.Visible = false;
-            //    panelTurnosMedico.Visible = true;
+            if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 3) //visión del médico
+            {
+                divListadoGeneral.Visible = false;
+                pnlGraficoAdmin.Visible = false;
+                panelTurnosMedico.Visible = true;
 
-            //    if (!IsPostBack)
-            //    {
+                if (!IsPostBack)
+                {
 
-            //    }
-            //}
+                }
+            }
 
             //recupero las listas desde session
             listaPaciente = (List<Paciente>)Session["Pacientes"];
@@ -107,7 +109,12 @@ namespace tp_cuatrimestral_equipo_12B
             //Muestra total de pacientes y medicos en las cards
             if (!IsPostBack)
             {
+                PacienteNegocio pacienteNegocio = new PacienteNegocio();
+                listaPaciente = pacienteNegocio.ListarPacientes();
                 lblTotalPacientes.Text = listaPaciente.Count.ToString();
+
+                MedicosNegocio medicoNegocio = new MedicosNegocio();
+                listaMedico = medicoNegocio.ListarMedicos();
                 lblTotalMedicos.Text = listaMedico.Count.ToString();
             }
 

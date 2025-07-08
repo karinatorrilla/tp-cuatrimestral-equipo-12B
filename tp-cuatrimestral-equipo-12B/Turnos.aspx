@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <%-- Tabla de Listado de Pacientes --%>
+        <%-- Tabla de Listado de Turnos --%>
         <div class="table-responsive">
             <table class="table table-striped table-hover table-bordered align-middle">
                 <thead class="table-dark">

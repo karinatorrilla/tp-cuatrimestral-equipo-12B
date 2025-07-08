@@ -106,8 +106,8 @@
                                         { %>
                                     <%= string.Join(", ", m.Especialidades.Select(e => e.Descripcion)) %>
                                     <% }
-                                    else
-                                    { %>
+                                        else
+                                        { %>
                                          Sin Especialidades
                                     <% } %>
                                 </td>
@@ -119,6 +119,53 @@
                 </div>
             </div>
         </div>
+
+        <%-- Listado de turnos de médicos con filtro fecha --%>      
+        <asp:Panel ID="panelTurnosMedico" runat="server" Visible="false" CssClass="listado-card mt-4">           
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="txtFechaFiltro">Filtrar por fecha:</label>
+                    <asp:TextBox ID="txtFechaFiltro" runat="server" CssClass="form-control" TextMode="Date" />
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <asp:Button ID="btnFiltrarTurnos" runat="server" Text="Filtrar" CssClass="btn btn-primary"/>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-bordered align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">NOMBRE</th>
+                            <th scope="col">APELLIDO</th>
+                            <th scope="col">DOCUMENTO</th>
+                            <th scope="col">OBRA SOCIAL</th>
+                            <th scope="col">ESPECIALIDAD TURNO</th>
+                            <th scope="col">MÉDICO</th>
+                            <th scope="col">FECHA</th>
+                            <th scope="col">HORARIO</th>
+                            <th scope="col">ESTADO</th>                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%-- Cuerpo del listado hardcodeado por el momento --%>
+                        <tr>
+                            <td>1</td>
+                            <td>Karina</td>
+                            <td>Torrilla</td>
+                            <td>11222333</td>
+                            <td>Particular</td>
+                            <td>Dentista</td>
+                            <td>Lopez Pedro</td>
+                            <td>3/07/2025</td>
+                            <td>09:00</td>
+                            <td>Asignado</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </asp:Panel>
+            
 
         <%-- Gráfico de estadisticas de turnos estados --%>
         <asp:Panel ID="pnlGraficoAdmin" runat="server" CssClass="listado-card mt-4" Visible="false">
