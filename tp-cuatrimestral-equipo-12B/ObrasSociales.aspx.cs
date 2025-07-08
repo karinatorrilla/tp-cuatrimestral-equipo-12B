@@ -81,8 +81,7 @@ namespace tp_cuatrimestral_equipo_12B
                             lblMensaje.CssClass = "alert alert-danger d-block";
                             lblMensaje.Text = ex.Message;
                         }
-                    }
-                    Response.Redirect("ObrasSociales.aspx");
+                    }                   
                 }
 
                 // MODIFICACIÓN

@@ -60,15 +60,6 @@ namespace tp_cuatrimestral_equipo_12B
         protected global::System.Web.UI.WebControls.DropDownList ddlFiltrarPor;
 
         /// <summary>
-        /// Control panelTurnosMedico.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel panelTurnosMedico;
-
-        /// <summary>
         /// Control txtFechaFiltro.
         /// </summary>
         /// <remarks>
@@ -85,6 +76,15 @@ namespace tp_cuatrimestral_equipo_12B
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnFiltrarTurnos;
+
+        /// <summary>
+        /// Control btnLimpiar.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnLimpiar;
 
         /// <summary>
         /// Control pnlGraficoAdmin.

@@ -54,15 +54,22 @@ namespace tp_cuatrimestral_equipo_12B
         {
             if ((int)Session["TipoUsuario"] == 3)
             {
-                lblTipoUsuario.Text = "Bienvenido/a " + Session["NombreMedico"].ToString() + "!";
+                if (Session["NombreMedico"] != null)
+                {
+                    lblTipoUsuario.Text = "¡Bienvenido/a " + Session["NombreMedico"].ToString() + "!";
+                }
+                else
+                {
+                    lblTipoUsuario.Text = "¡Bienvenido/a Médico GENÉRICO!";
+                }
             }
             else if ((int)Session["TipoUsuario"] == 2)
             {
-                lblTipoUsuario.Text = "Bienvenido/a Recepcionista";
+                lblTipoUsuario.Text = "¡Bienvenido/a Recepcionista!";
             }
             else if ((int)Session["TipoUsuario"] == 1)
             {
-                lblTipoUsuario.Text = "Bienvenido Administrador";
+                lblTipoUsuario.Text = "¡Bienvenido Administrador!";
             }
             else
             {
@@ -73,14 +80,12 @@ namespace tp_cuatrimestral_equipo_12B
             if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 1) //visión del admin
             {
                 divListadoGeneral.Visible = false; //ocultar la tabla de filtro
-                pnlGraficoAdmin.Visible = true;
-                panelTurnosMedico.Visible = false;
+                pnlGraficoAdmin.Visible = true;               
             }
             else
             {
                 divListadoGeneral.Visible = true; //visión del recepcionista
-                pnlGraficoAdmin.Visible = false;
-                panelTurnosMedico.Visible = false;
+                pnlGraficoAdmin.Visible = false;                
 
                 if (!IsPostBack)
                 {
@@ -101,9 +106,8 @@ namespace tp_cuatrimestral_equipo_12B
 
             if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 3) //visión del médico
             {
-                divListadoGeneral.Visible = false;
-                pnlGraficoAdmin.Visible = false;
-                panelTurnosMedico.Visible = true;
+                divListadoGeneral.Visible = true;
+                pnlGraficoAdmin.Visible = false;               
 
                 if (!IsPostBack)
                 {

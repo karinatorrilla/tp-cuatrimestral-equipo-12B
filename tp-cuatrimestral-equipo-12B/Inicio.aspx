@@ -10,8 +10,8 @@
                 <p class="lead mt-3">
                     <%= 
                         Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 1 
-                        ? "Aquí vas a poder ver un panorama general" 
-                        : "Aquí vas a poder ver un panorama del día de hoy" 
+                        ? "Aquí vas a poder ver un panorama general." 
+                        : "Aquí vas a poder ver un panorama del día de hoy." 
                     %>
                 </p>
             </div>
@@ -47,15 +47,17 @@
             <%-- Card 3: Turnos del Día --%>
             <div class="dashboard-card">
                 <img src="images/icon_turno.svg" alt="Icono Turnos" />
-                <div class="card-number">25</div>
-                <div class="card-title">Turnos</div>
+                <div class="card-number">1</div>
+                <div class="card-title">Turno</div>
             </div>
         </div>
 
 
-        <%-- Listado con filtros de turnos de Pacientes o Medicos con consulta a la DB con la fecha de HOY --%>
+        <%-- Listado de Pacientes y Médicos para Recepcionista / Listado de Turnos para Médico --%>
         <div class="content-listado-card" runat="server" id="divListadoGeneral">
             <div class="listado-card mt-4">
+                <%if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 2) //si es recepcionista
+                    { %>
                 <div class="row mb-3 align-items-center">
                     <div class="col-md-2">
                         <label for="ddlFiltrarPor" class="form-label mb-0">Filtrar por:</label>
@@ -64,10 +66,29 @@
                         <asp:DropDownList ID="ddlFiltrarPor" runat="server" CssClass="form-select" OnSelectedIndexChanged="ddlFiltrarPor_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
                     </div>
                 </div>
+                <% }
+                %>
+                <%else if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 3) //si es médico
+                    { %>
+                <div class="row mb-3 align-items-center">
+                    <div class="col-md-2">
+                        <label for="txtFechaFiltro">Filtrar por fecha:</label>
+                    </div>
+                    <div class="col-md-4">
+                        <asp:TextBox ID="txtFechaFiltro" runat="server" CssClass="form-control" TextMode="Date" />
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <asp:Button ID="btnFiltrarTurnos" runat="server" Text="Filtrar" CssClass="btn btn-primary w-100" />
+                        <asp:Button ID="btnLimpiar" Text="Limpiar" runat="server" CssClass="btn btn-secondary w-100 ms-3" />
+                    </div>                                     
+                </div>
+                <%} %>
 
                 <div class="table-responsive">
                     <table class="table table-striped table-hover table-bordered align-middle">
                         <thead class="table-dark">
+                            <%if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 2) //si es recepcionista
+                                { %>
                             <tr>
                                 <th scope="col">ID</th>
                                 <th scope="col">NOMBRE</th>
@@ -77,8 +98,25 @@
                                     <%= ddlFiltrarPor.SelectedIndex == 0 ? "OBRA SOCIAL" : "ESPECIALIDAD" %>
                                 </th>
                             </tr>
+                            <%} %>
+                            <%else if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 3) //si es médico
+                                { %>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">NOMBRE</th>
+                                <th scope="col">APELLIDO</th>
+                                <th scope="col">DOCUMENTO</th>
+                                <th scope="col">OBRA SOCIAL</th>
+                                <th scope="col">ESPECIALIDAD DEL TURNO</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">HORARIO</th>
+                                <th scope="col">ESTADO</th>
+                            </tr>
+                            <%} %>
                         </thead>
                         <tbody>
+                            <%if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 2) //si es recepcionista
+                                { %>
                             <% if (ddlFiltrarPor.SelectedValue == "0" && listaPaciente != null)
                                 {
                                     foreach (var p in listaPaciente)
@@ -114,58 +152,27 @@
                             </tr>
                             <%     }
                                 } %>
+                            <%} %>
+                            <%else if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 3) //si es médico
+                                { %>
+                            <%-- HARDCODEADO --%>
+                            <tr>
+                                <td>1</td>
+                                <td>Karina</td>
+                                <td>Torrilla</td>
+                                <td>11222333</td>
+                                <td>Particular</td>
+                                <td>Dentista</td>
+                                <td>3/07/2025</td>
+                                <td>09:00</td>
+                                <td>Asignado</td>
+                            </tr>
+                            <%} %>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-
-        <%-- Listado de turnos de médicos con filtro fecha --%>      
-        <asp:Panel ID="panelTurnosMedico" runat="server" Visible="false" CssClass="listado-card mt-4">           
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label for="txtFechaFiltro">Filtrar por fecha:</label>
-                    <asp:TextBox ID="txtFechaFiltro" runat="server" CssClass="form-control" TextMode="Date" />
-                </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <asp:Button ID="btnFiltrarTurnos" runat="server" Text="Filtrar" CssClass="btn btn-primary"/>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-striped table-hover table-bordered align-middle">
-                    <thead class="table-dark">
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">NOMBRE</th>
-                            <th scope="col">APELLIDO</th>
-                            <th scope="col">DOCUMENTO</th>
-                            <th scope="col">OBRA SOCIAL</th>
-                            <th scope="col">ESPECIALIDAD TURNO</th>
-                            <th scope="col">MÉDICO</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">HORARIO</th>
-                            <th scope="col">ESTADO</th>                           
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <%-- Cuerpo del listado hardcodeado por el momento --%>
-                        <tr>
-                            <td>1</td>
-                            <td>Karina</td>
-                            <td>Torrilla</td>
-                            <td>11222333</td>
-                            <td>Particular</td>
-                            <td>Dentista</td>
-                            <td>Lopez Pedro</td>
-                            <td>3/07/2025</td>
-                            <td>09:00</td>
-                            <td>Asignado</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </asp:Panel>
-            
 
         <%-- Gráfico de estadisticas de turnos estados --%>
         <asp:Panel ID="pnlGraficoAdmin" runat="server" CssClass="listado-card mt-4" Visible="false">
