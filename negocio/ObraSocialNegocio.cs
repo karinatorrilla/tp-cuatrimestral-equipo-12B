@@ -43,13 +43,30 @@ namespace negocio
             }
 
         }
-        public void habilitarObraSocial(int idObra)
+        public void habilitarObraSocial(int idObra, string descripcion)
         {
 
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
+                /*Verificamos que no exista obrasocial */
+                datos.setearConsulta("SELECT COUNT(*) FROM OBRASOCIAL WHERE Descripcion = @Descripcion AND Habilitado =1");
+
+                datos.setearParametro("@Descripcion", descripcion);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    int cantidad = (int)datos.Lector[0];
+                    if (cantidad > 0)
+                    {
+                        throw new Exception("No se puede rehabilitar porque ya existe");
+                    }
+                }
+
+                datos.cerrarConexion();
+                datos.limpiarParametros();
 
                 datos.setearConsulta("UPDATE OBRASOCIAL SET Habilitado=1 WHERE ID = @ID");
                 datos.setearParametro("@ID", idObra);

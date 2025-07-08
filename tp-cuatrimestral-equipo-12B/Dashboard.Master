@@ -27,11 +27,11 @@
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="Inicio.aspx">Inicio</a>
                         </li>
+                        <%if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] != 3)
+                            { %>
                         <li class="nav-item">
                             <a class="nav-link" href="Pacientes.aspx">Pacientes</a>
                         </li>
-                        <%if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] != 3)
-                            { %>
 
                         <li class="nav-item">
                             <a class="nav-link" href="Medicos.aspx">Médicos</a>

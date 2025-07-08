@@ -19,14 +19,21 @@ namespace tp_cuatrimestral_equipo_12B
             try
             {
                 ObraSocialNegocio negocio = new ObraSocialNegocio();
+
                 if (!IsPostBack)
                 {
-                    listaObrasSociales = negocio.Listar();
-                    Session["ListaObrasSociales"] = listaObrasSociales;
+                    if (Session["ListaObrasSociales"] == null)
+                    {
+                        listaObrasSociales = negocio.Listar();
+                        Session["ListaObrasSociales"] = listaObrasSociales;
+                    }
+                    else
+                    {
+                        listaObrasSociales = (List<ObraSocial>)Session["ListaObrasSociales"];
+                    }
                 }
 
-
-                //ELIMINACION
+                // ELIMINACIÓN
                 if (!IsPostBack && Request["eliminar"] != null)
                 {
                     int idEliminar;
@@ -38,6 +45,9 @@ namespace tp_cuatrimestral_equipo_12B
                             lblMensaje.Visible = true;
                             lblMensaje.CssClass = "alert alert-warning d-block";
                             lblMensaje.Text = "Obra Social Eliminada";
+
+                            listaObrasSociales = negocio.Listar();
+                            Session["ListaObrasSociales"] = listaObrasSociales;
                         }
                         catch (Exception ex)
                         {
@@ -45,10 +55,10 @@ namespace tp_cuatrimestral_equipo_12B
                             lblMensaje.CssClass = "alert alert-danger d-block";
                             lblMensaje.Text = ex.Message;
                         }
-                       
                     }
                 }
-                //Habilitacion
+
+                // HABILITACIÓN
                 if (!IsPostBack && Request["habilitar"] != null)
                 {
                     int idHabilitar;
@@ -56,10 +66,14 @@ namespace tp_cuatrimestral_equipo_12B
                     {
                         try
                         {
-                            negocio.habilitarObraSocial(idHabilitar);
+                            string descripcion = Request["descripcion"];
+                            negocio.habilitarObraSocial(idHabilitar,descripcion);
                             lblMensaje.Visible = true;
                             lblMensaje.CssClass = "alert alert-success d-block";
                             lblMensaje.Text = "Obra Social Habilitada";
+
+                            listaObrasSociales = negocio.Listar();
+                            Session["ListaObrasSociales"] = listaObrasSociales;
                         }
                         catch (Exception ex)
                         {
@@ -70,7 +84,8 @@ namespace tp_cuatrimestral_equipo_12B
                     }
                     Response.Redirect("ObrasSociales.aspx");
                 }
-                //MODIFICACIÓN
+
+                // MODIFICACIÓN
                 string target = Request["__EVENTTARGET"];
 
                 if (target == null && Request.Form["IdObraSocial"] != null && Request.Form["DescripcionModificada"] != null)
@@ -81,7 +96,7 @@ namespace tp_cuatrimestral_equipo_12B
                     if (int.TryParse(Request.Form["IdObraSocial"], out idObraSocial) && !string.IsNullOrEmpty(nuevaDescripcion))
                     {
                         ObraSocial obraModificada = new ObraSocial();
-                        List<ObraSocial> lista = negocio.Listar();
+                        List<ObraSocial> lista = (List<ObraSocial>)Session["ListaObrasSociales"];
 
                         bool yaExiste = lista.Any(o => o.Descripcion.Trim().ToLower() == nuevaDescripcion.ToLower());
 
@@ -90,57 +105,49 @@ namespace tp_cuatrimestral_equipo_12B
                             lblMensaje.CssClass = "alert alert-warning d-block";
                             lblMensaje.Text = "Ya existe una obra social con ese nombre.";
                             lblMensaje.Visible = true;
-                            listaObrasSociales = negocio.Listar();
-                            ///////////ver donde podemos mostrar fuera del modal 
-
                             return;
+                        }
+
+                        obraModificada.Id = idObraSocial;
+                        obraModificada.Descripcion = nuevaDescripcion;
+
+                        bool resultado = negocio.modificarObraSocial(obraModificada);
+
+                        if (!resultado)
+                        {
+                            lblMensaje.CssClass = "alert alert-danger d-block";
+                            lblMensaje.Text = "Ocurrió un error al modificar la obra social.";
+                            lblMensaje.Visible = true;
                         }
                         else
                         {
-
-                            obraModificada.Id = idObraSocial;
-                            obraModificada.Descripcion = nuevaDescripcion;
-
-                            bool resultado = negocio.modificarObraSocial(obraModificada);
-
-                            if (!resultado)
-                            {
-
-                                lblMensaje.Text = "Ocurrió un error al modificar la obra social.";
-                                ///////////ver donde podemos mostrar fuera del modal 
-                            }
-                            else
-                            {
-                                lblMensaje.Visible = true;
-                                lblMensaje.CssClass = "alert alert-success d-block";
-                                lblMensaje.Text = "Obra Social modificada";
-
-                            }
+                            lblMensaje.Visible = true;
+                            lblMensaje.CssClass = "alert alert-success d-block";
+                            lblMensaje.Text = "Obra Social modificada";
 
                             listaObrasSociales = negocio.Listar();
                             Session["ListaObrasSociales"] = listaObrasSociales;
                         }
                     }
                 }
+
                 if (listaObrasSociales == null)
                     listaObrasSociales = (List<ObraSocial>)Session["ListaObrasSociales"];
             }
             catch (Exception ex)
             {
-                throw ex;
+                lblMensaje.Visible = true;
+                lblMensaje.CssClass = "alert alert-danger d-block";
+                lblMensaje.Text = "Error general: " + ex.Message;
             }
         }
-
-
-
-
-
 
         protected void btnMostrarFormularioAgregar_Click(object sender, EventArgs e)
         {
             formAgregar.Visible = true;
             lblMensaje.Visible = false;
         }
+
         protected void cerrarForm_Click(object sender, EventArgs e)
         {
             formAgregar.Visible = false;
@@ -148,9 +155,7 @@ namespace tp_cuatrimestral_equipo_12B
             lblMensaje.Visible = false;
         }
 
-
-
-        protected void AgregarObraSocial_Click(object sender, EventArgs e) // se pueden agregar mas validaciones !!!!!!!!!
+        protected void AgregarObraSocial_Click(object sender, EventArgs e)
         {
             string nombre = txtNombreObraSocial.Text.Trim();
 
@@ -172,7 +177,6 @@ namespace tp_cuatrimestral_equipo_12B
                 lblMensaje.CssClass = "alert alert-warning d-block";
                 lblMensaje.Text = "El nombre de la obra social solo puede contener letras.";
                 lblMensaje.Visible = true;
-
                 return;
             }
 
@@ -181,7 +185,6 @@ namespace tp_cuatrimestral_equipo_12B
                 lblMensaje.CssClass = "alert alert-warning d-block";
                 lblMensaje.Text = "Ya existe una obra social con ese nombre.";
                 lblMensaje.Visible = true;
-
                 return;
             }
 
@@ -195,11 +198,10 @@ namespace tp_cuatrimestral_equipo_12B
             lblMensaje.CssClass = "alert alert-success d-block";
             lblMensaje.Visible = true;
 
-            //Ocultamos el formulario
             formAgregar.Visible = false;
 
-            // Cargamos la lista actualizada
             listaObrasSociales = negocio.Listar();
+            Session["ListaObrasSociales"] = listaObrasSociales;
         }
 
         protected void btnBuscarObra_Click(object sender, EventArgs e)
@@ -212,16 +214,15 @@ namespace tp_cuatrimestral_equipo_12B
                 listaObrasSociales = todas
                     .Where(es => es.Descripcion.ToLower().Contains(txtBusqueda))
                     .ToList();
+
                 lblMensaje.Visible = false;
-
-
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                lblMensaje.Visible = true;
+                lblMensaje.CssClass = "alert alert-danger d-block";
+                lblMensaje.Text = ex.Message;
             }
-
         }
 
         protected void btnLimpiarBusqueda_Click(object sender, EventArgs e)
@@ -229,24 +230,22 @@ namespace tp_cuatrimestral_equipo_12B
             txtBuscarOS.Text = "";
             listaObrasSociales = (List<ObraSocial>)Session["ListaObrasSociales"];
         }
+
         protected void chkVerDeshabilitadas_CheckedChanged(object sender, EventArgs e)
         {
             ObraSocialNegocio negocio = new ObraSocialNegocio();
+            lblMensaje.Visible = false;
 
             if (chkVerDeshabilitadas.Checked)
             {
-                // Mostrar todas
                 listaObrasSociales = negocio.Listar(true);
             }
             else
             {
-                // Mostrar solo habilitadas
                 listaObrasSociales = negocio.Listar();
             }
 
             Session["ListaObrasSociales"] = listaObrasSociales;
         }
     }
-
-
 }

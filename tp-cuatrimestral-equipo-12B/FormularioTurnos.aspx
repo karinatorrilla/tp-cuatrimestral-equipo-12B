@@ -132,7 +132,8 @@
                                     <asp:AsyncPostBackTrigger ControlID="ddlEspecialidades" EventName="SelectedIndexChanged" />
                                 </Triggers>
                             </asp:UpdatePanel>
-
+                            <asp:Button Text="Asignar Turno" runat="server" />
+                            <asp:Button Text="Siguiente paso sin sugerencias" runat="server" />
                         </div>
                     </div>
                 </div>

@@ -20,11 +20,17 @@ namespace tp_cuatrimestral_equipo_12B
             {
                 EspecialidadNegocio negocio = new EspecialidadNegocio();
 
-
                 if (!IsPostBack)
                 {
-                    listaEspecialidades = negocio.Listar();
-                    Session["ListaEspecialidades"] = listaEspecialidades;
+                    if (Session["ListaEspecialidades"] == null)
+                    {
+                        listaEspecialidades = negocio.Listar();
+                        Session["ListaEspecialidades"] = listaEspecialidades;
+                    }
+                    else
+                    {
+                        listaEspecialidades = (List<Especialidad>)Session["ListaEspecialidades"];
+                    }
                 }
 
                 //ELIMINACIÓN
@@ -39,6 +45,9 @@ namespace tp_cuatrimestral_equipo_12B
                             lblMensaje.Visible = true;
                             lblMensaje.CssClass = "alert alert-warning d-block";
                             lblMensaje.Text = "Especialidad Eliminada";
+
+                            listaEspecialidades = negocio.Listar();
+                            Session["ListaEspecialidades"] = listaEspecialidades;
                         }
                         catch (Exception ex)
                         {
@@ -46,12 +55,10 @@ namespace tp_cuatrimestral_equipo_12B
                             lblMensaje.CssClass = "alert alert-danger d-block";
                             lblMensaje.Text = ex.Message;
                         }
-                       
-
                     }
-
                 }
-                //Habilitacion
+
+                //HABILITACIÓN
                 if (!IsPostBack && Request["habilitar"] != null)
                 {
                     int idHabilitar;
@@ -59,10 +66,14 @@ namespace tp_cuatrimestral_equipo_12B
                     {
                         try
                         {
-                            negocio.habilitarEspecialidad(idHabilitar);
+                            string descripcion = Request["descripcion"];
+                            negocio.habilitarEspecialidad(idHabilitar, descripcion);
                             lblMensaje.Visible = true;
                             lblMensaje.CssClass = "alert alert-success d-block";
                             lblMensaje.Text = "Especialidad Habilitada";
+
+                            listaEspecialidades = negocio.Listar();
+                            Session["ListaEspecialidades"] = listaEspecialidades;
                         }
                         catch (Exception ex)
                         {
@@ -71,23 +82,19 @@ namespace tp_cuatrimestral_equipo_12B
                             lblMensaje.Text = ex.Message;
                         }
                     }
-                    Response.Redirect("Especialidades.aspx");
                 }
 
                 //MODIFICACIÓN
                 string target = Request["__EVENTTARGET"];
-
                 if (target == null && Request.Form["IdEspecialidad"] != null && Request.Form["DescripcionModificada"] != null)
-
                 {
                     int idEspecialidad;
                     string nuevaDescripcion = Request.Form["DescripcionModificada"].Trim();
 
                     if (int.TryParse(Request.Form["IdEspecialidad"], out idEspecialidad) && !string.IsNullOrEmpty(nuevaDescripcion))
                     {
-
                         Especialidad especialidadModificada = new Especialidad();
-                        List<Especialidad> lista = negocio.Listar();
+                        List<Especialidad> lista = (List<Especialidad>)Session["ListaEspecialidades"];
 
                         bool yaExiste = lista.Any(o => o.Descripcion.Trim().ToLower() == nuevaDescripcion.ToLower());
                         if (yaExiste)
@@ -95,46 +102,41 @@ namespace tp_cuatrimestral_equipo_12B
                             lblMensaje.Visible = true;
                             lblMensaje.CssClass = "alert alert-warning d-block";
                             lblMensaje.Text = "Ya existe una especialidad con ese nombre.";
-                            listaEspecialidades = negocio.Listar();
                             return;
-                            ///////////ver donde podemos mostrar fuera del modal 
+                        }
+
+                        especialidadModificada.Id = idEspecialidad;
+                        especialidadModificada.Descripcion = nuevaDescripcion;
+
+                        bool resultado = negocio.modificarEspecialidad(especialidadModificada);
+
+                        if (!resultado)
+                        {
+                            lblMensaje.Text = "Ocurrió un error al modificar la especialidad.";
                         }
                         else
                         {
-
-
-                            especialidadModificada.Id = idEspecialidad;
-                            especialidadModificada.Descripcion = nuevaDescripcion;
-
-                            bool resultado = negocio.modificarEspecialidad(especialidadModificada);
-
-                            if (!resultado)
-                            {
-                                lblMensaje.Text = "Ocurrió un error al modificar la especialidad.";
-                                ///////////ver donde podemos mostrar fuera del modal 
-                            }
-                            else
-                            {
-                                lblMensaje.Visible = true;
-                                lblMensaje.CssClass = "alert alert-success d-block";
-                                lblMensaje.Text = "Especialidad modificada";
-
-                            }
+                            lblMensaje.Visible = true;
+                            lblMensaje.CssClass = "alert alert-success d-block";
+                            lblMensaje.Text = "Especialidad modificada";
 
                             listaEspecialidades = negocio.Listar();
                             Session["ListaEspecialidades"] = listaEspecialidades;
                         }
                     }
                 }
+
                 if (listaEspecialidades == null)
                     listaEspecialidades = (List<Especialidad>)Session["ListaEspecialidades"];
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                lblMensaje.Visible = true;
+                lblMensaje.CssClass = "alert alert-danger d-block";
+                lblMensaje.Text = "Error general: " + ex.Message;
             }
         }
+
 
 
         protected void btnMostrarFormularioAgregar_Click(object sender, EventArgs e)
@@ -236,6 +238,7 @@ namespace tp_cuatrimestral_equipo_12B
         protected void chkVerDeshabilitadas_CheckedChanged(object sender, EventArgs e)
         {
             EspecialidadNegocio negocio = new EspecialidadNegocio();
+            lblMensaje.Visible = false;
 
             if (chkVerDeshabilitadas.Checked)
             {

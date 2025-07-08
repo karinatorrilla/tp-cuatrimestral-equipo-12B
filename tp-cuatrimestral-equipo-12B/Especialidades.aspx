@@ -116,7 +116,8 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                            <a href="Especialidades.aspx?habilitar=<%= esp.Id %>" class="btn btn-success">Habilitar Especialidad</a>
+                                            <a href="Especialidades.aspx?habilitar=<%= esp.Id %>&descripcion=<%= Server.UrlEncode(esp.Descripcion) %>" class="btn btn-success">Habilitar Especialidad </a>
+
                                         </div>
                                     </form>
                                 </div>

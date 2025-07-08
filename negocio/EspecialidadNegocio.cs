@@ -135,14 +135,31 @@ namespace negocio
             }
         }
 
-        public void habilitarEspecialidad(int idEspecialidad)
+        public void habilitarEspecialidad(int idEspecialidad,string descripcion)
         {
 
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                             
+                /*Verificamos que no exista una especialidad igual */
+                datos.setearConsulta("SELECT COUNT(*) FROM ESPECIALIDADES WHERE Descripcion = @descripcion AND Habilitado=1");
+                datos.setearParametro("@descripcion", descripcion);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    int cantidad = (int)datos.Lector[0];
+                    if (cantidad > 0)
+                    {
+                        throw new Exception("No se puede rehabilitar porque ya existe.");
+                    }
+                }
+
+                datos.cerrarConexion();
+                datos.limpiarParametros();
+
+
                 datos.setearConsulta("UPDATE ESPECIALIDADES SET Habilitado=1 WHERE ID = @ID");
                 datos.setearParametro("@ID", idEspecialidad);
                 datos.ejecutarAccion();
