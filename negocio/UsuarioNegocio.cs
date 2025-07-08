@@ -15,7 +15,7 @@ namespace negocio
 
             try
             {
-                datos.setearConsulta("select Id, TipoUser from USUARIOS where usuario = @user and Pass = @Password");
+                datos.setearConsulta("select Id, TipoUser,IDMedico from USUARIOS where usuario = @user and Pass = @Password");
                 datos.setearParametro("@user", usuario.User);
                 datos.setearParametro("@Password", usuario.Password);
                 datos.ejecutarLectura();
@@ -26,6 +26,10 @@ namespace negocio
 
                     usuario.TipoUsuario = (int)(datos.Lector["TipoUser"]) == 1 ? TipoUsuario.ADMIN : ((int)(datos.Lector["TipoUser"]) == 2 ? TipoUsuario.RECEP : TipoUsuario.MED);
 
+                    //guardamos el idmedico si es med sino le asignamos 0
+                    usuario.IDMedico = (usuario.TipoUsuario == TipoUsuario.MED && datos.Lector["IDMedico"] != DBNull.Value)
+       ? (int)datos.Lector["IDMedico"]
+       : 0;
                     return true;
 
                 }

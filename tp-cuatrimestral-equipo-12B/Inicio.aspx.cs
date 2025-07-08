@@ -1,11 +1,12 @@
-﻿using System;
+﻿using dominio;
+using negocio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using negocio;
-using dominio;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace tp_cuatrimestral_equipo_12B
 {
@@ -51,9 +52,17 @@ namespace tp_cuatrimestral_equipo_12B
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["TipoUsuario"] != null)
+            if ((int)Session["TipoUsuario"] == 3)
             {
-                lblTipoUsuario.Text = "Bienvenido " + Session["TipoUsuario"].ToString() + "!";
+                lblTipoUsuario.Text = "Bienvenido/a " + Session["NombreMedico"].ToString() + "!";
+            }
+            else if ((int)Session["TipoUsuario"] == 2)
+            {
+                lblTipoUsuario.Text = "Bienvenido/a Recepcionista";
+            }
+            else if ((int)Session["TipoUsuario"] == 1)
+            {
+                lblTipoUsuario.Text = "Bienvenido Administrador";
             }
             else
             {

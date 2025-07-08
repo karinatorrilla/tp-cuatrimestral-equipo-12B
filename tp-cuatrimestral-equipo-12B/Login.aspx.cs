@@ -30,6 +30,18 @@ namespace tp_cuatrimestral_equipo_12B
                 {
                     Session.Add("Usuario", usuario);
                     Session.Add("TipoUsuario", usuario.TipoUsuario);
+
+                    if (usuario.IDMedico > 0)
+                    {
+                        Session.Add("IDMedico", usuario.IDMedico);
+
+                        MedicosNegocio medicoNegocio = new MedicosNegocio();
+                        Medico medico = medicoNegocio.ListarMedicos(usuario.IDMedico).FirstOrDefault();
+
+                        if (medico != null)
+                            Session["NombreMedico"] = medico.Nombre + " " + medico.Apellido;
+                    }
+
                     lblErrorLogin.Visible = false;
                     Response.Redirect("Inicio.aspx", false);
                 }

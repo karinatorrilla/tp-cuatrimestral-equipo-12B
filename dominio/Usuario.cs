@@ -25,5 +25,7 @@ namespace dominio
             Password = password;
         }
 
+        public int IDMedico { get; set; }
+
     }
 }
