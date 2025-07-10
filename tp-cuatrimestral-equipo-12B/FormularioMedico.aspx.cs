@@ -721,72 +721,7 @@ namespace tp_cuatrimestral_equipo_12B
                 medicoNuevo.Depto = txtDepto.Text;
                 // Habilitado: Por defecto en 1 (true) para nuevos medicoNuevo
                 medicoNuevo.Habilitado = 1;
-                medicoNuevo.FechaNacimiento = fechaNacimiento;
-
-                // Asignar Especialidades
-                // Recopila los IDs de las especialidades seleccionadas
-                //List<string> especialidadesSeleccionadas = new List<string>();
-                //foreach (ListItem item in lstEspecialidades.Items)
-                //{
-                //    if (item.Selected)
-                //    {
-                //        especialidadesSeleccionadas.Add(item.Value);
-                //    }
-                //}
-                //// Convierte la lista de IDs a una cadena separada por comas
-                //medicoNuevo.EspecialidadesIDs = string.Join(",", especialidadesSeleccionadas);
-
-
-                //// Asignar Turno de Trabajo
-                //if (!string.IsNullOrEmpty(ddlTurnoTrabajo.SelectedValue))
-                //{
-                //    medicoNuevo.IDTurnoTrabajo = int.Parse(ddlTurnoTrabajo.SelectedValue);
-                //}
-                //else
-                //{
-                //    medicoNuevo.IDTurnoTrabajo = null;
-                //}
-
-
-                ////Asignar Días Disponibles
-                ////Recopila los IDs de los días seleccionados
-                //List<string> diasSeleccionados = new List<string>();
-                //foreach (ListItem item in lstDiaSemana.Items)
-                //{
-                //    if (item.Selected)
-                //    {
-                //        diasSeleccionados.Add(item.Value);
-                //    }
-                //}
-                ////Convierte la lista de IDs a una cadena separada por comas
-                //medicoNuevo.DiasDisponiblesIDs = string.Join(",", diasSeleccionados);
-
-
-                //// Asignar Disponibilidad Horaria (HoraInicioBloque, HoraFinBloque)
-                //TimeSpan horaInicio;
-                //TimeSpan horaFin;
-
-                //if (TimeSpan.TryParse(ddlHoraInicioBloque.SelectedValue, out horaInicio) &&
-                //    TimeSpan.TryParse(ddlHoraFinBloque.SelectedValue, out horaFin))
-                //{
-                //    medicoNuevo.HoraInicioBloque = horaInicio;
-                //    medicoNuevo.HoraFinBloque = horaFin;
-
-                //    // Validamos el orden.
-                //    if (medicoNuevo.HoraInicioBloque >= medicoNuevo.HoraFinBloque)
-                //    {
-                //        divMensaje.Attributes["class"] = "alert alert-danger";
-                //        divMensaje.InnerText = "La hora de inicio no puede ser igual o posterior a la hora de fin.";
-                //        divMensaje.Visible = true;
-                //        return;
-                //    }
-                //}
-                //else
-                //{
-                //    medicoNuevo.HoraInicioBloque = null;
-                //    medicoNuevo.HoraFinBloque = null;
-                //}
-
+                medicoNuevo.FechaNacimiento = fechaNacimiento;                
 
                 // Lógica para Agregar o Modificar
                 if (Request.QueryString["id"] != null) // Modo Modificar

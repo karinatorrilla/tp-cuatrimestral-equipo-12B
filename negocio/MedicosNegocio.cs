@@ -113,11 +113,10 @@ namespace negocio
             {
                 // Actualiza la consulta INSERT para incluir todos los campos
                 string consulta = "INSERT INTO MEDICOS (Matricula, Nombre, Apellido, Documento, Email, Telefono, Nacionalidad, " +
-                                  "Provincia, Localidad, Calle, Altura, CodPostal, Depto, FechaNacimiento, " +
-                                  "EspecialidadesIDs, IDTurnoTrabajo, DiasDisponiblesIDs, HoraInicioBloque, HoraFinBloque, Habilitado) " +
+                                  "Provincia, Localidad, Calle, Altura, CodPostal, Depto, FechaNacimiento, Habilitado) " +
                                   "VALUES (@Matricula, @Nombre, @Apellido, @Documento, @Email, @Telefono, @Nacionalidad, " +
                                   "@Provincia, @Localidad, @Calle, @Altura, @CodPostal, @Depto, @FechaNacimiento, " +
-                                  "@EspecialidadesIDs, @IDTurnoTrabajo, @DiasDisponiblesIDs, @HoraInicioBloque, @HoraFinBloque, @Habilitado)";
+                                  "@Habilitado)";
 
                 datos.setearConsulta(consulta);
 
@@ -135,14 +134,7 @@ namespace negocio
                 datos.setearParametro("@Altura", (object)nuevo.Altura ?? DBNull.Value);
                 datos.setearParametro("@CodPostal", (object)nuevo.CodPostal ?? DBNull.Value);
                 datos.setearParametro("@Depto", (object)nuevo.Depto ?? DBNull.Value);
-                datos.setearParametro("@FechaNacimiento", (object)nuevo.FechaNacimiento ?? DBNull.Value);
-
-                // Parámetros para los selectores múltiples y la disponibilidad
-                datos.setearParametro("@EspecialidadesIDs", (object)nuevo.EspecialidadesIDs ?? DBNull.Value); // string con IDs separados por comas
-                datos.setearParametro("@IDTurnoTrabajo", (object)nuevo.IDTurnoTrabajo ?? DBNull.Value);
-                datos.setearParametro("@DiasDisponiblesIDs", (object)nuevo.DiasDisponiblesIDs ?? DBNull.Value); // string con IDs separados por comas
-                datos.setearParametro("@HoraInicioBloque", (object)nuevo.HoraInicioBloque ?? DBNull.Value); // TimeSpan 
-                datos.setearParametro("@HoraFinBloque", (object)nuevo.HoraFinBloque ?? DBNull.Value);     // TimeSpan
+                datos.setearParametro("@FechaNacimiento", (object)nuevo.FechaNacimiento ?? DBNull.Value);                              
                 datos.setearParametro("@Habilitado", nuevo.Habilitado);
 
                 datos.ejecutarAccion();
@@ -180,8 +172,7 @@ namespace negocio
                 datos.setearParametro("@altura", mod.Altura);
                 datos.setearParametro("@depto", mod.Depto);
                 datos.setearParametro("@fechanacimiento", mod.FechaNacimiento);
-
-                //datos.setearParametro("@idespecialidad", mod.EspecialidadSeleccionada.Id);
+                
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
