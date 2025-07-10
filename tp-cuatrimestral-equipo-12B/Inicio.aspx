@@ -11,7 +11,7 @@
                     <%= 
                         Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 1 
                         ? "Aquí vas a poder ver un panorama general." 
-                        : "Aquí vas a poder ver un panorama del día de hoy." 
+                        : "Aquí vas a poder ver un panorama del día de hoy " + DateTime.Today.ToString("dd/MM/yyyy") + "." 
                     %>
                 </p>
             </div>
@@ -28,7 +28,9 @@
                 <div class="card-number">
                     <asp:Label ID="lblTotalPacientes" runat="server" Text="0"></asp:Label>
                 </div>
-                <div class="card-title">Pacientes</div>
+                <div class="card-title">
+                    <asp:Label ID="lblTextoPaciente" runat="server" Text="Pacientes"></asp:Label>
+                </div>
             </div>
 
             <%-- Card 2: Médicos --%>
@@ -39,7 +41,9 @@
                 <div class="card-number">
                     <asp:Label ID="lblTotalMedicos" runat="server" Text="0"></asp:Label>
                 </div>
-                <div class="card-title">Médicos</div>
+                <div class="card-title">
+                    <asp:Label ID="lblTextoMedico" runat="server" Text="Médicos"></asp:Label>
+                </div>
             </div>
             <%   }%>
 
@@ -47,8 +51,12 @@
             <%-- Card 3: Turnos del Día --%>
             <div class="dashboard-card">
                 <img src="images/icon_turno.svg" alt="Icono Turnos" />
-                <div class="card-number">1</div>
-                <div class="card-title">Turno</div>
+                <div class="card-number">
+                    <asp:Label ID="lblTotalTurnos" runat="server" Text="0"></asp:Label>
+                </div>
+                <div class="card-title">
+                    <asp:Label ID="lblTextoTurno" runat="server" Text="Turnos"></asp:Label>
+                </div>
             </div>
         </div>
 
@@ -70,6 +78,7 @@
                 %>
                 <%else if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 3) //si es médico
                     { %>
+                <h3 class="mb-3 fw-bold">Mis Turnos</h3>
                 <div class="row mb-3 align-items-center">
                     <div class="col-md-2">
                         <label for="txtFechaFiltro">Filtrar por fecha:</label>
@@ -153,21 +162,32 @@
                             <%     }
                                 } %>
                             <%} %>
-                            <%else if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 3) //si es médico
-                                { %>
-                            <%-- HARDCODEADO --%>
+                            <% else if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 3 && listaTurnos != null)
+                                {
+                                    if (listaTurnos.Count > 0)
+                                    {
+                                        foreach (var t in listaTurnos)
+                                        { %>
                             <tr>
-                                <td>1</td>
-                                <td>Karina</td>
-                                <td>Torrilla</td>
-                                <td>11222333</td>
-                                <td>Particular</td>
-                                <td>Dentista</td>
-                                <td>3/07/2025</td>
-                                <td>09:00</td>
-                                <td>Asignado</td>
+                                <td><%= t.Id %></td>
+                                <td><%= t.Paciente.Nombre %></td>
+                                <td><%= t.Paciente.Apellido %></td>
+                                <td><%= t.Paciente.Documento %></td>
+                                <td><%= t.Paciente.DescripcionObraSocial %></td>
+                                <td><%= t.Especialidad.Descripcion %></td>
+                                <td><%= t.Fecha.ToString("dd/MM/yyyy") %></td>
+                                <td><%= (t.Hora.ToString("00") + ":00") %></td>
+                                <td><%= t.Estado.ToString() %></td>
                             </tr>
-                            <%} %>
+                            <%       }
+                            }
+                            else
+                            { %>
+                            <tr>
+                                <td colspan="9" class="text-center">No se encontraron turnos.</td>
+                            </tr>
+                            <%   }
+                            } %>
                         </tbody>
                     </table>
                 </div>

@@ -213,7 +213,7 @@ CREATE TABLE [dbo].[TURNOS](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[IdMedico] [int] NOT NULL,
 	[IdPaciente] [int] NOT NULL,
-	[IdEspecialidad] [nchar](10) NOT NULL,
+	[IdEspecialidad] [int] NOT NULL,
 	[Fecha] [date] NOT NULL,
 	[Hora] [smallint] NOT NULL,
 	[Observaciones] [varchar](max) NULL,

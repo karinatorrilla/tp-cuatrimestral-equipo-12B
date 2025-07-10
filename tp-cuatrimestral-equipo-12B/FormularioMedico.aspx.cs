@@ -121,18 +121,7 @@ namespace tp_cuatrimestral_equipo_12B
                         if (listaMedicos != null && listaMedicos.Count > 0)
                         {
                             medicoActual = listaMedicos[0]; // Guardamos el médico en la propiedad de la página
-
-                            //if (medicoActual.Especialidades != null)
-                            //{
-                            //    foreach (Especialidad especialidadMedico in medicoActual.Especialidades)
-                            //    {
-                            //        ListItem item = lstEspecialidades.Items.FindByValue(especialidadMedico.Id.ToString());
-                            //        if (item != null)
-                            //        {
-                            //            item.Selected = true; // Selecciona la especialidad en el ListBox (ahora DropDownList)
-                            //        }
-                            //    }
-                            //}
+                           
 
                             //        // Precarga de Datos Personales y Profesionales
                             txtMatricula.Text = medicoActual.Matricula.ToString();

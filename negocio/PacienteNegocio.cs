@@ -10,7 +10,7 @@ namespace negocio
     public class PacienteNegocio
     {
 
-        public List<Paciente> ListarPacientes(int id = 0)
+        public List<Paciente> ListarPacientes(int id = 0, DateTime? fechaTurno = null)
         {
 
 
@@ -19,13 +19,33 @@ namespace negocio
 
             try
             {
-                string consulta = "SELECT Id, Nombre, Apellido, Documento, Email, Telefono, Nacionalidad, " +
-                                  "ProvinciaId, LocalidadId, Calle, Altura, CodPostal, Depto, " +
-                                  "FechaNacimiento, ObraSocialId, Observaciones, Habilitado " +
-                                  "FROM PACIENTES WHERE Habilitado = 1 ";
-                if (id > 0)
+                string consulta = "SELECT DISTINCT P.Id, P.Nombre, P.Apellido, P.Documento, P.Email, P.Telefono, P.Nacionalidad, " +
+                                  "P.ProvinciaId, P.LocalidadId, P.Calle, P.Altura, P.CodPostal, P.Depto, " +
+                                  "P.FechaNacimiento, P.ObraSocialId, P.Observaciones, P.Habilitado " +
+                                  "FROM PACIENTES P ";
+
+                if (fechaTurno.HasValue) //si se pasa parámetro de fecha, agregar INNER JOIN con tabla TURNOS
                 {
-                    consulta += " AND Id = " + id;
+                    consulta += "INNER JOIN TURNOS T ON T.IdPaciente = P.Id ";
+                }
+
+                consulta += "WHERE P.Habilitado = 1 ";
+
+                if (id > 0) //si se pasa parámetro de Id, agregarlo a la consulta
+                {
+                    consulta += "AND P.Id = " + id + " ";
+                }
+
+                if (fechaTurno.HasValue) //si se pasa parámetro de fecha, agregar condición 
+                {
+                    consulta += "AND T.Fecha = @Fecha ";
+                }
+
+                datos.setearConsulta(consulta);
+
+                if (fechaTurno.HasValue)
+                {
+                    datos.setearParametro("@Fecha", fechaTurno.Value.Date);
                 }
 
                 datos.setearConsulta(consulta);

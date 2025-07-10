@@ -9,7 +9,7 @@ namespace negocio
 {
     public class MedicosNegocio
     {
-        public List<Medico> ListarMedicos(int id = 0)
+        public List<Medico> ListarMedicos(int id = 0, DateTime? fechaTurno = null)
         {
 
             List<Medico> lista = new List<Medico>();
@@ -18,18 +18,38 @@ namespace negocio
 
             try
             {
-                string consulta = "SELECT Id, Matricula, Nombre, Apellido, Documento, Email, Telefono, Nacionalidad, " +
-                                  "Provincia, Localidad, Calle, Altura, CodPostal, Depto, " +
-                                  "FechaNacimiento, Habilitado " +
-                                  "FROM MEDICOS WHERE Habilitado = 1 ";
+                string consulta = "SELECT DISTINCT M.Id, M.Matricula, M.Nombre, M.Apellido, M.Documento, M.Email, M.Telefono, M.Nacionalidad, " +
+                                  "M.Provincia, M.Localidad, M.Calle, M.Altura, M.CodPostal, M.Depto, " +
+                                  "M.FechaNacimiento, M.Habilitado " +
+                                  "FROM MEDICOS M ";
 
-                if (id > 0)
+                if (fechaTurno.HasValue) //si se pasa parámetro de fecha, agregar INNER JOIN con tabla TURNOS
                 {
-                    consulta += " AND Id = " + id;
+                    consulta += "INNER JOIN TURNOS T ON T.IdMedico = M.Id ";
+                }
+
+                consulta += "WHERE M.Habilitado = 1 ";
+
+                if (id > 0) //si se pasa parámetro de Id, agregarlo a la consulta
+                {
+                    consulta += "AND M.Id = " + id + " ";
+                }
+
+                if (fechaTurno.HasValue) //si se pasa parámetro de fecha, agregar condición 
+                {
+                    consulta += "AND T.Fecha = @Fecha ";
+                }
+
+                datos.setearConsulta(consulta);
+
+                if (fechaTurno.HasValue)
+                {
+                    datos.setearParametro("@Fecha", fechaTurno.Value.Date);
                 }
 
                 datos.setearConsulta(consulta);
                 datos.ejecutarLectura();
+
                 while (datos.Lector.Read())
                 {
                     Medico aux = new Medico();
@@ -87,7 +107,7 @@ namespace negocio
                     Medico aux = new Medico();
                     aux.Id = (int)datos.Lector["Id"];
                     aux.Nombre = datos.Lector["Nombre"].ToString();
-                    aux.Apellido = datos.Lector["Apellido"].ToString();                  
+                    aux.Apellido = datos.Lector["Apellido"].ToString();
 
                     lista.Add(aux);
                 }
@@ -134,7 +154,7 @@ namespace negocio
                 datos.setearParametro("@Altura", (object)nuevo.Altura ?? DBNull.Value);
                 datos.setearParametro("@CodPostal", (object)nuevo.CodPostal ?? DBNull.Value);
                 datos.setearParametro("@Depto", (object)nuevo.Depto ?? DBNull.Value);
-                datos.setearParametro("@FechaNacimiento", (object)nuevo.FechaNacimiento ?? DBNull.Value);                              
+                datos.setearParametro("@FechaNacimiento", (object)nuevo.FechaNacimiento ?? DBNull.Value);
                 datos.setearParametro("@Habilitado", nuevo.Habilitado);
 
                 datos.ejecutarAccion();
@@ -172,7 +192,7 @@ namespace negocio
                 datos.setearParametro("@altura", mod.Altura);
                 datos.setearParametro("@depto", mod.Depto);
                 datos.setearParametro("@fechanacimiento", mod.FechaNacimiento);
-                
+
                 datos.ejecutarAccion();
             }
             catch (Exception ex)

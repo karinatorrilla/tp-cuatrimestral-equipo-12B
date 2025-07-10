@@ -38,40 +38,43 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <%-- Cuerpo del listado --%>
-
+                    <% if (listaTurno != null && listaTurno.Any())
+                        {
+                            foreach (var t in listaTurno)
+                            { %>
                     <tr>
-                        <td>1</td>
-                        <td>Karina</td>
-                        <td>Torrilla</td>
-                        <td>11222333</td>
-                        <td>Particular</td>
-                        <td>Dentista</td>
-                        <td>Lopez Pedro</td>
-                        <td>3/07/2025</td>
-                        <td>09:00</td>
-                        <td>Asignado</td>
-
-
+                        <td><%= t.Id %></td>
+                        <td><%= t.Paciente.Nombre %></td>
+                        <td><%= t.Paciente.Apellido %></td>
+                        <td><%= t.Paciente.Documento %></td>
+                        <td><%= t.Paciente.DescripcionObraSocial %></td>
+                        <td><%= t.Especialidad.Descripcion %></td>
+                        <td><%= t.Medico.Nombre + " " + t.Medico.Apellido %></td>
+                        <td><%= t.Fecha.ToString("dd/MM/yyyy") %></td>
+                        <td><%= t.Hora.ToString("00") + ":00" %></td>
+                        <td><%= t.Estado.ToString() %></td>
                         <td class="d-flex justify-content-center align-items-center gap-4">
-                            <%-- Íconos de acciones (Ver, Editar, Eliminar, Dar Turno) --%>
-                            <%--ver--%>
-                            <a href="FormularioTurnos.aspx" class="action-link" title="Detalles del Turno">
+                            <%-- Íconos de acciones (Ver, Editar, Eliminar) --%>
+                            <a href='FormularioTurnos.aspx?modo=ver&id=<%= t.Id %>' class="action-link" title="Detalles del Turno">
                                 <img src="images/icon_view.svg" alt="Ver" class="action-icon-img" />
                             </a>
-                            <%--editar--%>
-                            <a href="FormularioTurnos.aspx" class="action-link" title="Editar Turno">
+                            <a href='FormularioTurnos.aspx?modo=editar&id=<%= t.Id %>' class="action-link" title="Editar Turno">
                                 <img src="images/icon_edit.svg" alt="Editar" class="action-icon-img" />
                             </a>
-
-                            <%--Eliminar--%>
                             <div class="action-link">
                                 <img src="images/icon_delete.svg" alt="Eliminar" class="action-icon-img" style="cursor: pointer"
-                                    data-bs-toggle="modal"  />
+                                    data-bs-toggle="modal" data-bs-target="#modalEliminar_<%= t.Id %>" />
                             </div>
-
                         </td>
                     </tr>
+                    <%     }
+                    }
+                    else
+                    { %>
+                    <tr>
+                        <td colspan="11" class="text-center">No se encontraron turnos.</td>
+                    </tr>
+                    <% } %>
                 </tbody>
             </table>
         </div>

@@ -74,5 +74,90 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+        
+        public List<Turno> ListarTurnos(int idMedico = 0, DateTime? fecha = null)
+        {
+            List<Turno> lista = new List<Turno>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                string consulta = "SELECT T.Id, T.IdMedico, T.IdPaciente, T.IdEspecialidad, T.Fecha, T.Hora, T.Observaciones, T.Estado, " +
+                                  "P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente, P.Documento, OS.Descripcion AS DescripcionObraSocial, " +
+                                  "E.Descripcion AS DescripcionEspecialidad, " +
+                                  "M.Nombre AS NombreMedico, M.Apellido AS ApellidoMedico " +
+                                  "FROM TURNOS T " +
+                                  "INNER JOIN PACIENTES P ON P.Id = T.IdPaciente " +
+                                  "INNER JOIN OBRASOCIAL OS ON OS.Id = P.ObraSocialId " +
+                                  "INNER JOIN ESPECIALIDADES E ON E.Id = T.IdEspecialidad " +
+                                  "INNER JOIN MEDICOS M ON M.Id = T.IdMedico " +
+                                  "WHERE 1=1 "; //se pone 1=1 para poder realizar consultas dinámicamente
+                                  
+                if (idMedico > 0)
+                {
+                    consulta += "AND T.IdMedico = @IdMedico ";
+                }
+
+                if (fecha.HasValue)
+                {
+                    consulta += "AND T.Fecha = @Fecha ";
+                }
+
+                datos.setearConsulta(consulta);
+
+                if (idMedico > 0)
+                {
+                    datos.setearParametro("@IdMedico", idMedico);
+                }
+
+                if (fecha.HasValue)
+                {
+                    datos.setearParametro("@Fecha", fecha.Value.Date);
+                }
+
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Turno aux = new Turno();
+                    aux.Id = (int)datos.Lector["Id"];
+                    aux.Fecha = (DateTime)datos.Lector["Fecha"];
+                    aux.Hora = Convert.ToInt32(datos.Lector["Hora"]);
+                    aux.Observaciones = datos.Lector["Observaciones"] is DBNull ? null : datos.Lector["Observaciones"].ToString();
+                    aux.Estado = (EstadoTurno)(int)datos.Lector["Estado"];
+                    aux.Paciente = new Paciente
+                    {
+                        Id = (int)datos.Lector["IdPaciente"],
+                        Nombre = datos.Lector["NombrePaciente"].ToString(),
+                        Apellido = datos.Lector["ApellidoPaciente"].ToString(),
+                        Documento = (int)datos.Lector["Documento"],
+                        DescripcionObraSocial = datos.Lector["DescripcionObraSocial"].ToString()
+                    };
+                    aux.Especialidad = new Especialidad
+                    {
+                        Id = (int)datos.Lector["IdEspecialidad"],
+                        Descripcion = datos.Lector["DescripcionEspecialidad"].ToString()
+                    };
+                    aux.Medico = new Medico
+                    {
+                        Id = (int)datos.Lector["IdMedico"],
+                        Nombre = datos.Lector["NombreMedico"].ToString(),
+                        Apellido = datos.Lector["ApellidoMedico"].ToString()
+                    };
+
+                    lista.Add(aux);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al listar turnos por médico: " + ex.Message);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
