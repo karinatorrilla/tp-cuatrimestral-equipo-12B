@@ -83,6 +83,7 @@
     <Content Include="Medicos.aspx" />
     <Content Include="ObrasSociales.aspx" />
     <Content Include="Pacientes.aspx" />
+    <Content Include="RecuperarPassword.aspx" />
     <Content Include="Turnos.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -168,6 +169,13 @@
       <DependentUpon>Pacientes.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecuperarPassword.aspx.cs">
+      <DependentUpon>RecuperarPassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RecuperarPassword.aspx.designer.cs">
+      <DependentUpon>RecuperarPassword.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Turnos.aspx.cs">
       <DependentUpon>Turnos.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

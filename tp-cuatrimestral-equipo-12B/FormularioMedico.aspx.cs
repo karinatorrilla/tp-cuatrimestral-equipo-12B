@@ -41,18 +41,37 @@ namespace tp_cuatrimestral_equipo_12B
 
         protected async void Page_Load(object sender, EventArgs e)
         {
-            ///Config. inicial
-            if (!IsPostBack)
+            try
             {
-                btnGuardar.Enabled = true;
-                panelEspecialidades.Visible = false;
-                botonesAgregarEspecialidad.Visible = false;
 
-                // Cargar las Provincias
-                await PopulateProvincias();
+                /*Solo puede ver esta pagina un usuario tipo admin(1) o recepcionista (2) */
+                if (Session["TipoUsuario"] == null)
+                {
+                    Session.Add("error", "Debes loguearte para ingresar.");
+                    Response.Redirect("Error.aspx", false);
+                    return;
+                }
+                else if ((int)Session["TipoUsuario"] != 1 &&  (int)Session["TipoUsuario"] != 2)
+                {
+                    Session.Add("error", "No tenes los permisos para acceder");
+                    Response.Redirect("Error.aspx", false);
+                    return;
+                }
+                /*Solo puede ver esta pagina un usuario tipo admin(1) o recepcionista (2) */
 
-                // Cargar nacionalidades en el DropDownList (lista hardcodeada)
-                List<string> listanacionalidades = new List<string>()
+
+                ///Config. inicial
+                if (!IsPostBack)
+                {
+                    btnGuardar.Enabled = true;
+                    panelEspecialidades.Visible = false;
+                    botonesAgregarEspecialidad.Visible = false;
+
+                    // Cargar las Provincias
+                    await PopulateProvincias();
+
+                    // Cargar nacionalidades en el DropDownList (lista hardcodeada)
+                    List<string> listanacionalidades = new List<string>()
                 {
                 "Afgana", "Albana", "Alemana", "Andorrana", "Angoleña", "Antiguana", "Saudí", "Argelina", "Argentina", "Armenia",
                 "Australiana", "Austriaca", "Azerbaiyana", "Bahamesa", "Bangladesí", "Bareiní", "Belga", "Beliceña", "Beninesa",
@@ -77,186 +96,191 @@ namespace tp_cuatrimestral_equipo_12B
                 "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeca", "Vanuatense", "Vaticana", "Venezolana", "Vietnamita", "Yemení",
                 "Yibutiana", "Zambiana", "Zimbabuense"
                 };
-                ddlNacionalidad.DataSource = listanacionalidades;
-                ddlNacionalidad.DataBind();
+                    ddlNacionalidad.DataSource = listanacionalidades;
+                    ddlNacionalidad.DataBind();
 
-                // Deshabilitar localidad al inicio si no hay provincia seleccionada
-                ddlLocalidad.Enabled = false;
-            }
-
-            ///Config. para modificar médico
-            if (Request.QueryString["id"] != null && !IsPostBack)
-            {
-
-
-                //precarga de datos
-
-                try
-                {
-                    MedicosNegocio medicosNegocio = new MedicosNegocio();
-                    Medico medicoActual = new Medico();
-                    // Buscar el médico por ID
-                    int idMedico = int.Parse(Request.QueryString["id"].ToString());
-                    // Asume que ListarMedicos(id) devuelve una lista con un solo médico o null
-                    List<Medico> listaMedicos = medicosNegocio.ListarMedicos(idMedico);
-                    if (listaMedicos != null && listaMedicos.Count > 0)
-                    {
-                        medicoActual = listaMedicos[0]; // Guardamos el médico en la propiedad de la página
-
-                        //if (medicoActual.Especialidades != null)
-                        //{
-                        //    foreach (Especialidad especialidadMedico in medicoActual.Especialidades)
-                        //    {
-                        //        ListItem item = lstEspecialidades.Items.FindByValue(especialidadMedico.Id.ToString());
-                        //        if (item != null)
-                        //        {
-                        //            item.Selected = true; // Selecciona la especialidad en el ListBox (ahora DropDownList)
-                        //        }
-                        //    }
-                        //}
-
-                        //        // Precarga de Datos Personales y Profesionales
-                        txtMatricula.Text = medicoActual.Matricula.ToString();
-                        txtNombre.Text = medicoActual.Nombre;
-                        txtApellido.Text = medicoActual.Apellido;
-                        txtDni.Text = medicoActual.Documento.ToString();
-                        txtFechaNacimiento.Text = medicoActual.FechaNacimiento.ToString("yyyy-MM-dd"); // Formato para input type="date"
-                        txtEmail.Text = medicoActual.Email;
-                        txtTelefono.Text = medicoActual.Telefono;
-                        ddlNacionalidad.SelectedValue = medicoActual.Nacionalidad;
-
-                        //        // Precarga de Domicilio
-                        ddlProvincia.SelectedValue = medicoActual.Provincia;
-                        await PopulateLocalidades(medicoActual.Provincia); // Cargar localidades antes de seleccionarla
-                        ddlLocalidad.SelectedValue = medicoActual.Localidad;
-                        ddlLocalidad.Enabled = true; // Habilitar la localidad
-                        txtCalle.Text = medicoActual.Calle; // Corregido de txtDireccion
-                        txtAltura.Text = medicoActual.Altura.ToString();
-                        txtCodPostal.Text = medicoActual.CodPostal;
-                        txtDepto.Text = medicoActual.Depto;
-
-
-                        //        // Precarga de Especialidades (Manejo de ListBox de selección múltiple)
-                        //        foreach (Especialidad especialidadMedico in medicoActual.Especialidades)
-                        //        {
-                        //            ListItem item = lstEspecialidades.Items.FindByValue(especialidadMedico.Id.ToString());
-                        //            if (item != null)
-                        //            {
-                        //                item.Selected = true; // Selecciona la especialidad en el ListBox
-                        //            }
-                        //        }
-
-                        //        // Precarga de Turno de Trabajo
-                        //        if (medicoActual.TurnoDeTrabajoAsignado != null)
-                        //        {
-                        //            ddlTurnoTrabajo.SelectedValue = medicoActual.TurnoDeTrabajoAsignado.Id.ToString();
-                        //        }
-
-                        //        // Precarga de Disponibilidad Horaria (solo el primer bloque si hay más de uno)
-                        //        // Para manejar múltiples bloques se necesitaría un Repeater o lógica JS avanzada.
-                        //        if (medicoActual.HorariosDisponibles != null && medicoActual.HorariosDisponibles.Count > 0)
-                        //        {
-                        //            DisponibilidadHoraria primerHorario = medicoActual.HorariosDisponibles[0];
-                        //            lstDiaSemana.SelectedValue = primerHorario.DiaDeLaSemana.ToString();
-                        //            txtHoraInicioBloque.Text = primerHorario.HoraInicioBloque.ToString(@"hh\:mm"); // Formato HH:mm
-                        //            txtHoraFinBloque.Text = primerHorario.HoraFinBloque.ToString(@"hh\:mm");     // Formato HH:mm
-                        //        }
-
-                        // Si el modo es "ver", deshabilitar campos y ocultar botón de guardar
-                        if (Request.QueryString["modo"] == "ver")
-                        {
-                            DeshabilitarCampos();
-
-                            btnGuardar.Visible = false;
-                            // Mostrar panel de especialidades
-                            panelEspecialidades.Visible = true;
-                            alertaMensaje.Visible = false;
-                            // Obtener las especialidades del médico
-                            EspecialidadNegocio negocio = new EspecialidadNegocio();
-                            List<Especialidad> todasEspecialidades = negocio.Listar();
-                            List<int> idsEspecialidadesDelMedico = negocio.ListarIdsEspecialidadesPorMedico(idMedico);
-
-                            // Filtrar las que tiene el médico
-                            var especialidadesDelMedico = todasEspecialidades
-                                .Where(o => idsEspecialidadesDelMedico.Contains(o.Id))
-                                .ToList();
-
-                            // Mostrar como texto (ej: separado por comas)
-                            //   litEspecialidades.Text = string.Join(", ", especialidadesDelMedico.Select(o => o.Descripcion));
-                            litEspecialidades.Text = string.Join(" ", especialidadesDelMedico.Select(o =>
-           $"<span class='badge bg-secondary me-1'>{o.Descripcion}</span>"
-       ));
-                            litEspecialidades.Mode = LiteralMode.PassThrough;
-
-                        }
-                    }
-                    else
-                    {
-                        // Médico no encontrado
-                        Response.Redirect("Medicos.aspx", false); // Redirigir a la lista de médicos
-                    }
+                    // Deshabilitar localidad al inicio si no hay provincia seleccionada
+                    ddlLocalidad.Enabled = false;
                 }
-                catch (Exception ex)
+
+                ///Config. para modificar médico
+                if (Request.QueryString["id"] != null && !IsPostBack)
                 {
-                    // Manejo de errores al cargar datos del médico
-                    divMensaje.Attributes["class"] = "alert alert-danger";
-                    divMensaje.InnerText = "Error al cargar los datos del médico: " + ex.Message;
-                    divMensaje.Visible = true;
-                }
-            }
-            if (!IsPostBack && Request["agregarespecialidad"] != null)
-            {
-                try
-                {
-                    //btnAgregarEspecialidad.Visible = true;
-                    panelEspecialidades.Visible = true;
-                    botonesAgregarEspecialidad.Visible = true;
-                    alertaMensaje.Visible = false;
-                    Medico medico = new Medico();
-                    MedicosNegocio medicosNegocio = new MedicosNegocio();
-                    int idmedico;
-                    if (int.TryParse(Request["agregarespecialidad"], out idmedico))
+
+
+                    //precarga de datos
+
+                    try
                     {
-                        List<Medico> listaMedicos = medicosNegocio.ListarMedicos(idmedico);
+                        MedicosNegocio medicosNegocio = new MedicosNegocio();
+                        Medico medicoActual = new Medico();
+                        // Buscar el médico por ID
+                        int idMedico = int.Parse(Request.QueryString["id"].ToString());
+                        // Asume que ListarMedicos(id) devuelve una lista con un solo médico o null
+                        List<Medico> listaMedicos = medicosNegocio.ListarMedicos(idMedico);
                         if (listaMedicos != null && listaMedicos.Count > 0)
                         {
-                            medico = listaMedicos[0];
-                            medico.Id = idmedico;
+                            medicoActual = listaMedicos[0]; // Guardamos el médico en la propiedad de la página
+
+                            //if (medicoActual.Especialidades != null)
+                            //{
+                            //    foreach (Especialidad especialidadMedico in medicoActual.Especialidades)
+                            //    {
+                            //        ListItem item = lstEspecialidades.Items.FindByValue(especialidadMedico.Id.ToString());
+                            //        if (item != null)
+                            //        {
+                            //            item.Selected = true; // Selecciona la especialidad en el ListBox (ahora DropDownList)
+                            //        }
+                            //    }
+                            //}
+
+                            //        // Precarga de Datos Personales y Profesionales
+                            txtMatricula.Text = medicoActual.Matricula.ToString();
+                            txtNombre.Text = medicoActual.Nombre;
+                            txtApellido.Text = medicoActual.Apellido;
+                            txtDni.Text = medicoActual.Documento.ToString();
+                            txtFechaNacimiento.Text = medicoActual.FechaNacimiento.ToString("yyyy-MM-dd"); // Formato para input type="date"
+                            txtEmail.Text = medicoActual.Email;
+                            txtTelefono.Text = medicoActual.Telefono;
+                            ddlNacionalidad.SelectedValue = medicoActual.Nacionalidad;
+
+                            //        // Precarga de Domicilio
+                            ddlProvincia.SelectedValue = medicoActual.Provincia;
+                            await PopulateLocalidades(medicoActual.Provincia); // Cargar localidades antes de seleccionarla
+                            ddlLocalidad.SelectedValue = medicoActual.Localidad;
+                            ddlLocalidad.Enabled = true; // Habilitar la localidad
+                            txtCalle.Text = medicoActual.Calle; // Corregido de txtDireccion
+                            txtAltura.Text = medicoActual.Altura.ToString();
+                            txtCodPostal.Text = medicoActual.CodPostal;
+                            txtDepto.Text = medicoActual.Depto;
+
+
+                            //        // Precarga de Especialidades (Manejo de ListBox de selección múltiple)
+                            //        foreach (Especialidad especialidadMedico in medicoActual.Especialidades)
+                            //        {
+                            //            ListItem item = lstEspecialidades.Items.FindByValue(especialidadMedico.Id.ToString());
+                            //            if (item != null)
+                            //            {
+                            //                item.Selected = true; // Selecciona la especialidad en el ListBox
+                            //            }
+                            //        }
+
+                            //        // Precarga de Turno de Trabajo
+                            //        if (medicoActual.TurnoDeTrabajoAsignado != null)
+                            //        {
+                            //            ddlTurnoTrabajo.SelectedValue = medicoActual.TurnoDeTrabajoAsignado.Id.ToString();
+                            //        }
+
+                            //        // Precarga de Disponibilidad Horaria (solo el primer bloque si hay más de uno)
+                            //        // Para manejar múltiples bloques se necesitaría un Repeater o lógica JS avanzada.
+                            //        if (medicoActual.HorariosDisponibles != null && medicoActual.HorariosDisponibles.Count > 0)
+                            //        {
+                            //            DisponibilidadHoraria primerHorario = medicoActual.HorariosDisponibles[0];
+                            //            lstDiaSemana.SelectedValue = primerHorario.DiaDeLaSemana.ToString();
+                            //            txtHoraInicioBloque.Text = primerHorario.HoraInicioBloque.ToString(@"hh\:mm"); // Formato HH:mm
+                            //            txtHoraFinBloque.Text = primerHorario.HoraFinBloque.ToString(@"hh\:mm");     // Formato HH:mm
+                            //        }
+
+                            // Si el modo es "ver", deshabilitar campos y ocultar botón de guardar
+                            if (Request.QueryString["modo"] == "ver")
+                            {
+                                DeshabilitarCampos();
+
+                                btnGuardar.Visible = false;
+                                // Mostrar panel de especialidades
+                                panelEspecialidades.Visible = true;
+                                alertaMensaje.Visible = false;
+                                // Obtener las especialidades del médico
+                                EspecialidadNegocio negocio = new EspecialidadNegocio();
+                                List<Especialidad> todasEspecialidades = negocio.Listar();
+                                List<int> idsEspecialidadesDelMedico = negocio.ListarIdsEspecialidadesPorMedico(idMedico);
+
+                                // Filtrar las que tiene el médico
+                                var especialidadesDelMedico = todasEspecialidades
+                                    .Where(o => idsEspecialidadesDelMedico.Contains(o.Id))
+                                    .ToList();
+
+                                // Mostrar como texto (ej: separado por comas)
+                                //   litEspecialidades.Text = string.Join(", ", especialidadesDelMedico.Select(o => o.Descripcion));
+                                litEspecialidades.Text = string.Join(" ", especialidadesDelMedico.Select(o => $"<span class='badge bg-secondary me-1'>{o.Descripcion}</span>"));
+                                litEspecialidades.Mode = LiteralMode.PassThrough;
+
+                            }
                         }
-                        botonesAgregarEspecialidad.Visible = true;
-                        panelbotonesGuardarMedico.Visible = false;
-                        panelContacto.Visible = false;
-                        panelDomicilio.Visible = false;
-                        DeshabilitarCampos();
-                        txtMatricula.Text = medico.Matricula.ToString();
-                        txtNombre.Text = medico.Nombre;
-                        txtApellido.Text = medico.Apellido;
-                        txtDni.Text = medico.Documento.ToString();
-                    }
-
-                    EspecialidadNegocio negocio = new EspecialidadNegocio();
-                    List<Especialidad> lista = negocio.Listar();
-
-                    chkEspecialidades.DataSource = lista;
-                    chkEspecialidades.DataTextField = "Descripcion";
-                    chkEspecialidades.DataValueField = "ID";
-                    chkEspecialidades.DataBind();
-
-                    List<int> especialidadesAsociadas = negocio.ListarIdsEspecialidadesPorMedico(idmedico);
-                    foreach (ListItem item in chkEspecialidades.Items)
-                    {
-                        if (especialidadesAsociadas.Contains(int.Parse(item.Value)))
+                        else
                         {
-                            item.Selected = true;
+                            // Médico no encontrado
+                            Response.Redirect("Medicos.aspx", false); // Redirigir a la lista de médicos
                         }
                     }
-
+                    catch (Exception ex)
+                    {
+                        // Manejo de errores al cargar datos del médico
+                        divMensaje.Attributes["class"] = "alert alert-danger";
+                        divMensaje.InnerText = "Error al cargar los datos del médico: " + ex.Message;
+                        divMensaje.Visible = true;
+                    }
                 }
-                catch (Exception ex)
+                if (!IsPostBack && Request["agregarespecialidad"] != null)
                 {
+                    try
+                    {
+                        //btnAgregarEspecialidad.Visible = true;
+                        panelEspecialidades.Visible = true;
+                        botonesAgregarEspecialidad.Visible = true;
+                        alertaMensaje.Visible = false;
+                        Medico medico = new Medico();
+                        MedicosNegocio medicosNegocio = new MedicosNegocio();
+                        int idmedico;
+                        if (int.TryParse(Request["agregarespecialidad"], out idmedico))
+                        {
+                            List<Medico> listaMedicos = medicosNegocio.ListarMedicos(idmedico);
+                            if (listaMedicos != null && listaMedicos.Count > 0)
+                            {
+                                medico = listaMedicos[0];
+                                medico.Id = idmedico;
+                            }
+                            botonesAgregarEspecialidad.Visible = true;
+                            panelbotonesGuardarMedico.Visible = false;
+                            panelContacto.Visible = false;
+                            panelDomicilio.Visible = false;
+                            DeshabilitarCampos();
+                            txtMatricula.Text = medico.Matricula.ToString();
+                            txtNombre.Text = medico.Nombre;
+                            txtApellido.Text = medico.Apellido;
+                            txtDni.Text = medico.Documento.ToString();
+                        }
 
-                    throw ex;
+                        EspecialidadNegocio negocio = new EspecialidadNegocio();
+                        List<Especialidad> lista = negocio.Listar();
+
+                        chkEspecialidades.DataSource = lista;
+                        chkEspecialidades.DataTextField = "Descripcion";
+                        chkEspecialidades.DataValueField = "ID";
+                        chkEspecialidades.DataBind();
+
+                        List<int> especialidadesAsociadas = negocio.ListarIdsEspecialidadesPorMedico(idmedico);
+                        foreach (ListItem item in chkEspecialidades.Items)
+                        {
+                            if (especialidadesAsociadas.Contains(int.Parse(item.Value)))
+                            {
+                                item.Selected = true;
+                            }
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw ex;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+
+                Session.Add("error", "Error al cargar la pagina: " + ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
 
         }

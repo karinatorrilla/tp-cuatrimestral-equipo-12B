@@ -52,7 +52,15 @@ namespace tp_cuatrimestral_equipo_12B
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if ((int)Session["TipoUsuario"] == 3)
+            if (Session["TipoUsuario"] == null)
+            {
+                Session.Add("error", "Debes loguearte para ingresar.");
+                Response.Redirect("Error.aspx", false);
+                return;
+            }
+
+
+            if ((int)Session["TipoUsuario"] == 3)//medico
             {
                 if (Session["NombreMedico"] != null)
                 {
@@ -63,29 +71,11 @@ namespace tp_cuatrimestral_equipo_12B
                     lblTipoUsuario.Text = "¡Bienvenido/a Médico GENÉRICO!";
                 }
             }
-            else if ((int)Session["TipoUsuario"] == 2)
+            else if ((int)Session["TipoUsuario"] == 2)//recepcionista
             {
                 lblTipoUsuario.Text = "¡Bienvenido/a Recepcionista!";
-            }
-            else if ((int)Session["TipoUsuario"] == 1)
-            {
-                lblTipoUsuario.Text = "¡Bienvenido Administrador!";
-            }
-            else
-            {
-                Session.Add("error", "Debes loguearte para ingresar.");
-                Response.Redirect("Error.aspx", false);
-            }
-
-            if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 1) //visión del admin
-            {
-                divListadoGeneral.Visible = false; //ocultar la tabla de filtro
-                pnlGraficoAdmin.Visible = true;               
-            }
-            else
-            {
                 divListadoGeneral.Visible = true; //visión del recepcionista
-                pnlGraficoAdmin.Visible = false;                
+                pnlGraficoAdmin.Visible = false;
 
                 if (!IsPostBack)
                 {
@@ -103,21 +93,23 @@ namespace tp_cuatrimestral_equipo_12B
 
                 }
             }
-
-            if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 3) //visión del médico
+            else if ((int)Session["TipoUsuario"] == 1)//admin
             {
-                divListadoGeneral.Visible = true;
-                pnlGraficoAdmin.Visible = false;               
+                lblTipoUsuario.Text = "¡Bienvenido Administrador!";
 
-                if (!IsPostBack)
-                {
-
-                }
+                divListadoGeneral.Visible = false; //ocultar la tabla de filtro
+                pnlGraficoAdmin.Visible = true;
+            }
+            else
+            {
+                Session.Add("error", "Debes loguearte para ingresar.");
+                Response.Redirect("Error.aspx", false);
             }
 
-            //recupero las listas desde session
-            listaPaciente = (List<Paciente>)Session["Pacientes"];
-            listaMedico = (List<Medico>)Session["Medicos"];
+
+            ////recupero las listas desde session
+            //listaPaciente = (List<Paciente>)Session["Pacientes"];
+            //listaMedico = (List<Medico>)Session["Medicos"];
 
             //Muestra total de pacientes y medicos en las cards
             if (!IsPostBack)

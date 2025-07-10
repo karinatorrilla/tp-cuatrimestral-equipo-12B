@@ -80,7 +80,7 @@
                     <div class="col-md-2 d-flex align-items-end">
                         <asp:Button ID="btnFiltrarTurnos" runat="server" Text="Filtrar" CssClass="btn btn-primary w-100" />
                         <asp:Button ID="btnLimpiar" Text="Limpiar" runat="server" CssClass="btn btn-secondary w-100 ms-3" />
-                    </div>                                     
+                    </div>
                 </div>
                 <%} %>
 

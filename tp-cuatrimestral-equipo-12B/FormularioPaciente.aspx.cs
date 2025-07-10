@@ -37,22 +37,40 @@ namespace tp_cuatrimestral_equipo_12B
         }
         protected async void Page_Load(object sender, EventArgs e)
         {
-            ///config inicial
-            if (!IsPostBack)
+            try
             {
-                // Cargar provincias
-                await PopulateProvincias();
+
+                /*Solo puede ver esta pagina un usuario tipo admin(1) o recepcionista (2) */
+                if (Session["TipoUsuario"] == null)
+                {
+                    Session.Add("error", "Debes loguearte para ingresar.");
+                    Response.Redirect("Error.aspx", false);
+                    return;
+                }
+                else if ((int)Session["TipoUsuario"] != 1 &&  (int)Session["TipoUsuario"] != 2)
+                {
+                    Session.Add("error", "No tenes los permisos para acceder");
+                    Response.Redirect("Error.aspx", false);
+                    return;
+                }
+                /*Solo puede ver esta pagina un usuario tipo admin(1) o recepcionista (2) */
+
+                ///config inicial
+                if (!IsPostBack)
+                {
+                    // Cargar provincias
+                    await PopulateProvincias();
 
 
-                // Cargar obra social en el DropDownList
-                ObraSocialNegocio obraSocialNegocio = new ObraSocialNegocio();
-                ddlObraSocial.DataSource = obraSocialNegocio.Listar();
-                ddlObraSocial.DataValueField = "Id";
-                ddlObraSocial.DataTextField = "Descripcion";
-                ddlObraSocial.DataBind();
+                    // Cargar obra social en el DropDownList
+                    ObraSocialNegocio obraSocialNegocio = new ObraSocialNegocio();
+                    ddlObraSocial.DataSource = obraSocialNegocio.Listar();
+                    ddlObraSocial.DataValueField = "Id";
+                    ddlObraSocial.DataTextField = "Descripcion";
+                    ddlObraSocial.DataBind();
 
-                // Cargar nacionalidades en el DropDownList (lista hardcodeada)
-                List<string> listanacionalidades = new List<string>()
+                    // Cargar nacionalidades en el DropDownList (lista hardcodeada)
+                    List<string> listanacionalidades = new List<string>()
                 {
                 "Afgana", "Albana", "Alemana", "Andorrana", "Angoleña", "Antiguana", "Saudí", "Argelina", "Argentina", "Armenia",
                 "Australiana", "Austriaca", "Azerbaiyana", "Bahamesa", "Bangladesí", "Bareiní", "Belga", "Beliceña", "Beninesa",
@@ -77,68 +95,75 @@ namespace tp_cuatrimestral_equipo_12B
                 "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeca", "Vanuatense", "Vaticana", "Venezolana", "Vietnamita", "Yemení",
                 "Yibutiana", "Zambiana", "Zimbabuense"
                 };
-                ddlNacionalidad.DataSource = listanacionalidades;
-                ddlNacionalidad.DataBind();
+                    ddlNacionalidad.DataSource = listanacionalidades;
+                    ddlNacionalidad.DataBind();
 
 
-                // Deshabilitar localidad al inicio
-                ddlLocalidad.Enabled = false;
-            }
+                    // Deshabilitar localidad al inicio
+                    ddlLocalidad.Enabled = false;
+                }
 
-            ///config para modificar
-            if (Request.QueryString["id"] != null && !IsPostBack)
-            {
-                try
+                ///config para modificar
+                if (Request.QueryString["id"] != null && !IsPostBack)
                 {
-                   
-
-                    PacienteNegocio negocio = new PacienteNegocio();
-                    List<Paciente> lista = negocio.ListarPacientes(int.Parse(Request.QueryString["id"]));
-                    Paciente seleccionado = lista[0];
-
-                    string idProvincia = seleccionado.Provincia;
-                    ddlProvincia.SelectedValue = idProvincia;
-
-                    await PopulateLocalidades(idProvincia);
-
-                    string idLocalidad = seleccionado.Localidad;
-                    ddlLocalidad.SelectedValue = idLocalidad;
-                    ddlLocalidad.Enabled = true;
-
-
-                    //precarga de datos
-
-                    txtNombre.Text = seleccionado.Nombre;
-                    txtApellido.Text = seleccionado.Apellido;
-                    txtDni.Text = seleccionado.Documento.ToString();
-                    txtFechaNacimiento.Text = seleccionado.FechaNacimiento.ToString(("yyyy-MM-dd"));
-                    txtEmail.Text = seleccionado.Email;
-                    txtTelefono.Text = seleccionado.Telefono;
-                    ddlNacionalidad.SelectedValue = seleccionado.Nacionalidad;
-                    ddlObraSocial.SelectedValue = seleccionado.ObraSocial.ToString();
-                    txtDireccion.Text = seleccionado.Calle;
-                    txtAltura.Text = seleccionado.Altura.ToString();
-                    txtCodPostal.Text = seleccionado.CodPostal;
-                    txtDepto.Text = seleccionado.Depto;
-                    txtObservaciones.Text = seleccionado.Observaciones;
-
-                    if (Request.QueryString["modo"] == "ver")
+                    try
                     {
-                        DeshabilitarCampos();
-                        btnGuardar.Visible = false;  // Oculta botón de guardar
+
+
+                        PacienteNegocio negocio = new PacienteNegocio();
+                        List<Paciente> lista = negocio.ListarPacientes(int.Parse(Request.QueryString["id"]));
+                        Paciente seleccionado = lista[0];
+
+                        string idProvincia = seleccionado.Provincia;
+                        ddlProvincia.SelectedValue = idProvincia;
+
+                        await PopulateLocalidades(idProvincia);
+
+                        string idLocalidad = seleccionado.Localidad;
+                        ddlLocalidad.SelectedValue = idLocalidad;
+                        ddlLocalidad.Enabled = true;
+
+
+                        //precarga de datos
+
+                        txtNombre.Text = seleccionado.Nombre;
+                        txtApellido.Text = seleccionado.Apellido;
+                        txtDni.Text = seleccionado.Documento.ToString();
+                        txtFechaNacimiento.Text = seleccionado.FechaNacimiento.ToString(("yyyy-MM-dd"));
+                        txtEmail.Text = seleccionado.Email;
+                        txtTelefono.Text = seleccionado.Telefono;
+                        ddlNacionalidad.SelectedValue = seleccionado.Nacionalidad;
+                        ddlObraSocial.SelectedValue = seleccionado.ObraSocial.ToString();
+                        txtDireccion.Text = seleccionado.Calle;
+                        txtAltura.Text = seleccionado.Altura.ToString();
+                        txtCodPostal.Text = seleccionado.CodPostal;
+                        txtDepto.Text = seleccionado.Depto;
+                        txtObservaciones.Text = seleccionado.Observaciones;
+
+                        if (Request.QueryString["modo"] == "ver")
+                        {
+                            DeshabilitarCampos();
+                            btnGuardar.Visible = false;  // Oculta botón de guardar
+                        }
+
                     }
+                    catch (Exception ex)
+                    {
 
+                        throw ex;
+                    }
                 }
-                catch (Exception ex)
-                {
 
-                    throw ex;
-                }
+
+
+
             }
+            catch (Exception ex)
+            {
 
-
-            
-
+                Session.Add("error", "Error al cargar la pagina " + ex.Message);
+                Response.Redirect("Error.aspx", false);
+            }
         }
 
         private async Task PopulateProvincias()

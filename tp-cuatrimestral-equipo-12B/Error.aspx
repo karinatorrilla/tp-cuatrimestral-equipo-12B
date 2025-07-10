@@ -3,8 +3,9 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <h1>¡Hubo un problema!</h1>
-    <asp:Label Text="text" ID="lblMensaje" runat="server" />
+   <h1 id="tituloError" runat="server">¡Hubo un problema!</h1>
+
+    <asp:Label Text=" " ID="lblMensaje" runat="server" />
     <div class="col-md-4">
         <hr />
         <asp:Button Text="Volver" ID="btnVolver" CssClass="btn btn-primary px-5 me-3" OnClick="btnVolver_Click" runat="server" />

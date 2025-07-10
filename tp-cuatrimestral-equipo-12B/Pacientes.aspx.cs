@@ -17,11 +17,21 @@ namespace tp_cuatrimestral_equipo_12B
             try
             {
 
+                /*Solo puede ver esta pagina un usuario tipo admin(1) o recepcionista (2) */
                 if (Session["TipoUsuario"] == null)
                 {
                     Session.Add("error", "Debes loguearte para ingresar.");
                     Response.Redirect("Error.aspx", false);
+                    return;
                 }
+                else if ((int)Session["TipoUsuario"] != 1 &&  (int)Session["TipoUsuario"] != 2)
+                {
+                    Session.Add("error", "No tenes los permisos para acceder");
+                    Response.Redirect("Error.aspx", false);
+                    return;
+                }
+                /*Solo puede ver esta pagina un usuario tipo admin(1) o recepcionista (2) */
+
 
                 if (!IsPostBack && Request["eliminar"] != null)
                 {
@@ -57,7 +67,9 @@ namespace tp_cuatrimestral_equipo_12B
             catch (Exception ex)
             {
 
-                throw ex;
+
+                Session.Add("error", "Error al cargar la pagina: " + ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
 

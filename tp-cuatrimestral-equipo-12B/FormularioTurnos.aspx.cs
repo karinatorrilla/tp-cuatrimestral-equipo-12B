@@ -25,59 +25,78 @@ namespace tp_cuatrimestral_equipo_12B
         }
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["TipoUsuario"] == null)
+            try
             {
-                Session.Add("error", "Debes loguearte para ingresar.");
+
+                /*Solo puede ver esta pagina un usuario tipo admin(1) o recepcionista (2) */
+                if (Session["TipoUsuario"] == null)
+                {
+                    Session.Add("error", "Debes loguearte para ingresar.");
+                    Response.Redirect("Error.aspx", false);
+                    return;
+                }
+                else if ((int)Session["TipoUsuario"] != 1 &&  (int)Session["TipoUsuario"] != 2)
+                {
+                    Session.Add("error", "No tenes los permisos para acceder");
+                    Response.Redirect("Error.aspx", false);
+                    return;
+                }
+                /*Solo puede ver esta pagina un usuario tipo admin(1) o recepcionista (2) */
+
+                //Asignacion de turno
+                if (!IsPostBack && Request["darturno"] != null)
+                {
+                    try
+                    {
+                        /* Datos del paciente */
+
+                        DeshabilitarCampos();
+                        PacienteNegocio negocio = new PacienteNegocio();
+                        List<Paciente> lista = negocio.ListarPacientes(int.Parse(Request.QueryString["darturno"]));
+                        Paciente seleccionado = lista[0];
+
+                        txtNombre.Text = seleccionado.Nombre;
+                        txtApellido.Text = seleccionado.Apellido;
+                        txtDni.Text = seleccionado.Documento.ToString();
+                        txtEmail.Text = seleccionado.Email.ToString();
+                        txtFechaNacimiento.Text = seleccionado.FechaNacimiento.ToString(("yyyy-MM-dd"));
+                        /* Datos del paciente */
+
+                        /* Especialidad */
+                        panelAsignarTurno.Visible = true;
+                        EspecialidadNegocio negocioEsp = new EspecialidadNegocio();
+                        List<Especialidad> listaEsp = negocioEsp.ListaEspecialidadesAsignadas();
+                        ddlMedicos.Enabled = false;
+                        calTurno.CssClass += " calendar-disabled";
+                        ddlHorarios.Enabled = false;
+                        ddlEspecialidades.Items.Clear();
+                        ddlEspecialidades.Items.Add(new ListItem("-", "")); // Item por defecto
+                        ddlEspecialidades.DataSource = listaEsp;
+                        ddlEspecialidades.DataTextField = "Descripcion";
+                        ddlEspecialidades.DataValueField = "Id";
+                        ddlEspecialidades.DataBind();
+                        /* Especialidad */
+
+                        /* Sugerencias de horarios */
+                        CargarSugerencias(0); //No hay especialidad seleccionada
+
+                        /* Sugerencias de horarios */
+
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw ex;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", "Error al cargar la pagina : " + ex.Message);
                 Response.Redirect("Error.aspx", false);
             }
-            //Asignacion de turno
-            if (!IsPostBack && Request["darturno"] != null)
-            {
-                try
-                {
-                    /* Datos del paciente */
-
-                    DeshabilitarCampos();
-                    PacienteNegocio negocio = new PacienteNegocio();
-                    List<Paciente> lista = negocio.ListarPacientes(int.Parse(Request.QueryString["darturno"]));
-                    Paciente seleccionado = lista[0];
-
-                    txtNombre.Text = seleccionado.Nombre;
-                    txtApellido.Text = seleccionado.Apellido;
-                    txtDni.Text = seleccionado.Documento.ToString();
-                    txtEmail.Text = seleccionado.Email.ToString();
-                    txtFechaNacimiento.Text = seleccionado.FechaNacimiento.ToString(("yyyy-MM-dd"));
-                    /* Datos del paciente */
-
-                    /* Especialidad */
-                    panelAsignarTurno.Visible = true;
-                    EspecialidadNegocio negocioEsp = new EspecialidadNegocio();
-                    List<Especialidad> listaEsp = negocioEsp.ListaEspecialidadesAsignadas();
-                    ddlMedicos.Enabled = false;
-                    calTurno.CssClass += " calendar-disabled";
-                    ddlHorarios.Enabled = false;
-                    ddlEspecialidades.Items.Clear();
-                    ddlEspecialidades.Items.Add(new ListItem("-", "")); // Item por defecto
-                    ddlEspecialidades.DataSource = listaEsp;
-                    ddlEspecialidades.DataTextField = "Descripcion";
-                    ddlEspecialidades.DataValueField = "Id";
-                    ddlEspecialidades.DataBind();
-                    /* Especialidad */
-
-                    /* Sugerencias de horarios */
-                    CargarSugerencias(0); //No hay especialidad seleccionada
-
-                    /* Sugerencias de horarios */
-
-
-                }
-                catch (Exception ex)
-                {
-
-                    throw ex;
-                }
-            }
-            
         }
 
         private void CargarSugerencias(int idEspecialidadSeleccionada)
@@ -163,7 +182,7 @@ namespace tp_cuatrimestral_equipo_12B
                                 // Si ya tenemos la cantidad requerida de sugerencias salimos
                                 if (sugerenciasEncontradas.Count >= cantidadSugerenciasRequeridas)
                                 {
-                                    break; 
+                                    break;
                                 }
                             }
                         }
@@ -388,6 +407,6 @@ namespace tp_cuatrimestral_equipo_12B
 
         }
 
-        
+
     }
 }

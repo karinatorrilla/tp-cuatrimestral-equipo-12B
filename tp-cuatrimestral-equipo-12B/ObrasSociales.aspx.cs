@@ -18,6 +18,22 @@ namespace tp_cuatrimestral_equipo_12B
         {
             try
             {
+                /*Solo puede ver esta pagina un usuario tipo admin(1) o recepcionista (2) */
+                if (Session["TipoUsuario"] == null)
+                {
+                    Session.Add("error", "Debes loguearte para ingresar.");
+                    Response.Redirect("Error.aspx", false);
+                    return;
+                }
+                else if ((int)Session["TipoUsuario"] != 1 &&  (int)Session["TipoUsuario"] != 2)
+                {
+                    Session.Add("error", "No tenes los permisos para acceder");
+                    Response.Redirect("Error.aspx", false);
+                    return;
+                }
+                /*Solo puede ver esta pagina un usuario tipo admin(1) o recepcionista (2) */
+
+
                 ObraSocialNegocio negocio = new ObraSocialNegocio();
 
                 if (!IsPostBack)
@@ -135,9 +151,8 @@ namespace tp_cuatrimestral_equipo_12B
             }
             catch (Exception ex)
             {
-                lblMensaje.Visible = true;
-                lblMensaje.CssClass = "alert alert-danger d-block";
-                lblMensaje.Text = "Error general: " + ex.Message;
+                Session.Add("error", "Error al cargar la pagina: " + ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
 

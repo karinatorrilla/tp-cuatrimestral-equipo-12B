@@ -18,13 +18,23 @@ namespace tp_cuatrimestral_equipo_12B
 
             try
             {
-                MedicosNegocio medicoNegocio = new MedicosNegocio();
+                /*Solo puede ver esta pagina un usuario tipo admin(1) o recepcionista (2) */
                 if (Session["TipoUsuario"] == null)
                 {
                     Session.Add("error", "Debes loguearte para ingresar.");
                     Response.Redirect("Error.aspx", false);
                     return;
                 }
+                else if ((int)Session["TipoUsuario"] != 1 &&  (int)Session["TipoUsuario"] != 2)
+                {
+                    Session.Add("error", "No tenes los permisos para acceder");
+                    Response.Redirect("Error.aspx", false);
+                    return;
+                }
+                /*Solo puede ver esta pagina un usuario tipo admin(1) o recepcionista (2) */
+
+                MedicosNegocio medicoNegocio = new MedicosNegocio();
+
 
                 if (!IsPostBack)
                 {
@@ -176,8 +186,9 @@ namespace tp_cuatrimestral_equipo_12B
             catch (Exception ex)
             {
 
-                Session.Add("error", "Error al cargar el listado de médicos: " + ex.Message);
                 listaMedico = new List<Medico>();
+                Session.Add("error", "Error al cargar el listado de médicos: " + ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
 
         }
@@ -262,7 +273,7 @@ namespace tp_cuatrimestral_equipo_12B
             {
                 string filtrarPor = ddlFiltro.SelectedValue;
                 string textoBusqueda = txtFiltro.Text.Trim().ToLower();
-                             
+
                 CargarMedicos(); //inicializo lista con todos los médicos, especialidades y disponibilidad
                 CargarEspecialidades();
 

@@ -33,6 +33,7 @@
 
                 <div class="d-grid gap-2">
                     <asp:Button Text="Ingresar" CssClass="btn btn-primary btn-lg" ID="btnLogin" OnClick="btnLogin_Click" runat="server" />
+                    <a href="RecuperarPassword.aspx">Olvidaste la contraseña?</a>
                 </div>
             </div>
         </div>

@@ -16,7 +16,12 @@ namespace tp_cuatrimestral_equipo_12B
             if (Session["error"] != null)
             {
                 lblMensaje.Text = Session["error"].ToString();
-            }         
+            }
+            else
+            {
+                tituloError.InnerText = "Tienes que iniciar sesion";
+            }
+                   
 
         }
 
