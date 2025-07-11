@@ -286,7 +286,38 @@ namespace negocio
             }
         }
 
+        public Medico buscarCorreo(string datoAbuscar)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            Medico medico = new Medico();
+            try
+            {
+                string consulta = "select U.IdMedico, M.Nombre,M.Apellido,M.Email from USUARIOS as U inner join MEDICOS AS M ON U.IDMedico=M.ID where M.Email = @Dato OR U.Usuario=@Dato";
 
+                datos.setearConsulta(consulta);
+                datos.setearParametro("@Dato", datoAbuscar);
+
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    medico.Nombre = (string)datos.Lector["Nombre"];
+                    medico.Apellido = (string)datos.Lector["Apellido"];
+                    medico.Email=(string)datos.Lector["Email"];
+
+                }
+                return medico;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
 

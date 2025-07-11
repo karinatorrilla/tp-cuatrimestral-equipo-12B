@@ -31,7 +31,7 @@
                     <asp:Label ID="lblErrorLogin" runat="server" Text="Error al ingresar los datos, usuario o contraseña incorrecta" CssClass="text-danger" Visible="false" />
                 </div>
 
-                <div class="d-grid gap-2">
+                <div class="text-center d-grid gap-2">
                     <asp:Button Text="Ingresar" CssClass="btn btn-primary btn-lg" ID="btnLogin" OnClick="btnLogin_Click" runat="server" />
                     <a href="RecuperarPassword.aspx">Olvidaste la contraseña?</a>
                 </div>

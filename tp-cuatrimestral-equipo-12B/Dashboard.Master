@@ -27,8 +27,17 @@
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="Inicio.aspx">Inicio</a>
                         </li>
-                        <%if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] != 3)
-                            { %>
+
+                        <%if (Session["TipoUsuario"] != null)
+                            {
+                                if ((int)Session["TipoUsuario"] == 3)
+                                { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="Turnos.aspx">Turnos</a>
+                        </li>
+                        <%}
+                            else
+                            {  %>
                         <li class="nav-item">
                             <a class="nav-link" href="Pacientes.aspx">Pacientes</a>
                         </li>
@@ -42,12 +51,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="ObrasSociales.aspx">Obra Social</a>
                         </li>
-                        <%   }%>
-
-                        <li class="nav-item">
+                            <li class="nav-item">
                             <a class="nav-link" href="Turnos.aspx">Turnos</a>
                         </li>
-
+                        <%}
+                            } %>
                     </ul>
                 </div>
                 <%-- Botón de Cerrar Sesión --%>
