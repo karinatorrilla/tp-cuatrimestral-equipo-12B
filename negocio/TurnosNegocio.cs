@@ -104,6 +104,27 @@ namespace negocio
             }
         }
 
+        public void CambiarEstadoTurno(int idTurno, EstadoTurno nuevoEstado)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("UPDATE TURNOS SET Estado = @estado WHERE Id = @idTurno");
+                datos.setearParametro("@estado", (int)nuevoEstado);
+                datos.setearParametro("@idTurno", idTurno);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al cambiar estado del turno: " + ex.Message, ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
         public List<Turno> ListarTurnos(int idMedico = 0, DateTime? fecha = null)
         {
             List<Turno> lista = new List<Turno>();

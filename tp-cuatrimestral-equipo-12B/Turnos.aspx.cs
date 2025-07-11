@@ -41,6 +41,27 @@ namespace tp_cuatrimestral_equipo_12B
                     {                    
                         listaTurno = negocio.ListarTurnos();
                     }
+
+                    if (Request["cancelar"] != null)
+                    {
+                        int id = int.Parse(Request["cancelar"]);
+                        new TurnosNegocio().CambiarEstadoTurno(id, EstadoTurno.Cancelado);
+                        listaTurno = negocio.ListarTurnos();
+                    }
+
+                    if (Request["inasistencia"] != null)
+                    {
+                        int id = int.Parse(Request["inasistencia"]);
+                        new TurnosNegocio().CambiarEstadoTurno(id, EstadoTurno.Inasistencia);
+                        listaTurno = negocio.ListarTurnos();
+                    }
+
+                    if (Request["cerrar"] != null)
+                    {
+                        int id = int.Parse(Request["cerrar"]);
+                        new TurnosNegocio().CambiarEstadoTurno(id, EstadoTurno.Cerrado);
+                        listaTurno = negocio.ListarTurnos();
+                    }
                 }
 
             }
