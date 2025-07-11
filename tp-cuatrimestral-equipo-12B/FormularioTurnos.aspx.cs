@@ -77,6 +77,7 @@ namespace tp_cuatrimestral_equipo_12B
 
                     try
                     {
+                        TurnosNegocio negociosTurno = new TurnosNegocio();
                         /* Datos del paciente */
 
                         DeshabilitarCampos();
@@ -558,7 +559,44 @@ namespace tp_cuatrimestral_equipo_12B
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
+            Turno nuevoTurno = new Turno();
+            TurnosNegocio negocioTurno = new TurnosNegocio();
 
+            try
+            {
+                nuevoTurno.Fecha = calTurno.SelectedDate;
+                nuevoTurno.Hora = int.Parse(ddlHorarios.SelectedValue);
+
+                int idPaciente = int.Parse(Request.QueryString["darturno"]);
+                int idMedico = int.Parse(ddlMedicos.SelectedValue);
+                int idEspecialidad = int.Parse(ddlEspecialidades.SelectedValue);
+
+                nuevoTurno.Paciente = new Paciente { Id = idPaciente };
+                nuevoTurno.Medico = new Medico { Id = idMedico };
+                nuevoTurno.Especialidad = new Especialidad { Id = idEspecialidad };
+
+                nuevoTurno.Observaciones = txtObservaciones.Text;
+
+                nuevoTurno.Estado = EstadoTurno.Nuevo;
+
+                if (negocioTurno.AgregarTurno(nuevoTurno))
+                {
+                    divMensaje.Attributes["class"] = "alert alert-success";
+                    divMensaje.InnerText = "Turno registrado con éxito.";
+                    btnGuardar.Visible = false;
+                }
+                else
+                {
+                    divMensaje.Attributes["class"] = "alert alert-danger";
+                    divMensaje.InnerText = "No se pudo registrar el turno.";
+                }
+                divMensaje.Visible = true;
+
+            }
+            catch (Exception ex)
+            {
+                divMensaje.InnerText = "Error inesperado: " + ex.Message;
+            }
         }
 
     }

@@ -74,7 +74,36 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
-        
+
+        public bool AgregarTurno(Turno nuevo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("INSERT INTO TURNOS (IdMedico, IdPaciente, IdEspecialidad, Fecha, Hora, Observaciones, Estado) " +
+                                     "VALUES (@idMedico, @idPaciente, @idEspecialidad, @fecha, @hora, @observaciones, @estado)");
+
+                datos.setearParametro("@idMedico", nuevo.Medico.Id);
+                datos.setearParametro("@idPaciente", nuevo.Paciente.Id);
+                datos.setearParametro("@idEspecialidad", nuevo.Especialidad.Id);
+                datos.setearParametro("@fecha", nuevo.Fecha.Date);
+                datos.setearParametro("@hora", nuevo.Hora);
+                datos.setearParametro("@observaciones", string.IsNullOrEmpty(nuevo.Observaciones) ? DBNull.Value : (object)nuevo.Observaciones);
+                datos.setearParametro("@estado", (int)nuevo.Estado);
+
+                datos.ejecutarAccion();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al guardar el turno: " + ex.Message, ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
         public List<Turno> ListarTurnos(int idMedico = 0, DateTime? fecha = null)
         {
             List<Turno> lista = new List<Turno>();

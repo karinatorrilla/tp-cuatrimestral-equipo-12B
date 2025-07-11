@@ -35,6 +35,8 @@
         <%  }  %>
     </div>
 
+    <div id="divMensaje" runat="server" class="alert" visible="false"></div>
+
     <div class="p-4 rounded bg-white shadow-sm">
         <%-- Sección de Datos Personales --%>
         <h3 class="mb-4 text-dark">Datos del Paciente</h3>
