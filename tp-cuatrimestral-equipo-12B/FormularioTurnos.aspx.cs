@@ -69,6 +69,89 @@ namespace tp_cuatrimestral_equipo_12B
                         rptSugerencias.DataSource = null;
                         rptSugerencias.DataBind();
                     }
+
+                    if (Request.QueryString["id"] != null)
+                    {
+                        int idTurno = int.Parse(Request.QueryString["id"]);
+                        TurnosNegocio turnoNegocio = new TurnosNegocio();
+                        Turno turno = turnoNegocio.ListarTurnos().FirstOrDefault(t => t.Id == idTurno);
+
+                        if (turno != null)
+                        {
+                            // Datos del paciente
+                            DeshabilitarCampos();
+                            txtNombre.Text = turno.Paciente.Nombre;
+                            txtApellido.Text = turno.Paciente.Apellido;
+                            txtDni.Text = turno.Paciente.Documento.ToString();
+                            txtEmail.Text = turno.Paciente.Email;
+                            txtFechaNacimiento.Text = turno.Paciente.FechaNacimiento.ToString("yyyy-MM-dd");
+
+                            // Datos del turno
+                            txtObservaciones.Text = turno.Observaciones;
+
+                            // Carga de especialidades
+                            ddlEspecialidades.Items.Clear();
+                            ddlEspecialidades.Items.Add(new ListItem("-", ""));
+                            EspecialidadNegocio espNegocio = new EspecialidadNegocio();
+                            ddlEspecialidades.DataSource = espNegocio.ListaEspecialidadesAsignadas();
+                            ddlEspecialidades.DataTextField = "Descripcion";
+                            ddlEspecialidades.DataValueField = "Id";
+                            ddlEspecialidades.DataBind();
+                            ddlEspecialidades.SelectedValue = turno.Especialidad.Id.ToString();
+
+                            // Carga de médicos
+                            MedicosNegocio medicoNegocio = new MedicosNegocio();
+                            List<Medico> medicos = medicoNegocio.listarMedicosPorEspecialidad(turno.Especialidad.Id);
+                            ddlMedicos.Items.Clear();
+                            ddlMedicos.Items.Add(new ListItem("Seleccione Médico", ""));
+                            ddlMedicos.DataSource = medicos;
+                            ddlMedicos.DataTextField = "NombreCompleto";
+                            ddlMedicos.DataValueField = "Id";
+                            ddlMedicos.DataBind();
+                            ddlMedicos.SelectedValue = turno.Medico.Id.ToString();
+                            Session["IdMedicoSeleccionado"] = turno.Medico.Id;
+                            DisponibilidadHorariaNegocio disponibilidadNegocio = new DisponibilidadHorariaNegocio();
+                            List<DisponibilidadHoraria> disponibilidad = disponibilidadNegocio.ListarPorMedico(turno.Medico.Id);
+                            Session["DiasTrabajaMedico"] = disponibilidad.Select(d => d.DiaDeLaSemana).ToList();
+
+                            // Fecha y horario
+                            calTurno.SelectedDate = turno.Fecha;
+                            ddlHorarios.Items.Clear();
+                            ddlHorarios.Items.Add(new ListItem(turno.Hora.ToString("00") + ":00", turno.Hora.ToString()));
+                            ddlHorarios.SelectedValue = turno.Hora.ToString();
+
+
+                            string modo = Request.QueryString["modo"];
+
+                            if (modo == "ver")
+                            {
+                                // deshabilito los campos que faltan deshabilitar
+                                ddlEspecialidades.Enabled = false;
+                                ddlMedicos.Enabled = false;
+                                calTurno.Enabled = false;
+                                ddlHorarios.Enabled = false;
+                                txtObservaciones.Enabled = false;
+                                btnGuardar.Visible = false;
+                            }
+                            else if (modo == "editar")
+                            {
+                                // Reprogramar turno
+                                ddlEspecialidades.Enabled = false;
+                                ddlMedicos.Enabled = true;
+                                calTurno.Enabled = true;
+                                ddlHorarios.Enabled = true;
+                                txtObservaciones.Enabled = true;
+                                btnGuardar.Visible = true;
+
+                                // Sugerencias
+                                ViewState["EspecialidadSeleccionadaId"] = turno.Especialidad.Id;
+                                CargarSugerencias(turno.Especialidad.Id);
+
+                                ScriptManager.RegisterStartupScript(this, GetType(), "AbrirSugerenciasEditar",
+                                    "$('#panelsStayOpen-collapseTwo').collapse('show');", true);
+                            }
+                        }
+                    }
                 }
 
                 //Asignacion de turno
@@ -559,43 +642,81 @@ namespace tp_cuatrimestral_equipo_12B
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
-            Turno nuevoTurno = new Turno();
             TurnosNegocio negocioTurno = new TurnosNegocio();
+            Turno turnoActual = new Turno();
 
             try
             {
-                nuevoTurno.Fecha = calTurno.SelectedDate;
-                nuevoTurno.Hora = int.Parse(ddlHorarios.SelectedValue);
-
-                int idPaciente = int.Parse(Request.QueryString["darturno"]);
-                int idMedico = int.Parse(ddlMedicos.SelectedValue);
-                int idEspecialidad = int.Parse(ddlEspecialidades.SelectedValue);
-
-                nuevoTurno.Paciente = new Paciente { Id = idPaciente };
-                nuevoTurno.Medico = new Medico { Id = idMedico };
-                nuevoTurno.Especialidad = new Especialidad { Id = idEspecialidad };
-
-                nuevoTurno.Observaciones = txtObservaciones.Text;
-
-                nuevoTurno.Estado = EstadoTurno.Nuevo;
-
-                if (negocioTurno.AgregarTurno(nuevoTurno))
-                {
-                    divMensaje.Attributes["class"] = "alert alert-success";
-                    divMensaje.InnerText = "Turno registrado con éxito.";
-                    btnGuardar.Visible = false;
-                }
-                else
+                // Validar seleccionados
+                if (calTurno.SelectedDate == DateTime.MinValue || string.IsNullOrEmpty(ddlHorarios.SelectedValue))
                 {
                     divMensaje.Attributes["class"] = "alert alert-danger";
-                    divMensaje.InnerText = "No se pudo registrar el turno.";
+                    divMensaje.InnerText = "Debe seleccionar una fecha y horario válido.";
+                    divMensaje.Visible = true;
+                    return;
                 }
-                divMensaje.Visible = true;
 
+                turnoActual.Fecha = calTurno.SelectedDate;
+                turnoActual.Hora = int.Parse(ddlHorarios.SelectedValue);
+
+                int idMedico = int.Parse(ddlMedicos.SelectedValue);
+                int idEspecialidad = int.Parse(ddlEspecialidades.SelectedValue);
+                turnoActual.Medico = new Medico { Id = idMedico };
+                turnoActual.Especialidad = new Especialidad { Id = idEspecialidad };
+
+                turnoActual.Observaciones = txtObservaciones.Text;
+
+                if (Request.QueryString["modo"] == "editar" && Request.QueryString["id"] != null)
+                {
+                    // Reprogramar
+                    int idTurno = int.Parse(Request.QueryString["id"]);
+                    turnoActual.Id = idTurno;
+
+                    Turno turnoOriginal = negocioTurno.ListarTurnos().FirstOrDefault(t => t.Id == idTurno);
+                    if (turnoOriginal == null)
+                    {
+                        divMensaje.Attributes["class"] = "alert alert-danger";
+                        divMensaje.InnerText = "No se encontró el turno a modificar.";
+                        divMensaje.Visible = true;
+                        return;
+                    }
+
+                    turnoActual.Paciente = turnoOriginal.Paciente;
+                    turnoActual.Estado = EstadoTurno.Reprogramado;
+
+                    negocioTurno.ReprogramarTurno(turnoActual);
+
+                    divMensaje.Attributes["class"] = "alert alert-success";
+                    divMensaje.InnerText = "Turno reprogramado con éxito.";
+                    btnGuardar.Visible = false;
+                }
+                else if (Request.QueryString["darturno"] != null)
+                {
+                    // Alta nueva
+                    int idPaciente = int.Parse(Request.QueryString["darturno"]);
+                    turnoActual.Paciente = new Paciente { Id = idPaciente };
+                    turnoActual.Estado = EstadoTurno.Nuevo;
+
+                    if (negocioTurno.AgregarTurno(turnoActual))
+                    {
+                        divMensaje.Attributes["class"] = "alert alert-success";
+                        divMensaje.InnerText = "Turno registrado con éxito.";
+                        btnGuardar.Visible = false;
+                    }
+                    else
+                    {
+                        divMensaje.Attributes["class"] = "alert alert-danger";
+                        divMensaje.InnerText = "No se pudo registrar el turno.";
+                    }
+                }
+
+                divMensaje.Visible = true;
             }
             catch (Exception ex)
             {
+                divMensaje.Attributes["class"] = "alert alert-danger";
                 divMensaje.InnerText = "Error inesperado: " + ex.Message;
+                divMensaje.Visible = true;
             }
         }
 

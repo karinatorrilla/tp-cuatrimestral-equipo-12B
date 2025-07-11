@@ -104,6 +104,33 @@ namespace negocio
             }
         }
 
+        public void ReprogramarTurno(Turno actualizado)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("UPDATE TURNOS SET IdMedico = @idMedico, IdEspecialidad = @idEspecialidad, Fecha = @fecha, Hora = @hora, Observaciones = @observaciones, Estado = @estado WHERE Id = @idTurno");
+                datos.setearParametro("@idMedico", actualizado.Medico.Id);
+                datos.setearParametro("@idEspecialidad", actualizado.Especialidad.Id);
+                datos.setearParametro("@fecha", actualizado.Fecha.Date);
+                datos.setearParametro("@hora", actualizado.Hora);
+                datos.setearParametro("@observaciones", string.IsNullOrEmpty(actualizado.Observaciones) ? DBNull.Value : (object)actualizado.Observaciones);
+                datos.setearParametro("@estado", (int)actualizado.Estado);
+                datos.setearParametro("@idTurno", actualizado.Id);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al reprogramar el turno: " + ex.Message, ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
         public void CambiarEstadoTurno(int idTurno, EstadoTurno nuevoEstado)
         {
             AccesoDatos datos = new AccesoDatos();
