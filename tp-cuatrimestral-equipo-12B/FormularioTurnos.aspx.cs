@@ -9,8 +9,15 @@ using System.Web.UI.WebControls;
 
 namespace tp_cuatrimestral_equipo_12B
 {
+    
+
     public partial class FormularioTurnos : System.Web.UI.Page
     {
+        public class SugerenciaTurno
+        {
+            public string TextoDisplay { get; set; }
+            public string CommandArgumentValue { get; set; }
+        }
 
         // Deshabilitar todos los textbox y ddl del formulario
         private void DeshabilitarCampos()
@@ -22,6 +29,11 @@ namespace tp_cuatrimestral_equipo_12B
             txtEmail.Enabled = false;
 
             //txtObservaciones.Enabled = false;
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            rptSugerencias.ItemCommand += rptSugerencias_ItemCommand;
         }
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -43,9 +55,26 @@ namespace tp_cuatrimestral_equipo_12B
                 }
                 /*Solo puede ver esta pagina un usuario tipo admin(1) o recepcionista (2) */
 
+                if (!IsPostBack)
+                {
+                    // Verificar si hay una especialidad seleccionada
+                    if (ddlEspecialidades.SelectedValue != "")
+                    {
+                        int idEspecialidad = int.Parse(ddlEspecialidades.SelectedValue);
+                        CargarSugerencias(idEspecialidad);
+                    }
+                    else
+                    {
+                        // No hay especialidad seleccionada, limpiar el Repeater
+                        rptSugerencias.DataSource = null;
+                        rptSugerencias.DataBind();
+                    }
+                }
+
                 //Asignacion de turno
                 if (!IsPostBack && Request["darturno"] != null)
                 {
+
                     try
                     {
                         /* Datos del paciente */
@@ -78,9 +107,25 @@ namespace tp_cuatrimestral_equipo_12B
                         /* Especialidad */
 
                         /* Sugerencias de horarios */
-                        CargarSugerencias(0); //No hay especialidad seleccionada
 
-                        /* Sugerencias de horarios */
+                        if (!string.IsNullOrEmpty(ddlEspecialidades.SelectedValue))
+                        {
+                            int idEspecialidadInicial;
+                            if (int.TryParse(ddlEspecialidades.SelectedValue, out idEspecialidadInicial))
+                            {
+                                // Guarda el ID de la especialidad seleccionada en ViewState
+                                ViewState["EspecialidadSeleccionadaId"] = idEspecialidadInicial;
+                                CargarSugerencias(idEspecialidadInicial);
+                            }
+                            else
+                            {
+                                CargarSugerencias(0); //No hay especialidad seleccionada
+                            }
+                        }
+                        else
+                        {
+                            CargarSugerencias(0); //No hay especialidad seleccionada
+                        }
 
 
                     }
@@ -88,6 +133,24 @@ namespace tp_cuatrimestral_equipo_12B
                     {
 
                         throw ex;
+                    }
+                }
+                else if (ViewState["EspecialidadSeleccionadaId"] != null)
+                {
+                    CargarSugerencias((int)ViewState["EspecialidadSeleccionadaId"]);
+                }
+                else 
+                {
+                    
+                    if (ViewState["EspecialidadSeleccionadaId"] != null)
+                    {
+                        int idEspecialidad = (int)ViewState["EspecialidadSeleccionadaId"];
+                        CargarSugerencias(idEspecialidad); // Llama a cargar las sugerencias para reconstruir el Repeater
+                    }
+                    else
+                    {
+                        
+                        CargarSugerencias(0);
                     }
                 }
 
@@ -101,13 +164,13 @@ namespace tp_cuatrimestral_equipo_12B
 
         private void CargarSugerencias(int idEspecialidadSeleccionada)
         {
-            divContenedorSugerencias.Controls.Clear(); // Limpiar cualquier contenido previo
+            List<SugerenciaTurno> sugerenciasParaRepeater = new List<SugerenciaTurno>();
 
             if (idEspecialidadSeleccionada == 0)
             {
-                divContenedorSugerencias.Controls.Add(new LiteralControl(
-                    "<div class='alert alert-info' role='alert'>Debe seleccionar una Especialidad para ver sugerencias de horarios.</div>"
-                ));
+
+                rptSugerencias.DataSource = null; // Limpiar el Repeater
+                rptSugerencias.DataBind();
                 return;
             }
 
@@ -121,46 +184,36 @@ namespace tp_cuatrimestral_equipo_12B
             int cantidadSugerenciasRequeridas = 3;
             int limiteDiasBusqueda = 60; // Buscar en los próximos 60 días
 
-            // Comenzar la búsqueda desde mañana si ya es tarde hoy, o desde hoy si aún hay tiempo.
             DateTime fechaActual = DateTime.Today;
-            // Si ya son más de las 23:00 (23 PM), la búsqueda debería empezar desde mañana.
-            if (DateTime.Now.Hour >= 23) // Usamos DateTime.Now para la hora actual
+            if (DateTime.Now.Hour >= 18)
             {
                 fechaActual = fechaActual.AddDays(1);
             }
 
-
-            // Busqueda de Sugerencias
             for (int i = 0; i < limiteDiasBusqueda && sugerenciasEncontradas.Count < cantidadSugerenciasRequeridas; i++)
             {
                 DateTime fechaBusqueda = fechaActual.AddDays(i);
                 DayOfWeek diaDeLaSemana = fechaBusqueda.DayOfWeek;
 
-                // (1=Lunes ..... 7=Domingo)
                 int diaDeLaSemanaInt = (int)diaDeLaSemana;
-                if (diaDeLaSemanaInt == 0) // Si es 0, lo convertimos a 7
+                if (diaDeLaSemanaInt == 0)
                     diaDeLaSemanaInt = 7;
 
                 foreach (Medico medico in medicosPorEspecialidad)
                 {
-
                     List<DisponibilidadHoraria> bloquesDisponiblesMedicoCompleto = dhNegocio.ListarPorMedico(medico.Id);
                     List<DisponibilidadHoraria> bloquesDisponiblesParaEsteDia = bloquesDisponiblesMedicoCompleto
                         .Where(b => b.DiaDeLaSemana == diaDeLaSemanaInt)
                         .ToList();
-
 
                     foreach (DisponibilidadHoraria bloque in bloquesDisponiblesParaEsteDia)
                     {
                         int horaInicioBloque = bloque.HoraInicioBloque.Hours;
                         int horaFinBloque = bloque.HoraFinBloque.Hours;
 
-                        //Gnerar horarios dentro del rango dfel medico
                         List<int> horariosPotenciales = new List<int>();
                         for (int hora = horaInicioBloque; hora < horaFinBloque; hora++)
                         {
-                            // Si la fecha de busqueda es hoy entopnces omitir horarios que ya pasaron
-                            // Tambien, si la búsqueda empieza desde hoy (fechaActual es hoy) y el horario ya pasó, se ignora.
                             if (fechaBusqueda.Date == DateTime.Today.Date && hora <= DateTime.Now.Hour)
                             {
                                 continue;
@@ -168,18 +221,14 @@ namespace tp_cuatrimestral_equipo_12B
                             horariosPotenciales.Add(hora);
                         }
 
-                        //Obtenemos los turnos ya ocupados para este médico y esta fecha
                         List<int> horasOcupadas = turnosNegocio.listarHorasOcupadas(medico.Id, fechaBusqueda);
 
-                        //Filtrar los horarios potenciales para encontrar los realmente disponibles
                         foreach (int horaPotencial in horariosPotenciales)
                         {
                             if (!horasOcupadas.Contains(horaPotencial))
                             {
-                                // Encuentra horarios disponible
                                 sugerenciasEncontradas.Add(Tuple.Create(fechaBusqueda, horaPotencial, medico));
 
-                                // Si ya tenemos la cantidad requerida de sugerencias salimos
                                 if (sugerenciasEncontradas.Count >= cantidadSugerenciasRequeridas)
                                 {
                                     break;
@@ -188,26 +237,23 @@ namespace tp_cuatrimestral_equipo_12B
                         }
                         if (sugerenciasEncontradas.Count >= cantidadSugerenciasRequeridas)
                         {
-                            break; // Sale de bloques de disponibilidad
+                            break;
                         }
                     }
                     if (sugerenciasEncontradas.Count >= cantidadSugerenciasRequeridas)
                     {
-                        break; // Sale de médicos
+                        break;
                     }
                 }
             }
 
-            // Ordenar las sugerencias por fecha y hora de más próxima a más lejana
             sugerenciasEncontradas = sugerenciasEncontradas
-                .OrderBy(s => s.Item1) // Ordenar por fecha
-                .ThenBy(s => s.Item2) // Luego por hora
+                .OrderBy(s => s.Item1)
+                .ThenBy(s => s.Item2)
                 .ToList();
 
-            //Mostrar las sugerencias en tu divContenedorSugerencias
             if (sugerenciasEncontradas.Any())
             {
-                // Tomamos solo las primeras cantidadSugerenciasRequeridas
                 foreach (var sugerencia in sugerenciasEncontradas.Take(cantidadSugerenciasRequeridas))
                 {
                     DateTime fechaTurno = sugerencia.Item1;
@@ -217,26 +263,111 @@ namespace tp_cuatrimestral_equipo_12B
                     string horaDisplay = $"{horaTurno:00}:00 hs";
                     string fechaDisplay = fechaTurno.ToString("dd/MM/yyyy");
 
-                    Button btnSugerencia = new Button
+                    sugerenciasParaRepeater.Add(new SugerenciaTurno
                     {
-                        ID = "btnSugerencia_" + Guid.NewGuid().ToString("N"),
-                        Text = $"{medicoSugerido.NombreCompleto} - {horaDisplay} - {fechaDisplay}",
-                        CssClass = "btn btn-outline-secondary me-2 my-1 btn-custom-suggestion",
-                        CommandName = "SeleccionarSugerencia",
-                        CommandArgument = $"{medicoSugerido.Id}|{fechaTurno.ToString("yyyy-MM-dd")}|{horaTurno}"
-                    };
-
-                    divContenedorSugerencias.Controls.Add(btnSugerencia);
+                        TextoDisplay = $"{medicoSugerido.NombreCompleto} - {horaDisplay} - {fechaDisplay}",
+                        CommandArgumentValue = $"{medicoSugerido.Id}|{fechaTurno.ToString("yyyy-MM-dd")}|{horaTurno}"
+                    });
                 }
+
             }
-            else
+ 
+
+            rptSugerencias.DataSource = sugerenciasParaRepeater;
+            rptSugerencias.DataBind();
+        }
+
+        protected void rptSugerencias_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            // Verifica que el comando sea el esperado
+            if (e.CommandName == "SeleccionarSugerencia")
             {
-                divContenedorSugerencias.Controls.Add(new LiteralControl(
-                    "<div class='alert alert-warning' role='alert'>No se encontraron sugerencias de horarios para esta especialidad en los próximos días.</div>"
-                ));
+                string commandArg = e.CommandArgument.ToString();
+
+
+                // Crea un CommandEventArgs con el CommandName y CommandArgument recibidos.
+                CommandEventArgs customEventArgs = new CommandEventArgs(e.CommandName, commandArg);
+
+                // Llama a BtnSugerencia_Click
+                BtnSugerencia_Click(source, customEventArgs);
             }
         }
 
+
+        protected void BtnSugerencia_Click(object sender, CommandEventArgs e)
+        {
+            // Capturo los datos del CommandArgument
+            string[] args = e.CommandArgument.ToString().Split('|');
+
+            if (args.Length == 3)
+            {
+                string idMedicoStr = args[0];
+                string fechaStr = args[1];
+                string horaStr = args[2];
+
+                if (!int.TryParse(ddlEspecialidades.SelectedValue, out int idEspecialidad) || idEspecialidad <= 0)
+                {
+                    return;
+                }
+
+                if (!int.TryParse(idMedicoStr, out int idMedico))
+                {
+                    return;
+                }
+                if (!DateTime.TryParse(fechaStr, out DateTime fechaSugerida))
+                {
+                    return;
+                }
+
+                MedicosNegocio medicoNegocio = new MedicosNegocio();
+                List<Medico> listaMedicos = medicoNegocio.listarMedicosPorEspecialidad(idEspecialidad);
+
+                ddlMedicos.Items.Clear();
+                ddlMedicos.Items.Add(new ListItem("Seleccione Médico", ""));
+                ddlMedicos.DataSource = listaMedicos;
+                ddlMedicos.DataTextField = "NombreCompleto";
+                ddlMedicos.DataValueField = "Id";
+                ddlMedicos.DataBind();
+                ddlMedicos.Enabled = true;
+
+                try
+                {
+                    ddlMedicos.SelectedValue = idMedico.ToString();
+                    ddlMedicos_SelectedIndexChanged(ddlMedicos, EventArgs.Empty);
+                }
+                catch (Exception ex)
+                {
+                    return;
+                }
+
+                calTurno.SelectedDates.Clear();
+                calTurno.SelectedDate = fechaSugerida;
+                calTurno_SelectionChanged(calTurno, EventArgs.Empty);
+
+                int horaNumericaSugerida;
+                if (horaStr.Contains(":"))
+                {
+                    horaNumericaSugerida = TimeSpan.Parse(horaStr).Hours;
+                }
+                else
+                {
+                    horaNumericaSugerida = int.Parse(horaStr);
+                }
+
+                try
+                {
+                    ddlHorarios.SelectedValue = horaNumericaSugerida.ToString();
+                }
+                catch (Exception ex)
+                {
+                    
+                }
+
+                ScriptManager.RegisterStartupScript(this, GetType(), "ToggleAccordionPanels",
+                    "$('#panelsStayOpen-collapseTwo').collapse('hide'); $('#panelsStayOpen-collapseThree').collapse('show');", true);
+
+            }
+        }
 
 
         protected void ddlEspecialidades_SelectedIndexChanged(object sender, EventArgs e)
@@ -245,6 +376,9 @@ namespace tp_cuatrimestral_equipo_12B
             //valida si no eligió especialidad
             if (!int.TryParse(ddlEspecialidades.SelectedValue, out int idEspecialidad) || idEspecialidad <= 0)
             {
+                ViewState["EspecialidadSeleccionadaId"] = null;
+                // Si la especialidad no es válida, muestra el mensaje de "Debe seleccionar..."
+                CargarSugerencias(0);
                 ddlMedicos.Items.Clear();
                 ddlMedicos.Items.Add(new ListItem("Seleccione Médico", ""));
                 ddlHorarios.Items.Clear();
@@ -253,14 +387,15 @@ namespace tp_cuatrimestral_equipo_12B
                 ddlHorarios.Enabled = false;
                 calTurno.CssClass += " calendar-disabled";
 
-
-                // Si la especialidad no es válida, muestra el mensaje de "Debe seleccionar..."
-                CargarSugerencias(0);
-                ScriptManager.RegisterStartupScript(this, GetType(), "ToggleAccordion", "$('#panelsStayOpen-collapseTwo').collapse('hide');", true);
                 updSugerencias.Update(); // Forzar la actualización del UpdatePanel de sugerencias
+
+                // Cierra el acordeón de sugerencias si no hay especialidad seleccionada
+                ScriptManager.RegisterStartupScript(this, GetType(), "CerrarSugerencias",
+                    "$('#panelsStayOpen-collapseTwo').collapse('hide');", true);
 
                 return;
             }
+
 
             // Si se seleccionó una especialidad válida
             MedicosNegocio negocio = new MedicosNegocio();
@@ -281,13 +416,23 @@ namespace tp_cuatrimestral_equipo_12B
             ddlHorarios.Items.Add(new ListItem("Seleccione Horario", ""));
             ddlHorarios.Enabled = false;
 
-            // Llamar al método para cargar las sugerencias con la especialidad seleccionada
-            CargarSugerencias(idEspecialidad);
-
-            // Asegúrate de expandir el panel de sugerencias (colapso 2)
-            ScriptManager.RegisterStartupScript(this, GetType(), "ToggleAccordion", "$('#panelsStayOpen-collapseTwo').collapse('show');", true);
+            if (int.TryParse(ddlEspecialidades.SelectedValue, out idEspecialidad))
+            {
+                
+                ViewState["EspecialidadSeleccionadaId"] = idEspecialidad;
+                CargarSugerencias(idEspecialidad);
+            }
+            else
+            {
+                // Si no hay una especialidad válida seleccionada (ej. el item "-"),
+                // limpia el ViewState y las sugerencias.
+                ViewState["EspecialidadSeleccionadaId"] = null; // O establece a 0, según tu lógica
+                CargarSugerencias(0);
+            }
 
             updSugerencias.Update(); // Forzar la actualización del UpdatePanel de sugerencias
+            ScriptManager.RegisterStartupScript(this, GetType(), "AbrirSugerencias",
+                "$('#panelsStayOpen-collapseTwo').collapse('show');", true);
 
         }
 
@@ -338,7 +483,7 @@ namespace tp_cuatrimestral_equipo_12B
                 diaSemana = 7;
             }
 
-            if (e.Day.Date <= DateTime.Today) //si el día es anterior o igual a hoy, deshabilitar
+            if (e.Day.Date < DateTime.Today) //si el día es anterior a hoy, deshabilitar
             {
                 e.Day.IsSelectable = false;
                 e.Cell.ForeColor = System.Drawing.Color.LightGray;
@@ -350,6 +495,9 @@ namespace tp_cuatrimestral_equipo_12B
                 e.Day.IsSelectable = false;
                 e.Cell.ForeColor = System.Drawing.Color.LightGray;
             }
+
+            ScriptManager.RegisterStartupScript(this, GetType(), "AbrirObservaciones",
+                "$('#panelsStayOpen-collapseFour').collapse('show');", true);
         }
 
         protected void calTurno_SelectionChanged(object sender, EventArgs e)
@@ -407,6 +555,11 @@ namespace tp_cuatrimestral_equipo_12B
 
         }
 
+
+        protected void btnGuardar_Click(object sender, EventArgs e)
+        {
+
+        }
 
     }
 }

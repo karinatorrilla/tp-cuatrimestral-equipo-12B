@@ -101,8 +101,6 @@
                                 </asp:DropDownList>
                             </div>
 
-                            
-
                         </div>
                     </div>
                 </div>
@@ -116,37 +114,47 @@
                     </h2>
                     <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
                         <div class="accordion-body">
-                            <%--<h5>Si desea puede seleccionar uno de estos 3 horarios sugeridos o cargar de manera manual en el siguiente paso:</h5>--%>
-                           <!--Inserta 3 horarios proximos sugeridos por el sistema -->
-                           
-                            <asp:UpdatePanel ID="updSugerencias" runat="server" UpdateMode="Conditional">
+                            <asp:UpdatePanel ID="updSugerencias" runat="server" UpdateMode="Conditional" EnableViewState="true">
                                 <ContentTemplate>
                                     <asp:Panel ID="panelSugerencias" runat="server" CssClass="mt-3">
-                                        <div id="divContenedorSugerencias" runat="server" class="d-flex flex-wrap">
-                                            <%-- Aca se cargan los botones de sugerencia --%>
-                                        </div>
+                                        <asp:Repeater ID="rptSugerencias" runat="server" EnableViewState="true" OnItemCommand="rptSugerencias_ItemCommand">
+                                            <HeaderTemplate>
+                                                <div class="d-flex flex-wrap">
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <asp:Button runat="server"
+                                                    ID="btnSugerencia"
+                                                    UseSubmitBehavior="false"
+                                                    Text='<%# Eval("TextoDisplay") %>'
+                                                    CssClass="btn btn-outline-secondary me-2 my-1 btn-custom-suggestion"
+                                                    CommandName="SeleccionarSugerencia"
+                                                    CommandArgument='<%# Eval("CommandArgumentValue") %>' />
+                                            </ItemTemplate>
+                                            <FooterTemplate>
+                                                </div>
+                                            </FooterTemplate>
+                                        </asp:Repeater>
+
                                     </asp:Panel>
                                 </ContentTemplate>
                                 <Triggers>
-                                    <%-- Se actualiza cuando cambia el ddlEspecialidades --%>
                                     <asp:AsyncPostBackTrigger ControlID="ddlEspecialidades" EventName="SelectedIndexChanged" />
                                 </Triggers>
+
                             </asp:UpdatePanel>
-                            <asp:Button Text="Asignar Turno" runat="server" />
-                            <asp:Button Text="Siguiente paso sin sugerencias" runat="server" />
                         </div>
                     </div>
                 </div>
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                            CARGA MANUAL DEL MÉDICO A PARTIR DE LA ESPECIALIDAD SELECCIONADA (si no le sirven los 3 horarios sugeridos)
+                            CARGAR EL MÉDICO A PARTIR DE LA ESPECIALIDAD SELECCIONADA (si no le sirven los 3 horarios sugeridos)
                         </button>
                     </h2>
                     <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
 
                         <%--encerramos el calendario para que no recargue toda la pagina--%>
-                        <asp:UpdatePanel runat="server">
+                        <asp:UpdatePanel ID="updCargaManual" runat="server" EnableViewState="true">
                             <ContentTemplate>
 
                                 <div class="accordion-body">
@@ -154,7 +162,7 @@
                                     <!-- Médico (aparece después de elegir la especialidad!!) -->
                                     <div class="col-md-4 mb-3">
                                         <label for="ddlMedicos" class="form-label font-weight-bold text-dark">Médico</label>
-                                        <asp:DropDownList ID="ddlMedicos" runat="server" CssClass="form-control" AppendDataBoundItems="true" required="true" AutoPostBack="true" OnSelectedIndexChanged="ddlMedicos_SelectedIndexChanged">
+                                        <asp:DropDownList ID="ddlMedicos" runat="server" CssClass="form-control" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlMedicos_SelectedIndexChanged">
                                             <asp:ListItem Text="Seleccione Médico" Value=""></asp:ListItem>
                                         </asp:DropDownList>
                                     </div>
@@ -179,8 +187,6 @@
                                 </div>
                             </ContentTemplate>
                         </asp:UpdatePanel>
-                        <%--encerramos el calendario para que no recargue toda la pagina--%>
-                        <button type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">*ok* cerrar 2 y abrir 3</button>
                     </div>
                 </div>
                 <div class="accordion-item">
@@ -195,26 +201,26 @@
                             <div class="row g-3 mb-4">
                                 <div class="col-md-12">
                                     <label for="txtObservaciones" class="form-label font-weight-bold text-dark">Notas del turno</label>
-                                    <asp:TextBox ID="txtObservaciones" runat="server" TextMode="MultiLine" Rows="5" CssClass="form-control" />
+                                    <asp:TextBox ID="txtObservaciones" runat="server" TextMode="MultiLine" Rows="5" CssClass="form-control"  placeholder="Escriba aquí por que el paciente solicita turno..." required="true" />
                                 </div>
                             </div>
                         </div>
-                        <button>resumen</button>
                     </div>
                 </div>
+
+                <%-- Contenedor de Botones --%>
+                <div class="d-flex justify-content-center mt-4">
+                    <asp:Button Text="Guardar" ID="btnGuardar" CssClass="btn btn-primary px-5 me-3" runat="server" OnClick="btnGuardar_Click" />
+                    <a href="Pacientes.aspx" class="btn btn-secondary px-5">Volver</a>
+                </div>
+
+
             </div>
             <!-- Acordeon de Turno Paciente -->
         </asp:Panel>
 
-        
-
-
-
-
 
     </div>
-
-
 
 
 </asp:Content>

@@ -175,8 +175,9 @@
     color: #333;
 }
 
-.btn-custom-suggestion:hover,
-.btn-custom-suggestion:focus {
-    background-color: #21457a;
-    border-color: #21457a;
-    color: #ffffff;
+    .btn-custom-suggestion:hover,
+    .btn-custom-suggestion:focus {
+        background-color: #21457a;
+        border-color: #21457a;
+        color: #ffffff;
+    }

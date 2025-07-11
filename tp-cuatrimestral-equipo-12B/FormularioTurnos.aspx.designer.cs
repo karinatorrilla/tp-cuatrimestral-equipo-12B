@@ -105,13 +105,22 @@ namespace tp_cuatrimestral_equipo_12B
         protected global::System.Web.UI.WebControls.Panel panelSugerencias;
 
         /// <summary>
-        /// divContenedorSugerencias control.
+        /// rptSugerencias control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divContenedorSugerencias;
+        protected global::System.Web.UI.WebControls.Repeater rptSugerencias;
+
+        /// <summary>
+        /// updCargaManual control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel updCargaManual;
 
         /// <summary>
         /// ddlMedicos control.
@@ -148,5 +157,14 @@ namespace tp_cuatrimestral_equipo_12B
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtObservaciones;
+
+        /// <summary>
+        /// btnGuardar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGuardar;
     }
 }
