@@ -286,13 +286,13 @@ namespace negocio
             }
         }
 
-        public Medico buscarCorreo(string datoAbuscar)
+        public Medico buscarCorreoUsuario(string datoAbuscar)
         {
             AccesoDatos datos = new AccesoDatos();
             Medico medico = new Medico();
             try
             {
-                string consulta = "select U.IdMedico, M.Nombre,M.Apellido,M.Email from USUARIOS as U inner join MEDICOS AS M ON U.IDMedico=M.ID where M.Email = @Dato OR U.Usuario=@Dato";
+                string consulta = "select U.IdMedico, M.Nombre,M.Apellido,M.Email from USUARIOS as U inner join MEDICOS AS M ON U.IDMedico=M.ID where (M.Email = @Dato OR U.Usuario=@Dato) AND M.Habilitado = 1";
 
                 datos.setearConsulta(consulta);
                 datos.setearParametro("@Dato", datoAbuscar);
@@ -301,6 +301,7 @@ namespace negocio
 
                 while (datos.Lector.Read())
                 {
+                    medico.Id = (int)datos.Lector["IdMedico"];
                     medico.Nombre = (string)datos.Lector["Nombre"];
                     medico.Apellido = (string)datos.Lector["Apellido"];
                     medico.Email=(string)datos.Lector["Email"];
@@ -318,6 +319,9 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+
+       
+
     }
 }
 

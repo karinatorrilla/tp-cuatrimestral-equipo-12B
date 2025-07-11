@@ -1,6 +1,6 @@
 USE [master]
 GO
-/****** Object:  Database [CLINICA_DB]    Script Date: 8/7/2025 00:27:33 ******/
+/****** Object:  Database [CLINICA_DB]    Script Date: 11/7/2025 00:42:12 ******/
 CREATE DATABASE [CLINICA_DB]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -82,7 +82,7 @@ ALTER DATABASE [CLINICA_DB] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANU
 GO
 USE [CLINICA_DB]
 GO
-/****** Object:  Table [dbo].[ESPECIALIDADES]    Script Date: 8/7/2025 00:27:33 ******/
+/****** Object:  Table [dbo].[ESPECIALIDADES]    Script Date: 11/7/2025 00:42:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -97,7 +97,7 @@ CREATE TABLE [dbo].[ESPECIALIDADES](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[MEDICOS]    Script Date: 8/7/2025 00:27:33 ******/
+/****** Object:  Table [dbo].[MEDICOS]    Script Date: 11/7/2025 00:42:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -130,7 +130,7 @@ CREATE TABLE [dbo].[MEDICOS](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[MEDICOxDISPONIBILIDADHORARIA]    Script Date: 8/7/2025 00:27:33 ******/
+/****** Object:  Table [dbo].[MEDICOxDISPONIBILIDADHORARIA]    Script Date: 11/7/2025 00:42:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -148,7 +148,7 @@ CREATE TABLE [dbo].[MEDICOxDISPONIBILIDADHORARIA](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[MEDICOxESPECIALIDAD]    Script Date: 8/7/2025 00:27:33 ******/
+/****** Object:  Table [dbo].[MEDICOxESPECIALIDAD]    Script Date: 11/7/2025 00:42:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -164,7 +164,7 @@ CREATE TABLE [dbo].[MEDICOxESPECIALIDAD](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[OBRASOCIAL]    Script Date: 8/7/2025 00:27:33 ******/
+/****** Object:  Table [dbo].[OBRASOCIAL]    Script Date: 11/7/2025 00:42:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -175,7 +175,7 @@ CREATE TABLE [dbo].[OBRASOCIAL](
 	[Habilitado] [bit] NOT NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[PACIENTES]    Script Date: 8/7/2025 00:27:34 ******/
+/****** Object:  Table [dbo].[PACIENTES]    Script Date: 11/7/2025 00:42:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -204,7 +204,24 @@ CREATE TABLE [dbo].[PACIENTES](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TURNOS]    Script Date: 8/7/2025 00:27:34 ******/
+/****** Object:  Table [dbo].[TokensRecuperacion]    Script Date: 11/7/2025 00:42:12 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TokensRecuperacion](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[IDMedico] [int] NOT NULL,
+	[Token] [nvarchar](100) NOT NULL,
+	[FechaGenerado] [datetime] NOT NULL,
+	[Usado] [bit] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TURNOS]    Script Date: 11/7/2025 00:42:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -220,7 +237,7 @@ CREATE TABLE [dbo].[TURNOS](
 	[Estado] [int] NOT NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[USUARIOS]    Script Date: 8/7/2025 00:27:34 ******/
+/****** Object:  Table [dbo].[USUARIOS]    Script Date: 11/7/2025 00:42:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -259,7 +276,7 @@ SET IDENTITY_INSERT [dbo].[ESPECIALIDADES] OFF
 GO
 SET IDENTITY_INSERT [dbo].[MEDICOS] ON 
 GO
-INSERT [dbo].[MEDICOS] ([Id], [Matricula], [Nombre], [Apellido], [Documento], [Email], [Telefono], [Nacionalidad], [Provincia], [Localidad], [Calle], [Altura], [CodPostal], [Depto], [FechaNacimiento], [EspecialidadesIDs], [IDTurnoTrabajo], [DiasDisponiblesIDs], [HoraInicioBloque], [HoraFinBloque], [Habilitado]) VALUES (10, 1234, N'Lucía', N'González', 30555666, N'lucia.gonzalez@clinica.com', N'1122334455', N'Argentina', N'Buenos Aires', N'La Plata', N'Calle 12', 456, N'1900', N'3B', CAST(N'1980-06-15' AS Date), NULL, NULL, NULL, NULL, NULL, 1)
+INSERT [dbo].[MEDICOS] ([Id], [Matricula], [Nombre], [Apellido], [Documento], [Email], [Telefono], [Nacionalidad], [Provincia], [Localidad], [Calle], [Altura], [CodPostal], [Depto], [FechaNacimiento], [EspecialidadesIDs], [IDTurnoTrabajo], [DiasDisponiblesIDs], [HoraInicioBloque], [HoraFinBloque], [Habilitado]) VALUES (10, 1234, N'Lucía', N'González', 30555666, N'lucasalegresebas@gmail.com', N'1122334455', N'Argentina', N'Buenos Aires', N'La Plata', N'Calle 12', 456, N'1900', N'3B', CAST(N'1980-06-15' AS Date), NULL, NULL, NULL, NULL, NULL, 1)
 GO
 INSERT [dbo].[MEDICOS] ([Id], [Matricula], [Nombre], [Apellido], [Documento], [Email], [Telefono], [Nacionalidad], [Provincia], [Localidad], [Calle], [Altura], [CodPostal], [Depto], [FechaNacimiento], [EspecialidadesIDs], [IDTurnoTrabajo], [DiasDisponiblesIDs], [HoraInicioBloque], [HoraFinBloque], [Habilitado]) VALUES (11, 5678, N'Martín', N'Pérez', 28999111, N'martin.perez@clinica.com', N'1133445566', N'Argentina', N'Córdoba', N'Córdoba', N'Av. Colón', 1023, N'5000', NULL, CAST(N'1975-09-22' AS Date), NULL, NULL, NULL, NULL, NULL, 1)
 GO
@@ -268,6 +285,8 @@ GO
 INSERT [dbo].[MEDICOS] ([Id], [Matricula], [Nombre], [Apellido], [Documento], [Email], [Telefono], [Nacionalidad], [Provincia], [Localidad], [Calle], [Altura], [CodPostal], [Depto], [FechaNacimiento], [EspecialidadesIDs], [IDTurnoTrabajo], [DiasDisponiblesIDs], [HoraInicioBloque], [HoraFinBloque], [Habilitado]) VALUES (13, 4321, N'Carlos', N'Suárez', 27777888, N'carlos.suarez@clinica.com', N'1177889900', N'Argentina', N'Santa Fe', N'Rosario', N'Mitre', 321, N'2000', NULL, CAST(N'1982-11-30' AS Date), NULL, NULL, NULL, NULL, NULL, 1)
 GO
 INSERT [dbo].[MEDICOS] ([Id], [Matricula], [Nombre], [Apellido], [Documento], [Email], [Telefono], [Nacionalidad], [Provincia], [Localidad], [Calle], [Altura], [CodPostal], [Depto], [FechaNacimiento], [EspecialidadesIDs], [IDTurnoTrabajo], [DiasDisponiblesIDs], [HoraInicioBloque], [HoraFinBloque], [Habilitado]) VALUES (14, 6543, N'Soledad', N'Ramírez', 32222333, N'soledad.ramirez@clinica.com', N'1199001122', N'Argentina', N'Salta', N'Salta', N'Av. Belgrano', 777, N'4400', N'2C', CAST(N'1990-01-25' AS Date), NULL, NULL, NULL, NULL, NULL, 1)
+GO
+INSERT [dbo].[MEDICOS] ([Id], [Matricula], [Nombre], [Apellido], [Documento], [Email], [Telefono], [Nacionalidad], [Provincia], [Localidad], [Calle], [Altura], [CodPostal], [Depto], [FechaNacimiento], [EspecialidadesIDs], [IDTurnoTrabajo], [DiasDisponiblesIDs], [HoraInicioBloque], [HoraFinBloque], [Habilitado]) VALUES (15, 3312, N'NuevoMedico', N'Prueb', 33123312, N'nuevomed@gmail.com', N'1133123312', N'Burundesa', N'06', N'0651501002', N'Calle prueba', 3312, N'1757', N'', CAST(N'1993-12-21' AS Date), NULL, NULL, NULL, NULL, NULL, 1)
 GO
 SET IDENTITY_INSERT [dbo].[MEDICOS] OFF
 GO
@@ -301,6 +320,8 @@ INSERT [dbo].[MEDICOxDISPONIBILIDADHORARIA] ([Id], [MedicoId], [DiaDeLaSemana], 
 GO
 INSERT [dbo].[MEDICOxDISPONIBILIDADHORARIA] ([Id], [MedicoId], [DiaDeLaSemana], [HoraInicioBloque], [HoraFinBloque], [Habilitado]) VALUES (19, 14, 5, CAST(N'12:00:00' AS Time), CAST(N'18:00:00' AS Time), 1)
 GO
+INSERT [dbo].[MEDICOxDISPONIBILIDADHORARIA] ([Id], [MedicoId], [DiaDeLaSemana], [HoraInicioBloque], [HoraFinBloque], [Habilitado]) VALUES (20, 15, 2, CAST(N'10:00:00' AS Time), CAST(N'20:00:00' AS Time), 1)
+GO
 SET IDENTITY_INSERT [dbo].[MEDICOxDISPONIBILIDADHORARIA] OFF
 GO
 SET IDENTITY_INSERT [dbo].[MEDICOxESPECIALIDAD] ON 
@@ -327,6 +348,8 @@ INSERT [dbo].[MEDICOxESPECIALIDAD] ([Id], [MedicoId], [EspecialidadId], [Habilit
 GO
 INSERT [dbo].[MEDICOxESPECIALIDAD] ([Id], [MedicoId], [EspecialidadId], [Habilitado]) VALUES (71, 14, 6, 1)
 GO
+INSERT [dbo].[MEDICOxESPECIALIDAD] ([Id], [MedicoId], [EspecialidadId], [Habilitado]) VALUES (72, 15, 4, 1)
+GO
 SET IDENTITY_INSERT [dbo].[MEDICOxESPECIALIDAD] OFF
 GO
 SET IDENTITY_INSERT [dbo].[OBRASOCIAL] ON 
@@ -337,9 +360,9 @@ INSERT [dbo].[OBRASOCIAL] ([ID], [Descripcion], [Habilitado]) VALUES (3, N'OSDE'
 GO
 INSERT [dbo].[OBRASOCIAL] ([ID], [Descripcion], [Habilitado]) VALUES (4, N'Galeno', 1)
 GO
-INSERT [dbo].[OBRASOCIAL] ([ID], [Descripcion], [Habilitado]) VALUES (5, N'Swiss', 1)
+INSERT [dbo].[OBRASOCIAL] ([ID], [Descripcion], [Habilitado]) VALUES (5, N'Swiss', 0)
 GO
-INSERT [dbo].[OBRASOCIAL] ([ID], [Descripcion], [Habilitado]) VALUES (6, N'Swiss', 1)
+INSERT [dbo].[OBRASOCIAL] ([ID], [Descripcion], [Habilitado]) VALUES (6, N'Swiss', 0)
 GO
 SET IDENTITY_INSERT [dbo].[OBRASOCIAL] OFF
 GO
@@ -357,11 +380,13 @@ INSERT [dbo].[PACIENTES] ([Id], [Nombre], [Apellido], [Documento], [Email], [Tel
 GO
 SET IDENTITY_INSERT [dbo].[PACIENTES] OFF
 GO
-SET IDENTITY_INSERT [dbo].[TURNOS] ON 
+SET IDENTITY_INSERT [dbo].[TokensRecuperacion] ON 
 GO
-INSERT [dbo].[TURNOS] ([Id], [IdMedico], [IdPaciente], [IdEspecialidad], [Fecha], [Hora], [Observaciones], [Estado]) VALUES (1, 10, 3, N'1         ', CAST(N'2025-10-10' AS Date), 15, N'Observacion numero uno del medico', 1)
+INSERT [dbo].[TokensRecuperacion] ([ID], [IDMedico], [Token], [FechaGenerado], [Usado]) VALUES (13, 10, N'45cc5f06-8a1b-476f-8093-79608567d2db', CAST(N'2025-07-11T00:34:13.420' AS DateTime), 0)
 GO
-SET IDENTITY_INSERT [dbo].[TURNOS] OFF
+INSERT [dbo].[TokensRecuperacion] ([ID], [IDMedico], [Token], [FechaGenerado], [Usado]) VALUES (14, 10, N'd5ee681b-60fc-4c6a-8b47-f890af7a27a7', CAST(N'2025-07-11T00:38:13.107' AS DateTime), 0)
+GO
+SET IDENTITY_INSERT [dbo].[TokensRecuperacion] OFF
 GO
 SET IDENTITY_INSERT [dbo].[USUARIOS] ON 
 GO
@@ -371,7 +396,7 @@ INSERT [dbo].[USUARIOS] ([Id], [Usuario], [Pass], [TipoUser], [IDMedico]) VALUES
 GO
 INSERT [dbo].[USUARIOS] ([Id], [Usuario], [Pass], [TipoUser], [IDMedico]) VALUES (3, N'med', N'med', 3, NULL)
 GO
-INSERT [dbo].[USUARIOS] ([Id], [Usuario], [Pass], [TipoUser], [IDMedico]) VALUES (4, N'med10', N'med10', 3, 10)
+INSERT [dbo].[USUARIOS] ([Id], [Usuario], [Pass], [TipoUser], [IDMedico]) VALUES (4, N'med10', N'lucas', 3, 10)
 GO
 INSERT [dbo].[USUARIOS] ([Id], [Usuario], [Pass], [TipoUser], [IDMedico]) VALUES (5, N'med11', N'med11', 3, 11)
 GO
@@ -383,22 +408,30 @@ INSERT [dbo].[USUARIOS] ([Id], [Usuario], [Pass], [TipoUser], [IDMedico]) VALUES
 GO
 SET IDENTITY_INSERT [dbo].[USUARIOS] OFF
 GO
-/****** Object:  Index [UQ__MEDICOS__0FB9FB4FACB9FFCB]    Script Date: 8/7/2025 00:27:34 ******/
+/****** Object:  Index [UQ__MEDICOS__0FB9FB4FACB9FFCB]    Script Date: 11/7/2025 00:42:12 ******/
 ALTER TABLE [dbo].[MEDICOS] ADD UNIQUE NONCLUSTERED 
 (
 	[Matricula] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
-/****** Object:  Index [UQ__MEDICOS__0FB9FB4FD60FF0AE]    Script Date: 8/7/2025 00:27:34 ******/
+/****** Object:  Index [UQ__MEDICOS__0FB9FB4FD60FF0AE]    Script Date: 11/7/2025 00:42:12 ******/
 ALTER TABLE [dbo].[MEDICOS] ADD UNIQUE NONCLUSTERED 
 (
 	[Matricula] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
-/****** Object:  Index [UQ_MEDICOS_Documento]    Script Date: 8/7/2025 00:27:34 ******/
+/****** Object:  Index [UQ_MEDICOS_Documento]    Script Date: 11/7/2025 00:42:12 ******/
 ALTER TABLE [dbo].[MEDICOS] ADD  CONSTRAINT [UQ_MEDICOS_Documento] UNIQUE NONCLUSTERED 
 (
 	[Documento] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UQ__TokensRe__1EB4F817CD9448F1]    Script Date: 11/7/2025 00:42:12 ******/
+ALTER TABLE [dbo].[TokensRecuperacion] ADD UNIQUE NONCLUSTERED 
+(
+	[Token] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[ESPECIALIDADES] ADD  CONSTRAINT [DF_ESPECIALIDADES_Habilitado]  DEFAULT ((1)) FOR [Habilitado]
@@ -413,7 +446,9 @@ ALTER TABLE [dbo].[OBRASOCIAL] ADD  CONSTRAINT [DF_OBRASOCIAL_Habilitado]  DEFAU
 GO
 ALTER TABLE [dbo].[PACIENTES] ADD  DEFAULT ((1)) FOR [Habilitado]
 GO
-ALTER TABLE [dbo].[TURNOS] ADD  CONSTRAINT [DF_TURNOS_Observaciones]  DEFAULT ('No hay observaciones') FOR [Observaciones]
+ALTER TABLE [dbo].[TokensRecuperacion] ADD  DEFAULT (getdate()) FOR [FechaGenerado]
+GO
+ALTER TABLE [dbo].[TokensRecuperacion] ADD  DEFAULT ((0)) FOR [Usado]
 GO
 ALTER TABLE [dbo].[TURNOS] ADD  CONSTRAINT [DF_TURNOS_Estado]  DEFAULT ((1)) FOR [Estado]
 GO
