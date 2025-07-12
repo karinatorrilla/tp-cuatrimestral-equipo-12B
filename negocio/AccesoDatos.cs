@@ -20,7 +20,7 @@ namespace negocio
         {
             get { return lector; }
         }
-        
+
         public AccesoDatos()
         {
             conexion = new SqlConnection("server=.\\SQLEXPRESS; database=CLINICA_DB; integrated security=true");
@@ -67,6 +67,22 @@ namespace negocio
             catch (Exception ex)
             {
 
+                throw ex;
+            }
+        }
+
+        public int ejecutarAccionScalar()
+        {
+            comando.Connection = conexion;
+            try
+            {
+                conexion.Open();
+                object result = comando.ExecuteScalar();
+                return Convert.ToInt32(result);
+               
+            }
+            catch (Exception ex)
+            {
                 throw ex;
             }
         }

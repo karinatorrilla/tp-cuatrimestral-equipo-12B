@@ -58,6 +58,28 @@ namespace negocio
             }
         }
 
+        public void inhabilitarToken(string token)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                string consulta = "UPDATE TokensRecuperacion SET Usado = 1 WHERE Token = @token ";
+                datos.setearConsulta(consulta);
+                datos.setearParametro("@token", token);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al inhabilitar token", ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+
         public void cambiarContraseña(string contraseña, int idMedico)
         {
             AccesoDatos datos = new AccesoDatos();

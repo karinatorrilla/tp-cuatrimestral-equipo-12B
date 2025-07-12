@@ -14,7 +14,7 @@ namespace negocio
         private MailMessage email;
         private SmtpClient server;
 
-        public EmailService() //hay que modificar credenciales
+        public EmailService() 
         {
             server = new SmtpClient();
             server.Credentials = new NetworkCredential("grupo12bintegrador@gmail.com", "mpzf rsvj qrys dgat");

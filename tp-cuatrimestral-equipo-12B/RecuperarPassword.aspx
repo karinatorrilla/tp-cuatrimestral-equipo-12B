@@ -45,11 +45,11 @@
                 </div>
                 <div class="mb-3">
                     <label for="txtContraseña" class="form-label">Contraseña nueva</label>
-                    <asp:TextBox runat="server" CssClass="form-control" ID="txtContraseñaNueva" />
+                    <asp:TextBox runat="server" CssClass="form-control" ID="txtContraseñaNueva" TextMode="Password" />
                 </div>
                 <div class="mb-3">
                     <label for="txtContraseñaConfirmacion" class="form-label">Confirmar Contraseña</label>
-                    <asp:TextBox runat="server" CssClass="form-control" ID="txtContraseñaNuevaConfirmada" />
+                    <asp:TextBox runat="server" CssClass="form-control" ID="txtContraseñaNuevaConfirmada" TextMode="Password" />
                 </div>
 
 

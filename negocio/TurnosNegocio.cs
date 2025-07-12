@@ -75,13 +75,14 @@ namespace negocio
             }
         }
 
-        public bool AgregarTurno(Turno nuevo)
+        public int AgregarTurno(Turno nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
                 datos.setearConsulta("INSERT INTO TURNOS (IdMedico, IdPaciente, IdEspecialidad, Fecha, Hora, Observaciones, Estado) " +
-                                     "VALUES (@idMedico, @idPaciente, @idEspecialidad, @fecha, @hora, @observaciones, @estado)");
+                     "VALUES (@idMedico, @idPaciente, @idEspecialidad, @fecha, @hora, @observaciones, @estado); " +
+                     "SELECT SCOPE_IDENTITY();");
 
                 datos.setearParametro("@idMedico", nuevo.Medico.Id);
                 datos.setearParametro("@idPaciente", nuevo.Paciente.Id);
@@ -91,8 +92,8 @@ namespace negocio
                 datos.setearParametro("@observaciones", string.IsNullOrEmpty(nuevo.Observaciones) ? DBNull.Value : (object)nuevo.Observaciones);
                 datos.setearParametro("@estado", (int)nuevo.Estado);
 
-                datos.ejecutarAccion();
-                return true;
+               return datos.ejecutarAccionScalar();
+               
             }
             catch (Exception ex)
             {

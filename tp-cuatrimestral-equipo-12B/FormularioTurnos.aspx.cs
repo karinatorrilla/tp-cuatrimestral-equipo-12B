@@ -9,7 +9,7 @@ using System.Web.UI.WebControls;
 
 namespace tp_cuatrimestral_equipo_12B
 {
-    
+
 
     public partial class FormularioTurnos : System.Web.UI.Page
     {
@@ -47,7 +47,7 @@ namespace tp_cuatrimestral_equipo_12B
                     Response.Redirect("Error.aspx", false);
                     return;
                 }
-                else if ((int)Session["TipoUsuario"] != 1 &&  (int)Session["TipoUsuario"] != 2)
+                else if ((int)Session["TipoUsuario"] != 1 && (int)Session["TipoUsuario"] != 2)
                 {
                     Session.Add("error", "No tenes los permisos para acceder");
                     Response.Redirect("Error.aspx", false);
@@ -223,9 +223,9 @@ namespace tp_cuatrimestral_equipo_12B
                 {
                     CargarSugerencias((int)ViewState["EspecialidadSeleccionadaId"]);
                 }
-                else 
+                else
                 {
-                    
+
                     if (ViewState["EspecialidadSeleccionadaId"] != null)
                     {
                         int idEspecialidad = (int)ViewState["EspecialidadSeleccionadaId"];
@@ -233,7 +233,7 @@ namespace tp_cuatrimestral_equipo_12B
                     }
                     else
                     {
-                        
+
                         CargarSugerencias(0);
                     }
                 }
@@ -355,7 +355,7 @@ namespace tp_cuatrimestral_equipo_12B
                 }
 
             }
- 
+
 
             rptSugerencias.DataSource = sugerenciasParaRepeater;
             rptSugerencias.DataBind();
@@ -444,7 +444,7 @@ namespace tp_cuatrimestral_equipo_12B
                 }
                 catch (Exception ex)
                 {
-                    
+
                 }
 
                 ScriptManager.RegisterStartupScript(this, GetType(), "ToggleAccordionPanels",
@@ -502,7 +502,7 @@ namespace tp_cuatrimestral_equipo_12B
 
             if (int.TryParse(ddlEspecialidades.SelectedValue, out idEspecialidad))
             {
-                
+
                 ViewState["EspecialidadSeleccionadaId"] = idEspecialidad;
                 CargarSugerencias(idEspecialidad);
             }
@@ -658,9 +658,14 @@ namespace tp_cuatrimestral_equipo_12B
 
                 turnoActual.Fecha = calTurno.SelectedDate;
                 turnoActual.Hora = int.Parse(ddlHorarios.SelectedValue);
+                string fechaFormateada = turnoActual.Fecha.ToString("d 'de' MMMM yyyy");
 
                 int idMedico = int.Parse(ddlMedicos.SelectedValue);
+                string nombreMedico = ddlMedicos.SelectedItem.Text;
+                string nombrePaciente = txtNombre.Text + " " + txtApellido.Text;
                 int idEspecialidad = int.Parse(ddlEspecialidades.SelectedValue);
+                string especialidad = ddlEspecialidades.SelectedItem.Text;
+
                 turnoActual.Medico = new Medico { Id = idMedico };
                 turnoActual.Especialidad = new Especialidad { Id = idEspecialidad };
 
@@ -696,9 +701,17 @@ namespace tp_cuatrimestral_equipo_12B
                     int idPaciente = int.Parse(Request.QueryString["darturno"]);
                     turnoActual.Paciente = new Paciente { Id = idPaciente };
                     turnoActual.Estado = EstadoTurno.Nuevo;
-
-                    if (negocioTurno.AgregarTurno(turnoActual))
+                    int idturno = negocioTurno.AgregarTurno(turnoActual);
+                    if (idturno > 0)
                     {
+                        EmailService emailService = new EmailService();
+
+                        string cuerpoMail = "<!DOCTYPE html>\r\n<html lang=\"es\">\r\n<head>\r\n  <meta charset=\"UTF-8\">\r\n  <title>Confirmación de Turno</title>\r\n</head>\r\n<body style=\"font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;\">\r\n  <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"max-width: 600px; margin: 40px auto; background-color: #ffffff; padding: 30px; border-radius: 8px;\">\r\n    <tr>\r\n      <td align=\"center\" style=\"padding-bottom: 20px;\">\r\n        <img src=\"https://imgur.com/a/wJ6AmDj\" alt=\"Logo Clínica 12B\" style=\"width: 150px; margin-bottom: 20px;\" />\r\n<h2 style=\"color: #007BFF;\">Confirmación de Turno Nro: " + idturno + "</h2>\r\n      </td>\r\n    </tr>\r\n    <tr>\r\n      <td style=\"color: #333333; font-size: 16px;\">\r\n        <p>Hola <strong>" + nombrePaciente + "</strong>,</p>\r\n\r\n        <p>Tu turno ha sido confirmado con éxito. A continuación, los detalles:</p>\r\n\r\n        <ul style=\"list-style: none; padding-left: 0;\">\r\n          <li><strong>Especialista:</strong> Dr./Dra. " + nombreMedico + "</li>\r\n          <li><strong>Especialidad:</strong>" + especialidad + "</li>\r\n          <li><strong>Fecha:</strong> " + fechaFormateada + "</li>\r\n          <li><strong>Hora:</strong> " + turnoActual.Hora + ":00 hrs</li>\r\n        </ul>\r\n\r\n        <p>Por favor, presentarse 10 minutos antes del horario acordado. Si necesitás reprogramar o cancelar tu turno, podés contactarnos al <a href=\"mailto:grupo12bintegrador@gmail.com\" style=\"color: #007BFF; text-decoration: none;\">\r\n    correo electronico.\r\n  </a></p>\r\n\r\n        <p style=\"margin-top: 30px;\">¡Gracias por confiar en nosotros!</p>\r\n        <p>Equipo de <strong>Clínica 12B</strong></p>\r\n      </td>\r\n    </tr>\r\n    <tr>\r\n      <td align=\"center\" style=\"font-size: 12px; color: #aaaaaa; padding-top: 30px;\">\r\n        © 2025 Clínica 12B - Todos los derechos reservados.\r\n      </td>\r\n    </tr>\r\n  </table>\r\n</body>\r\n</html>";
+                        emailService.armarCorreo(txtEmail.Text, "Confirmación de Turno", cuerpoMail);
+                        emailService.enviarEmail();
+
+
+
                         divMensaje.Attributes["class"] = "alert alert-success";
                         divMensaje.InnerText = "Turno registrado con éxito.";
                         btnGuardar.Visible = false;
