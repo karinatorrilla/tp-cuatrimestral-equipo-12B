@@ -72,124 +72,109 @@ namespace tp_cuatrimestral_equipo_12B
                 return;
             }
 
-            if ((int)Session["TipoUsuario"] == 3)//medico
-            {
-                if (Session["NombreMedico"] != null)
-                {
-                    lblTipoUsuario.Text = "¡Bienvenido/a " + Session["NombreMedico"].ToString() + "!";
-                }
-                else
-                {
-                    lblTipoUsuario.Text = "¡Bienvenido/a Médico GENÉRICO!";
-                }
+            int tipoUsuario = (int)Session["TipoUsuario"];
+            DateTime fechaHoy = DateTime.Today;
 
-                if (!IsPostBack && Session["NombreMedico"] != null)
+            // Instanciar negocios
+            PacienteNegocio pacienteNegocio = new PacienteNegocio();
+            MedicosNegocio medicoNegocio = new MedicosNegocio();
+            TurnosNegocio turnoNegocio = new TurnosNegocio();
+
+            if (tipoUsuario == 3) // Médico
+            {
+                lblTipoUsuario.Text = Session["NombreMedico"] != null
+                    ? $"¡Bienvenido/a {Session["NombreMedico"]}!"
+                    : "¡Bienvenido/a Médico GENÉRICO!";
+
+                if (!IsPostBack)
                 {
-                    int idMedico = (int)Session["IDMedico"]; //obtengo el id del medico desde la session
-                    CargarTurnos(idMedico, DateTime.Today);
-                    
-                    ////muestra total de pacientes y turnos del día del médico asociado en las cards
-                    //obtener pacientes únicos del médico
-                    int totalPacientesDelMedico = listaTurnos
+                    int idMedico = (int)Session["IDMedico"];
+                    listaTurnos = turnoNegocio.ListarTurnos(idMedico, fechaHoy);
+
+                    int totalPacientes = listaTurnos
                         .Where(t => t.Paciente != null)
                         .Select(t => t.Paciente.Id)
                         .Distinct()
                         .Count();
-                                   
-                    int totalTurnosDelMedico = listaTurnos.Count;
 
-                    lblTotalPacientes.Text = totalPacientesDelMedico.ToString();
-                    lblTextoPaciente.Text = totalPacientesDelMedico == 1 ? "Paciente" : "Pacientes";                  
+                    int totalTurnos = listaTurnos.Count;
 
-                    lblTotalTurnos.Text = totalTurnosDelMedico.ToString();
-                    lblTextoTurno.Text = totalTurnosDelMedico == 1 ? "Turno" : "Turnos";
+                    lblTotalPacientes.Text = totalPacientes.ToString();
+                    lblTextoPaciente.Text = totalPacientes == 1 ? "Paciente" : "Pacientes";
 
+                    lblTotalTurnos.Text = totalTurnos.ToString();
+                    lblTextoTurno.Text = totalTurnos == 1 ? "Turno" : "Turnos";
                 }
             }
-            else if ((int)Session["TipoUsuario"] == 2)//recepcionista
+            else if (tipoUsuario == 2) // Recepcionista
             {
                 lblTipoUsuario.Text = "¡Bienvenido/a Recepcionista!";
-                divListadoGeneral.Visible = true; //visión del recepcionista
+                divListadoGeneral.Visible = true;
                 pnlGraficoAdmin.Visible = false;
 
                 if (!IsPostBack)
                 {
-                    CargarPacientes(DateTime.Today); //LLAMO A LOS MÉTODOS CON LA FECHA DE HOY
-                    CargarMedicos(DateTime.Today);
-                    CargarTurnos(0, DateTime.Today);
+                    listaPaciente = pacienteNegocio.ListarPacientes(0, fechaHoy);
+                    listaMedico = medicoNegocio.ListarMedicos(0, fechaHoy);
+                    listaTurnos = turnoNegocio.ListarTurnos(0, fechaHoy);
+    //                ClientScript.RegisterStartupScript(this.GetType(), "alertCantidadTurnos",
+    //"alert('Cantidad de turnos del día: " + listaTurnos.Count + "');", true);
 
                     ddlFiltrarPor.Items.Clear();
-
-                    // Añade los items al DropDownList
                     ddlFiltrarPor.Items.Add(new ListItem("Pacientes", "0"));
                     ddlFiltrarPor.Items.Add(new ListItem("Médicos", "1"));
-
-                    //Selecciona por defecto
                     ddlFiltrarPor.SelectedIndex = 0;
 
-                    //Muestra total de pacientes, medicos  y turnos del día en las cards
-                    int totalPacientes = listaPaciente.Count;
-                    int totalMedicos = listaMedico.Count;
-                    int totalTurnos = listaTurnos.Count;
+                    lblTotalPacientes.Text = listaPaciente.Count.ToString();
+                    lblTextoPaciente.Text = listaPaciente.Count == 1 ? "Paciente" : "Pacientes";
 
-                    lblTotalPacientes.Text = totalPacientes.ToString();
-                    lblTextoPaciente.Text = totalPacientes == 1 ? "Paciente" : "Pacientes";
+                    lblTotalMedicos.Text = listaMedico.Count.ToString();
+                    lblTextoMedico.Text = listaMedico.Count == 1 ? "Médico" : "Médicos";
 
-                    lblTotalMedicos.Text = totalMedicos.ToString();
-                    lblTextoMedico.Text = totalMedicos == 1 ? "Médico" : "Médicos";
-
-                    lblTotalTurnos.Text = totalTurnos.ToString();
-                    lblTextoTurno.Text = totalTurnos == 1 ? "Turno" : "Turnos";
-
+                    lblTotalTurnos.Text = listaTurnos.Count.ToString();
+                    lblTextoTurno.Text = listaTurnos.Count == 1 ? "Turno" : "Turnos";
                 }
             }
-            else if ((int)Session["TipoUsuario"] == 1)//admin
+            else if (tipoUsuario == 1) // Administrador
             {
                 lblTipoUsuario.Text = "¡Bienvenido Administrador!";
-                divListadoGeneral.Visible = false; //ocultar la tabla de filtro
+                divListadoGeneral.Visible = false;
                 pnlGraficoAdmin.Visible = true;
+
                 if (!IsPostBack)
                 {
-                    CargarMedicos(); //llamo a los métodos para listar todos los turnos, todos los pacientes y todos los médicos sin importar la fecha
-                    CargarPacientes();
-                    CargarTurnos();
+                    listaMedico = medicoNegocio.ListarMedicos();
+                    listaPaciente = pacienteNegocio.ListarPacientes();
+                    listaTurnos = turnoNegocio.ListarTurnos();
 
-                    // Agrupar cantidad de turnos por estado y mes
                     Dictionary<EstadoTurno, int[]> datosPorEstado = new Dictionary<EstadoTurno, int[]>();
 
                     foreach (EstadoTurno estado in Enum.GetValues(typeof(EstadoTurno)))
-                        datosPorEstado[estado] = new int[12]; // inicializo array de 12 meses
+                        datosPorEstado[estado] = new int[12];
 
                     foreach (Turno t in listaTurnos)
                     {
-                        int mes = t.Fecha.Month - 1; // índice 0-based
+                        int mes = t.Fecha.Month - 1;
                         datosPorEstado[t.Estado][mes]++;
                     }
 
-                    // Lo guardás en ViewState para poder accederlo desde la propiedad pública
                     ViewState["DatosPorEstadoTurnos"] = datosPorEstado;
 
-                    //Muestra total de pacientes, medicos  y turnos del día en las cards
-                    int totalPacientes = listaPaciente.Count;
-                    int totalMedicos = listaMedico.Count;
-                    int totalTurnos = listaTurnos.Count;
+                    lblTotalPacientes.Text = listaPaciente.Count.ToString();
+                    lblTextoPaciente.Text = listaPaciente.Count == 1 ? "Paciente" : "Pacientes";
 
-                    lblTotalPacientes.Text = totalPacientes.ToString();
-                    lblTextoPaciente.Text = totalPacientes == 1 ? "Paciente" : "Pacientes";
+                    lblTotalMedicos.Text = listaMedico.Count.ToString();
+                    lblTextoMedico.Text = listaMedico.Count == 1 ? "Médico" : "Médicos";
 
-                    lblTotalMedicos.Text = totalMedicos.ToString();
-                    lblTextoMedico.Text = totalMedicos == 1 ? "Médico" : "Médicos";
-
-                    lblTotalTurnos.Text = totalTurnos.ToString();
-                    lblTextoTurno.Text = totalTurnos == 1 ? "Turno" : "Turnos";
+                    lblTotalTurnos.Text = listaTurnos.Count.ToString();
+                    lblTextoTurno.Text = listaTurnos.Count == 1 ? "Turno" : "Turnos";
                 }
             }
             else
             {
                 Session.Add("error", "Debes loguearte para ingresar.");
                 Response.Redirect("Error.aspx", false);
-            }           
-                     
+            }
         }
 
         protected void btnIrTurnos_Click(object sender, EventArgs e)
@@ -210,24 +195,20 @@ namespace tp_cuatrimestral_equipo_12B
         protected void ddlFiltrarPor_SelectedIndexChanged(object sender, EventArgs e) //filtrado de recepcionista con fecha de hoy
         {
 
-            try
+            DateTime fechaHoy = DateTime.Today;
+
+            if (ddlFiltrarPor.SelectedValue == "0")
             {
-                if (ddlFiltrarPor.SelectedValue == "0") //pacientes
-                {
-                    CargarPacientes(DateTime.Today);
-
-                }
-                else if (ddlFiltrarPor.SelectedValue == "1") //médicos
-                {
-                    CargarMedicos(DateTime.Today);
-                }
+                // Filtro Pacientes del día
+                PacienteNegocio negocioPaciente = new PacienteNegocio();
+                listaPaciente = negocioPaciente.ListarPacientes(0, fechaHoy);
             }
-
-            catch (Exception ex)
+            else if (ddlFiltrarPor.SelectedValue == "1")
             {
-                throw ex;
+                // Filtro Médicos del día
+                MedicosNegocio negocioMedico = new MedicosNegocio();
+                listaMedico = negocioMedico.ListarMedicos(0, fechaHoy);
             }
-
         }
     }
 }
