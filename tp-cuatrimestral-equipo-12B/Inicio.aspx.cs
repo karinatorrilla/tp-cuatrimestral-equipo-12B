@@ -83,7 +83,19 @@ namespace tp_cuatrimestral_equipo_12B
                 if (!IsPostBack)
                 {
                     listaPaciente = pacienteNegocio.ListarPacientes(0, fechaHoy);
+                    List<ObraSocial> obrasSociales = new ObraSocialNegocio().Listar();
+                    foreach (var paciente in listaPaciente)
+                    {
+                        var os = obrasSociales.FirstOrDefault(x => x.Id == paciente.ObraSocial);
+                        paciente.DescripcionObraSocial = os != null ? os.Descripcion : "-";
+                    }
+
                     listaMedico = medicoNegocio.ListarMedicos(0, fechaHoy);
+                    foreach (var medico in listaMedico)
+                    {
+                        medico.Especialidades = medicoNegocio.ListarEspecialidadesPorMedico(medico.Id);
+                    }
+
                     listaTurnos = turnoNegocio.ListarTurnos(0, fechaHoy);
                     //                ClientScript.RegisterStartupScript(this.GetType(), "alertCantidadTurnos",
                     //"alert('Cantidad de turnos del día: " + listaTurnos.Count + "');", true);
@@ -170,12 +182,22 @@ namespace tp_cuatrimestral_equipo_12B
                 // Filtro Pacientes del día
                 PacienteNegocio negocioPaciente = new PacienteNegocio();
                 listaPaciente = negocioPaciente.ListarPacientes(0, fechaHoy);
+                List<ObraSocial> obrasSociales = new ObraSocialNegocio().Listar();
+                foreach (var paciente in listaPaciente)
+                {
+                    var os = obrasSociales.FirstOrDefault(x => x.Id == paciente.ObraSocial);
+                    paciente.DescripcionObraSocial = os != null ? os.Descripcion : "-";
+                }
             }
             else if (ddlFiltrarPor.SelectedValue == "1")
             {
                 // Filtro Médicos del día
                 MedicosNegocio negocioMedico = new MedicosNegocio();
                 listaMedico = negocioMedico.ListarMedicos(0, fechaHoy);
+                foreach (var medico in listaMedico)
+                {
+                    medico.Especialidades = negocioMedico.ListarEspecialidadesPorMedico(medico.Id);
+                }
             }
         }
 
