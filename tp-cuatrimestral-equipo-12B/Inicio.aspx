@@ -216,7 +216,7 @@
                     datasets: [
                         {
                             label: 'Nuevos',
-                            data: [65, 59, 80, 81, 56, 55, 40, 60, 70, 75, 85, 90], // Datos de ejemplo por mes
+                            data: [<%= ObtenerArregloJS((dominio.EstadoTurno)1) %>], // Datos de ejemplo por mes
                             borderColor: 'rgba(75, 192, 192, 1)',
                             backgroundColor: 'rgba(75, 192, 192, 0.2)',
                             tension: 0.3,
@@ -224,7 +224,7 @@
                         },
                         {
                             label: 'Reprogramados',
-                            data: [28, 48, 40, 19, 86, 27, 90, 45, 30, 25, 35, 40], // Datos de ejemplo por mes
+                            data: [<%= ObtenerArregloJS((dominio.EstadoTurno)2) %>], // Datos de ejemplo por mes
                             borderColor: 'rgba(255, 206, 86, 1)',
                             backgroundColor: 'rgba(255, 206, 86, 0.2)',
                             tension: 0.3,
@@ -232,7 +232,7 @@
                         },
                         {
                             label: 'Cancelados',
-                            data: [18, 20, 15, 25, 10, 12, 18, 22, 14, 16, 10, 11], // Datos de ejemplo por mes
+                            data: [<%= ObtenerArregloJS((dominio.EstadoTurno)3) %>], // Datos de ejemplo por mes
                             borderColor: 'rgba(255, 99, 132, 1)',
                             backgroundColor: 'rgba(255, 99, 132, 0.2)',
                             tension: 0.3,
@@ -240,7 +240,7 @@
                         },
                         {
                             label: 'Inasistencias',
-                            data: [5, 7, 3, 8, 4, 6, 9, 5, 7, 3, 6, 8], // Datos de ejemplo por mes
+                            data: [<%= ObtenerArregloJS((dominio.EstadoTurno)4) %>], // Datos de ejemplo por mes
                             borderColor: 'rgba(153, 102, 255, 1)',
                             backgroundColor: 'rgba(153, 102, 255, 0.2)',
                             tension: 0.3,
@@ -248,7 +248,7 @@
                         },
                         {
                             label: 'Cerrados',
-                            data: [40, 45, 50, 60, 70, 65, 75, 80, 90, 85, 95, 100], // Datos de ejemplo por mes
+                            data: [<%= ObtenerArregloJS((dominio.EstadoTurno)5) %>],// Datos de ejemplo por mes
                             borderColor: 'rgba(54, 162, 235, 1)',
                             backgroundColor: 'rgba(54, 162, 235, 0.2)',
                             tension: 0.3,
@@ -271,6 +271,14 @@
                     scales: {
                         y: {
                             beginAtZero: true,
+                            min: 0,
+                            max: 50,
+                            ticks: {
+                                stepSize: 5,
+                                callback: function (value) {
+                                    return value; // Muestra 0, 5, 10, 15...
+                                }
+                            },
                             title: {
                                 display: true,
                                 text: 'Cantidad de Turnos'

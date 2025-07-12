@@ -12,6 +12,17 @@ namespace tp_cuatrimestral_equipo_12B
 {
     public partial class Inicio : System.Web.UI.Page
     {
+        public string ObtenerArregloJS(EstadoTurno estado)
+        {
+            var datos = ViewState["DatosPorEstadoTurnos"] as Dictionary<EstadoTurno, int[]>;
+            if (datos != null && datos.ContainsKey(estado))
+            {
+                return string.Join(",", datos[estado]);
+            }
+            return "0,0,0,0,0,0,0,0,0,0,0,0";
+        }
+
+
         public List<Paciente> listaPaciente;
         public List<Medico> listaMedico;
         public List<Turno> listaTurnos;
@@ -142,6 +153,21 @@ namespace tp_cuatrimestral_equipo_12B
                     CargarMedicos(); //llamo a los métodos para listar todos los turnos, todos los pacientes y todos los médicos sin importar la fecha
                     CargarPacientes();
                     CargarTurnos();
+
+                    // Agrupar cantidad de turnos por estado y mes
+                    Dictionary<EstadoTurno, int[]> datosPorEstado = new Dictionary<EstadoTurno, int[]>();
+
+                    foreach (EstadoTurno estado in Enum.GetValues(typeof(EstadoTurno)))
+                        datosPorEstado[estado] = new int[12]; // inicializo array de 12 meses
+
+                    foreach (Turno t in listaTurnos)
+                    {
+                        int mes = t.Fecha.Month - 1; // índice 0-based
+                        datosPorEstado[t.Estado][mes]++;
+                    }
+
+                    // Lo guardás en ViewState para poder accederlo desde la propiedad pública
+                    ViewState["DatosPorEstadoTurnos"] = datosPorEstado;
 
                     //Muestra total de pacientes, medicos  y turnos del día en las cards
                     int totalPacientes = listaPaciente.Count;

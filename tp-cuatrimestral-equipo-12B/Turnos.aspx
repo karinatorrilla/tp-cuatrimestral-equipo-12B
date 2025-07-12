@@ -52,33 +52,66 @@
                         <td><%= t.Medico.Nombre + " " + t.Medico.Apellido %></td>
                         <td><%= t.Fecha.ToString("dd/MM/yyyy") %></td>
                         <td><%= t.Hora.ToString("00") + ":00" %></td>
-                        <td><%= t.Estado.ToString() %></td>
+                        <td>
+                            <span class="estado-cell <%= GetEstadoCssClass(t.Estado) %>">
+                            <%= t.Estado.ToString() %>
+                            </span>
+                        </td>
                         <td class="d-flex justify-content-center align-items-center gap-4">
                             <%-- Ver detalles del turno --%>
                             <a href='FormularioTurnos.aspx?modo=ver&id=<%= t.Id %>' class="action-link" title="Detalles del Turno">
                                 <img src="images/icon_view.svg" alt="Ver" class="action-icon-img" />
                             </a>
 
-                            <%-- Cerrar turno --%>
-                            <a href='Turnos.aspx?cerrar=<%= t.Id %>' class="action-link" title="Cerrar Turno">
-                                <img src="images/icon_turno_cerrado.svg" alt="Cerrar Turno" class="action-icon-img" />
-                            </a>
+                           <!-- Solo mostramos acciones si Estado es Nuevo 1 o Reprogramado 2 -->
+                            <% if ((int)t.Estado == 1 || (int)t.Estado == 2) { %>
 
-                            <%-- Marcar inasistencia (modal) --%>
-                            <div class="action-link">
-                                <img src="images/icon_turno_ausente.svg" title="Inasistencia Turno" alt="Inasistencia" class="action-icon-img" style="cursor: pointer"
-                                    data-bs-toggle="modal" data-bs-target="#modalInasistencia_<%= t.Id %>" />
-                            </div>
+                                <%-- Cerrar turno --%>
+                                <div class="action-link">
+                                    <img src="images/icon_turno_cerrado.svg" title="Cerrar Turno" alt="Cerrar Turno" class="action-icon-img" style="cursor: pointer"
+                                        data-bs-toggle="modal" data-bs-target="#cerrarModal_<%= t.Id %>" />
+                                </div>
 
-                            <%-- Reprogramar turno --%>
-                            <a href='FormularioTurnos.aspx?modo=editar&id=<%= t.Id %>' class="action-link" title="Reprogramar Turno">
-                                <img src="images/icon_turno_reprogramado.svg" alt="Reprogramar" class="action-icon-img" />
-                            </a>
+                                <%-- Marcar inasistencia --%>
+                                <div class="action-link">
+                                    <img src="images/icon_turno_ausente.svg" title="Inasistencia Turno" alt="Inasistencia" class="action-icon-img" style="cursor: pointer"
+                                        data-bs-toggle="modal" data-bs-target="#modalInasistencia_<%= t.Id %>" />
+                                </div>
 
-                            <%-- Cancelar turno (modal) --%>
-                            <div class="action-link">
-                                <img src="images/icon_cancel.svg" alt="Cancelar" class="action-icon-img" style="cursor:pointer"
-                                    data-bs-toggle="modal" data-bs-target="#cancelarModal_<%= t.Id %>" />
+                                <%-- Reprogramar turno --%>
+                                <a href='FormularioTurnos.aspx?modo=editar&id=<%= t.Id %>' class="action-link" title="Reprogramar Turno">
+                                    <img src="images/icon_turno_reprogramado.svg" alt="Reprogramar" class="action-icon-img" />
+                                </a>
+
+                                <%-- Cancelar turno --%>
+                                <div class="action-link">
+                                    <img src="images/icon_turno_cancelado.svg" title="Cancelar Turno" alt="Cancelar" class="action-icon-img" style="cursor:pointer"
+                                        data-bs-toggle="modal" data-bs-target="#cancelarModal_<%= t.Id %>" />
+                                </div>
+
+                            <% } %>
+
+
+                            <!-- Modal de Cierre -->
+                            <div class="modal fade" id="cerrarModal_<%= t.Id %>" tabindex="-1" aria-labelledby="cerrarLabel_<%= t.Id %>" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Cerrar Turno</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            ¿Estás seguro que deseás cerrar el turno del paciente 
+                                            <strong><%= t.Paciente.Nombre %> <%= t.Paciente.Apellido %></strong>
+                                            del día <strong><%= t.Fecha.ToString("dd/MM/yyyy") %> a las <%= t.Hora.ToString("00") %>:00 hs</strong>?
+                                            <br>
+                                            Esta acción marca el turno como finalizado y lo bloquea para reprogramar.
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="Turnos.aspx?cerrar=<%= t.Id %>" class="btn btn-success">Sí, cerrar turno</a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Modal de Inasistencia -->
@@ -93,7 +126,6 @@
                                             ¿Deseás marcar la inasistencia del turno del paciente <strong><%= t.Paciente.Nombre %> <%= t.Paciente.Apellido %></strong>?
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                             <a href="Turnos.aspx?inasistencia=<%= t.Id %>" class="btn btn-danger">Marcar Inasistencia</a>
                                         </div>
                                     </div>
@@ -114,8 +146,7 @@
                                             del día <strong><%= t.Fecha.ToString("dd/MM/yyyy") %> a las <%= t.Hora.ToString("00") %>:00 hs</strong>?
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                            <a href="Turnos.aspx?cancelar=<%= t.Id %>" class="btn btn-warning">Sí, cancelar</a>
+                                            <a href="Turnos.aspx?cancelar=<%= t.Id %>" class="btn btn-danger">Sí, cancelar</a>
                                         </div>
                                     </div>
                                 </div>

@@ -12,6 +12,19 @@ namespace tp_cuatrimestral_equipo_12B
 
     public partial class Turnos : System.Web.UI.Page
     {
+        public string GetEstadoCssClass(EstadoTurno estado)
+        {
+            switch (estado)
+            {
+                case EstadoTurno.Nuevo: return "estado-nuevo";
+                case EstadoTurno.Reprogramado: return "estado-reprogramado";
+                case EstadoTurno.Cancelado: return "estado-cancelado";
+                case EstadoTurno.Inasistencia: return "estado-inasistencia";
+                case EstadoTurno.Cerrado: return "estado-cerrado";
+                default: return "estado-default";
+            }
+        }
+
         public List<Turno> listaTurno;
         protected void Page_Load(object sender, EventArgs e)
         {

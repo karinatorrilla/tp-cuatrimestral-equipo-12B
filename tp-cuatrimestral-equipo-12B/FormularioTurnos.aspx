@@ -31,7 +31,7 @@
             {
         %>
 
-        <h1>Turnos</h1>
+        <h1>Turno</h1>
         <%  }  %>
     </div>
 
@@ -213,7 +213,7 @@
                 <%-- Contenedor de Botones --%>
                 <div class="d-flex justify-content-center mt-4">
                     <asp:Button Text="Guardar" ID="btnGuardar" CssClass="btn btn-primary px-5 me-3" runat="server" OnClick="btnGuardar_Click" />
-                    <a href="Pacientes.aspx" class="btn btn-secondary px-5">Volver</a>
+                    <a href="<%= Request.QueryString["id"] != null ? "Turnos.aspx" : "Pacientes.aspx" %>" class="btn btn-secondary px-5">Volver</a>
                 </div>
 
 
