@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -11,6 +12,22 @@ namespace tp_cuatrimestral_equipo_12B
 {
     public partial class Medicos : System.Web.UI.Page
     {
+        public string GenerarOpcionesHorario()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<option value=\"\" selected disabled>Seleccionar horario</option>");
+
+            for (int hora = 0; hora < 24; hora++)
+            {
+                // Crea el string en formato HH:mm compatible con TimeSpan.Parse
+                string horaStr = hora.ToString("00") + ":00";
+                sb.AppendFormat("<option value=\"{0}\">{0}</option>", horaStr);
+            }
+
+            return sb.ToString();
+        }
+
+
         public List<Medico> listaMedico;
         public List<Especialidad> todasLasEspecialidades;
         protected void Page_Load(object sender, EventArgs e)
@@ -45,6 +62,7 @@ namespace tp_cuatrimestral_equipo_12B
                 // --- Lógica para AGREGAR o ACTUALIZAR Disponibilidad ---
                 if (Request["medicoId"] != null && Request["dia"] != null && Request["horaInicio"] != null && Request["horaFin"] != null)
                 {
+                    
                     int medicoId;
                     int diaSemana;
                     TimeSpan horaInicio;

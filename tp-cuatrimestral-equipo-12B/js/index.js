@@ -2,8 +2,8 @@
 
 function generarEnlaceDisponibilidad(medicoId) {
     var diaSeleccionado = $('#ddlDiaSemana_' + medicoId).val();
-    var horaInicio = $('#txtHoraInicio_' + medicoId).val();
-    var horaFin = $('#txtHoraFin_' + medicoId).val();
+    var horaInicio = $('#ddlHoraInicio_' + medicoId).val();
+    var horaFin = $('#ddlHoraFin_' + medicoId).val();
     // Obtener el ID de la disponibilidad del campo oculto
     var idDisponibilidad = $('#hdnDisponibilidadId_' + medicoId).val();
 
@@ -13,11 +13,17 @@ function generarEnlaceDisponibilidad(medicoId) {
         return false;
     }
 
+    if (parseInt(horaFin.split(":")[0]) <= parseInt(horaInicio.split(":")[0])) {
+        alert("La hora de fin debe ser posterior a la hora de inicio.");
+        return false;
+    }
+
     // Construye la URL 
     var url = 'Medicos.aspx?medicoId=' + medicoId +
         '&dia=' + diaSeleccionado +
         '&horaInicio=' + encodeURIComponent(horaInicio) +
         '&horaFin=' + encodeURIComponent(horaFin);
+
 
     // Si el campo oculto tiene un valor, significa que es una actualización
     if (idDisponibilidad !== "") {
@@ -40,8 +46,8 @@ function editarDisponibilidad(medicoId, idDisponibilidad, diaSemana, horaInicio,
 
     //Precargar los campos 
     $('#ddlDiaSemana_' + medicoId).val(diaSemana);
-    $('#txtHoraInicio_' + medicoId).val(horaInicio);
-    $('#txtHoraFin_' + medicoId).val(horaFin);
+    $('#ddlHoraInicio_' + medicoId).val(horaInicio);
+    $('#ddlHoraFin_' + medicoId).val(horaFin);
 
     // Este ID sera usado luego para saber si se debe hacer un INSERT o un UPDATE
     $('#hdnDisponibilidadId_' + medicoId).val(idDisponibilidad);
@@ -56,8 +62,8 @@ function editarDisponibilidad(medicoId, idDisponibilidad, diaSemana, horaInicio,
 window.limpiarCamposModalDisponibilidad = function (medicoId) {
     // Seleccionamos los campos dentro del modal y los vaciamos
     $('#ddlDiaSemana_' + medicoId).val('');
-    $('#txtHoraInicio_' + medicoId).val(''); 
-    $('#txtHoraFin_' + medicoId).val(''); 
+    $('#ddlHoraInicio_' + medicoId).val('');
+    $('#ddlHoraFin_' + medicoId).val('');
 
     // limpia el campo oculto del ID de disponibilidad y restaura el botón a "Agregar"
     $('#hdnDisponibilidadId_' + medicoId).val('');
