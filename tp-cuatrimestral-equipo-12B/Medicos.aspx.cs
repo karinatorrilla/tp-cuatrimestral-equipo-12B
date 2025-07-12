@@ -93,6 +93,7 @@ namespace tp_cuatrimestral_equipo_12B
                                 HoraFinBloque = horaFin
                             };
 
+                            bool haySolapamiento;
                             // Lógica CLAVE: Detectar si es ACTUALIZAR o AGREGAR 
                             // Verificamos si el parámetro 'actualizarDisponibilidad' existe en la URL
                             if (Request["actualizarDisponibilidad"] != null)
@@ -102,11 +103,21 @@ namespace tp_cuatrimestral_equipo_12B
                                 if (int.TryParse(Request["actualizarDisponibilidad"], out idDisponibilidadAActualizar))
                                 {
                                     disponibilidad.Id = idDisponibilidadAActualizar; // Asigna el ID de la disponibilidad a modificar
-                                    dhNegocio.ModificarDisponibilidadHoraria(disponibilidad); // Llama al método de modificación
-
-                                    lblMensaje.Visible = true;
-                                    lblMensaje.CssClass = "alert alert-success d-block";
-                                    lblMensaje.Text = "Disponibilidad horaria actualizada correctamente.";
+                                    haySolapamiento = dhNegocio.ExisteSolapamiento(medicoId, diaSemana, horaInicio, horaFin, idDisponibilidadAActualizar);
+                                    if (haySolapamiento)
+                                    {
+                                        lblMensaje.Visible = true;
+                                        lblMensaje.CssClass = "alert alert-warning d-block";
+                                        lblMensaje.Text = "Ya existe una disponibilidad que se solapa con este horario.";
+                                    }
+                                    else
+                                    {
+                                        dhNegocio.ModificarDisponibilidadHoraria(disponibilidad); // Llama al método de modificación
+                                        lblMensaje.Visible = true;
+                                        lblMensaje.CssClass = "alert alert-success d-block";
+                                        lblMensaje.Text = "Disponibilidad horaria actualizada correctamente.";
+                                    }
+                                    
                                 }
                                 else
                                 {
@@ -118,12 +129,22 @@ namespace tp_cuatrimestral_equipo_12B
                             }
                             else
                             {
-                                // No hay parámetro 'actualizarDisponibilidad', estamos en modo AGREGAR
-                                dhNegocio.AgregarDisponibilidadHoraria(disponibilidad);
-
-                                lblMensaje.Visible = true;
-                                lblMensaje.CssClass = "alert alert-success d-block";
-                                lblMensaje.Text = "Disponibilidad horaria agregada correctamente.";
+                                haySolapamiento = dhNegocio.ExisteSolapamiento(medicoId, diaSemana, horaInicio, horaFin);
+                                if (haySolapamiento)
+                                {
+                                    lblMensaje.Visible = true;
+                                    lblMensaje.CssClass = "alert alert-warning d-block";
+                                    lblMensaje.Text = "Ya existe una disponibilidad para ese día y rango horario.";
+                                }
+                                else
+                                {
+                                    // No hay parámetro 'actualizarDisponibilidad', estamos en modo AGREGAR
+                                    dhNegocio.AgregarDisponibilidadHoraria(disponibilidad);
+                                    lblMensaje.Visible = true;
+                                    lblMensaje.CssClass = "alert alert-success d-block";
+                                    lblMensaje.Text = "Disponibilidad horaria agregada correctamente.";
+                                }
+                                
                             }
                         }
                         catch (Exception ex)

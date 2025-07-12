@@ -98,6 +98,51 @@ namespace negocio
             }
         }
 
+        // Método para verificar si existe disponibilidad horaria que se solape con otra del mismo medico
+        public bool ExisteSolapamiento(int medicoId, int diaSemana, TimeSpan horaInicio, TimeSpan horaFin, int? idAExcluir = null)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                string consulta = "SELECT COUNT(*) FROM MEDICOxDISPONIBILIDADHORARIA " +
+                                  "WHERE MedicoId = @MedicoId AND DiaDeLaSemana = @DiaDeLaSemana " +
+                                  "AND Habilitado = 1 " +
+                                  "AND NOT (HoraFinBloque <= @HoraInicio OR HoraInicioBloque >= @HoraFin)";
+
+                if (idAExcluir.HasValue)
+                {
+                    consulta += " AND Id <> @IdAExcluir";
+                }
+
+                datos.setearConsulta(consulta);
+                datos.setearParametro("@MedicoId", medicoId);
+                datos.setearParametro("@DiaDeLaSemana", diaSemana);
+                datos.setearParametro("@HoraInicio", horaInicio);
+                datos.setearParametro("@HoraFin", horaFin);
+
+                if (idAExcluir.HasValue)
+                {
+                    datos.setearParametro("@IdAExcluir", idAExcluir.Value);
+                }
+
+                datos.ejecutarLectura();
+                if (datos.Lector.Read())
+                {
+                    return (int)datos.Lector[0] > 0;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al validar solapamiento: " + ex.Message, ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
         // Método para eliminar disponibilidad horaria
         public bool EliminarDisponibilidadHoraria(int idDisponibilidad)
         {

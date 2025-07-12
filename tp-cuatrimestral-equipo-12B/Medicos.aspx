@@ -154,14 +154,6 @@
                                                             <option value="7">Domingo</option>
                                                         </select>
                                                     </div>
-                                                    <%--<div class="col-md-3">
-                                                        <label for="txtHoraInicio_<%= medico.Id %>" class="form-label">Hora de Inicio:</label>
-                                                        <input type="time" id="txtHoraInicio_<%= medico.Id %>" name="txtHoraInicio_<%= medico.Id %>" class="form-control" step="3600" />
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <label for="txtHoraFin_<%= medico.Id %>" class="form-label">Hora de Fin:</label>
-                                                        <input type="time" id="txtHoraFin_<%= medico.Id %>" name="txtHoraFin_<%= medico.Id %>" class="form-control" step="3600" />
-                                                    </div>--%>
                                                     <div class="col-md-3">
                                                          <label for="txtHoraInicio_<%= medico.Id %>" class="form-label">Hora de Inicio:</label>
                                                         <select id="ddlHoraInicio_<%= medico.Id %>" name="horaInicio" class="form-select">
