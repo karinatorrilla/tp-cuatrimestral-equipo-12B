@@ -48,5 +48,37 @@ namespace negocio
             }
 
         }
+
+        public bool agregarUsuario(string usuario,string password,int idmedico)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {                
+                string consulta = "insert into USUARIOS(Usuario,Pass,TipoUser,IDMedico)values(@Usuario,@Password,3,@IdMedico)";
+
+                datos.setearConsulta(consulta);
+
+                // Asignar parámetros para todos los campos
+                datos.setearParametro("@Usuario", usuario);
+                datos.setearParametro("@Password", password);
+                datos.setearParametro("@IdMedico", idmedico);
+
+                datos.ejecutarAccion();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw new Exception("Error al agregar usuario: " + ex.Message, ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+
+
+        }
     }
 }

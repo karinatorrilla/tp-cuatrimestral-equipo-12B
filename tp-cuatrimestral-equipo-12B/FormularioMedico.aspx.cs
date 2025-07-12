@@ -51,7 +51,7 @@ namespace tp_cuatrimestral_equipo_12B
                     Response.Redirect("Error.aspx", false);
                     return;
                 }
-                else if ((int)Session["TipoUsuario"] != 1 &&  (int)Session["TipoUsuario"] != 2)
+                else if ((int)Session["TipoUsuario"] != 1 && (int)Session["TipoUsuario"] != 2)
                 {
                     Session.Add("error", "No tenes los permisos para acceder");
                     Response.Redirect("Error.aspx", false);
@@ -121,7 +121,7 @@ namespace tp_cuatrimestral_equipo_12B
                         if (listaMedicos != null && listaMedicos.Count > 0)
                         {
                             medicoActual = listaMedicos[0]; // Guardamos el médico en la propiedad de la página
-                           
+
 
                             //        // Precarga de Datos Personales y Profesionales
                             txtMatricula.Text = medicoActual.Matricula.ToString();
@@ -710,7 +710,7 @@ namespace tp_cuatrimestral_equipo_12B
                 medicoNuevo.Depto = txtDepto.Text;
                 // Habilitado: Por defecto en 1 (true) para nuevos medicoNuevo
                 medicoNuevo.Habilitado = 1;
-                medicoNuevo.FechaNacimiento = fechaNacimiento;                
+                medicoNuevo.FechaNacimiento = fechaNacimiento;
 
                 // Lógica para Agregar o Modificar
                 if (Request.QueryString["id"] != null) // Modo Modificar
@@ -724,18 +724,35 @@ namespace tp_cuatrimestral_equipo_12B
                 }
                 else
                 {
-                    if (negocio.agregarMedico(medicoNuevo)) // Llama a agregar medico
+                    try
                     {
-                        divMensaje.Attributes["class"] = "alert alert-success";
-                        divMensaje.InnerText = "Operación realizada con éxito.";
-                        divMensaje.Visible = true;
-                        btnGuardar.Visible = false;
-                        // Response.Redirect("Medicos.aspx", false); 
+
+
+                        int idmedico = negocio.agregarMedico(medicoNuevo);
+                        if (idmedico > 0) // Llama a agregar medico
+                        {
+                            UsuarioNegocio usuario = new UsuarioNegocio();
+                            usuario.agregarUsuario(medicoNuevo.Email, medicoNuevo.Documento.ToString(), idmedico);
+                            divMensaje.Attributes["class"] = "alert alert-success";
+                            divMensaje.InnerText = "Operación realizada con éxito.";
+                            divMensaje.Visible = true;
+                            btnGuardar.Visible = false;
+                            // Response.Redirect("Medicos.aspx", false); 
+                        }
+                        else
+                        {
+                            divMensaje.Attributes["class"] = "alert alert-danger";
+                            divMensaje.InnerText = "Ocurrió un error al procesar la operación.";
+                            divMensaje.Visible = true;
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
                         divMensaje.Attributes["class"] = "alert alert-danger";
-                        divMensaje.InnerText = "Ocurrió un error al procesar la operación.";
+                        divMensaje.InnerText = "Error inesperado: " + ex.Message;
+                    }
+                    finally
+                    {
                         divMensaje.Visible = true;
                     }
                 }

@@ -125,7 +125,7 @@ namespace negocio
 
         }
 
-        public bool agregarMedico(Medico nuevo)
+        public int agregarMedico(Medico nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
 
@@ -136,7 +136,8 @@ namespace negocio
                                   "Provincia, Localidad, Calle, Altura, CodPostal, Depto, FechaNacimiento, Habilitado) " +
                                   "VALUES (@Matricula, @Nombre, @Apellido, @Documento, @Email, @Telefono, @Nacionalidad, " +
                                   "@Provincia, @Localidad, @Calle, @Altura, @CodPostal, @Depto, @FechaNacimiento, " +
-                                  "@Habilitado)";
+                                  "@Habilitado);"+
+                                  "SELECT SCOPE_IDENTITY();";
 
                 datos.setearConsulta(consulta);
 
@@ -157,12 +158,12 @@ namespace negocio
                 datos.setearParametro("@FechaNacimiento", (object)nuevo.FechaNacimiento ?? DBNull.Value);
                 datos.setearParametro("@Habilitado", nuevo.Habilitado);
 
-                datos.ejecutarAccion();
-                return true;
+                return datos.ejecutarAccionScalar();
+               
             }
             catch (Exception ex)
             {
-                return false;
+                return -1;
                 throw new Exception("Error al agregar médico: " + ex.Message, ex);
             }
             finally
