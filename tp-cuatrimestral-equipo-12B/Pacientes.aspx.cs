@@ -1,17 +1,26 @@
-﻿using System;
+﻿using dominio;
+using negocio;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using negocio;
-using dominio;
 
 namespace tp_cuatrimestral_equipo_12B
 {
     public partial class Pacientes : System.Web.UI.Page
     {
         public List<Paciente> listaPaciente;
+        private string quitarAcentos(string texto) //para poder obviar en el filtrado
+        {
+            return new string(texto.Normalize(NormalizationForm.FormD)
+                .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+                .ToArray())
+                .Normalize(NormalizationForm.FormC);
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -83,7 +92,7 @@ namespace tp_cuatrimestral_equipo_12B
             try
             {
                 string filtrarPor = ddlFiltro.SelectedValue;
-                string textoBusqueda = txtFiltro.Text.Trim().ToLower();
+                string textoBusqueda = quitarAcentos(txtFiltro.Text.Trim().ToLower());
 
 
                 PacienteNegocio negocio = new PacienteNegocio();
@@ -113,19 +122,19 @@ namespace tp_cuatrimestral_equipo_12B
                 switch (filtrarPor)
                 {
                     case "Nombre":
-                        filtrados = todos.Where(p => p.Nombre != null && p.Nombre.ToLower().Contains(textoBusqueda)).ToList();
+                        filtrados = todos.Where(p => p.Nombre != null && quitarAcentos(p.Nombre.ToLower()).Contains(textoBusqueda)).ToList();
                         break;
                     case "Apellido":
-                        filtrados = todos.Where(p => p.Apellido != null && p.Apellido.ToLower().Contains(textoBusqueda)).ToList();
+                        filtrados = todos.Where(p => p.Apellido != null && quitarAcentos(p.Apellido.ToLower()).Contains(textoBusqueda)).ToList();
                         break;
                     case "Documento":
                         filtrados = todos.Where(p => p.Documento.ToString().Contains(textoBusqueda)).ToList();
                         break;
                     case "Obra Social":
-                        filtrados = todos.Where(p => p.DescripcionObraSocial != null && p.DescripcionObraSocial.ToLower().Contains(textoBusqueda)).ToList();
+                        filtrados = todos.Where(p => p.DescripcionObraSocial != null && quitarAcentos(p.DescripcionObraSocial.ToLower()).Contains(textoBusqueda)).ToList();
                         break;
                     case "Email":
-                        filtrados = todos.Where(p => p.Email != null && p.Email.ToLower().Contains(textoBusqueda)).ToList();
+                        filtrados = todos.Where(p => p.Email != null && quitarAcentos(p.Email.ToLower()).Contains(textoBusqueda)).ToList();
                         break;
                 }
 

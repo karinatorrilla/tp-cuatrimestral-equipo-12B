@@ -7,11 +7,19 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using negocio;
 using dominio;
+using System.Globalization;
 
 namespace tp_cuatrimestral_equipo_12B
 {
     public partial class Medicos : System.Web.UI.Page
     {
+        private string quitarAcentos(string texto) //para poder obviar en el filtrado
+        {
+            return new string(texto.Normalize(NormalizationForm.FormD)
+                .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+                .ToArray())
+                .Normalize(NormalizationForm.FormC);
+        }
         public string GenerarOpcionesHorario()
         {
             StringBuilder sb = new StringBuilder();
@@ -290,7 +298,7 @@ namespace tp_cuatrimestral_equipo_12B
             try
             {
                 string filtrarPor = ddlFiltro.SelectedValue;
-                string textoBusqueda = txtFiltro.Text.Trim().ToLower();
+                string textoBusqueda = quitarAcentos(txtFiltro.Text.Trim().ToLower());
 
                 CargarMedicos(); //inicializo lista con todos los médicos, especialidades y disponibilidad
                 CargarEspecialidades();
@@ -306,16 +314,16 @@ namespace tp_cuatrimestral_equipo_12B
                 switch (filtrarPor)
                 {
                     case "Nombre":
-                        filtrados = listaMedico.Where(m => m.Nombre != null && m.Nombre.ToLower().Contains(textoBusqueda)).ToList();
+                        filtrados = listaMedico.Where(m => m.Nombre != null && quitarAcentos(m.Nombre.ToLower()).Contains(textoBusqueda)).ToList();
                         break;
                     case "Apellido":
-                        filtrados = listaMedico.Where(m => m.Apellido != null && m.Apellido.ToLower().Contains(textoBusqueda)).ToList();
+                        filtrados = listaMedico.Where(m => m.Apellido != null && quitarAcentos(m.Apellido.ToLower()).Contains(textoBusqueda)).ToList();
                         break;
                     case "Matricula":
                         filtrados = listaMedico.Where(m => m.Matricula.ToString().Contains(textoBusqueda)).ToList();
                         break;
                     case "Especialidad":
-                        filtrados = listaMedico.Where(m => m.Especialidades != null && m.Especialidades.Any(esp => esp.Descripcion != null && esp.Descripcion.ToLower().Contains(textoBusqueda))).ToList();
+                        filtrados = listaMedico.Where(m => m.Especialidades != null && m.Especialidades.Any(esp => esp.Descripcion != null && quitarAcentos(esp.Descripcion.ToLower()).Contains(textoBusqueda))).ToList();
                         break;
                 }
 

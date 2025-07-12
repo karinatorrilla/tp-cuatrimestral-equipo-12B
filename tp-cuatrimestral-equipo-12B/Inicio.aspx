@@ -87,8 +87,8 @@
                         <asp:TextBox ID="txtFechaFiltro" runat="server" CssClass="form-control" TextMode="Date" />
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
-                        <asp:Button ID="btnFiltrarTurnos" runat="server" Text="Filtrar" CssClass="btn btn-primary w-100" />
-                        <asp:Button ID="btnLimpiar" Text="Limpiar" runat="server" CssClass="btn btn-secondary w-100 ms-3" />
+                        <asp:Button ID="btnFiltrarTurnos" OnClick="btnFiltrarTurnos_Click" runat="server" Text="Filtrar" CssClass="btn btn-primary w-100" />
+                        <asp:Button ID="btnLimpiar" Text="Limpiar" OnClick="btnLimpiar_Click" runat="server" CssClass="btn btn-secondary w-100 ms-3" />
                     </div>
                 </div>
                 <%} %>
@@ -128,8 +128,10 @@
                                 { %>
                             <% if (ddlFiltrarPor.SelectedValue == "0" && listaPaciente != null)
                                 {
-                                    foreach (var p in listaPaciente)
-                                    { %>
+                                    if (listaPaciente.Count > 0)
+                                    {
+                                        foreach (var p in listaPaciente)
+                                        { %>
                             <tr>
                                 <td><%= p.Id %></td>
                                 <td><%= p.Nombre %></td>
@@ -137,12 +139,21 @@
                                 <td><%= p.Telefono %></td>
                                 <td><%= p.DescripcionObraSocial %></td>
                             </tr>
-                            <%     }
+                            <%          }
                                 }
+                                else
+                                { %>
+                            <tr>
+                                <td colspan="9" class="text-center">No se encontraron pacientes.</td>
+                            </tr>
+                            <%   }
+                                } 
                                 else if (ddlFiltrarPor.SelectedValue == "1" && listaMedico != null)
                                 {
-                                    foreach (var m in listaMedico)
-                                    { %>
+                                    if (listaMedico.Count > 0)
+                                    {
+                                        foreach (var m in listaMedico)
+                                        { %>
                             <tr>
                                 <td><%= m.Id %></td>
                                 <td><%= m.Nombre %></td>
@@ -159,7 +170,14 @@
                                     <% } %>
                                 </td>
                             </tr>
-                            <%     }
+                            <%          }
+                                }
+                                else
+                                { %>
+                            <tr>
+                                <td colspan="9" class="text-center">No se encontraron médicos.</td>
+                            </tr>
+                            <%    }
                                 } %>
                             <%} %>
                             <% else if (Session["TipoUsuario"] != null && (int)Session["TipoUsuario"] == 3 && listaTurnos != null)
@@ -180,14 +198,14 @@
                                 <td><%= t.Estado.ToString() %></td>
                             </tr>
                             <%       }
-                            }
-                            else
-                            { %>
+                                }
+                                else
+                                { %>
                             <tr>
                                 <td colspan="9" class="text-center">No se encontraron turnos.</td>
                             </tr>
                             <%   }
-                            } %>
+                                } %>
                         </tbody>
                     </table>
                 </div>
