@@ -119,7 +119,7 @@ namespace negocio
                 datos.setearParametro("@observaciones", string.IsNullOrEmpty(actualizado.Observaciones) ? DBNull.Value : (object)actualizado.Observaciones);
                 datos.setearParametro("@estado", (int)actualizado.Estado);
                 datos.setearParametro("@idTurno", actualizado.Id);
-
+                
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
@@ -161,7 +161,7 @@ namespace negocio
             try
             {
                 string consulta = "SELECT T.Id, T.IdMedico, T.IdPaciente, T.IdEspecialidad, T.Fecha, T.Hora, T.Observaciones, T.Estado, " +
-                                  "P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente, P.Documento, OS.Descripcion AS DescripcionObraSocial, " +
+                                  "P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente, P.Documento,P.Email,P.FechaNacimiento, OS.Descripcion AS DescripcionObraSocial, " +
                                   "E.Descripcion AS DescripcionEspecialidad, " +
                                   "M.Nombre AS NombreMedico, M.Apellido AS ApellidoMedico " +
                                   "FROM TURNOS T " +
@@ -181,6 +181,7 @@ namespace negocio
                     consulta += "AND T.Fecha = @Fecha ";
                 }
 
+                consulta += "ORDER BY T.Fecha";
                 datos.setearConsulta(consulta);
 
                 if (idMedico > 0)
@@ -209,8 +210,10 @@ namespace negocio
                         Nombre = datos.Lector["NombrePaciente"].ToString(),
                         Apellido = datos.Lector["ApellidoPaciente"].ToString(),
                         Documento = (int)datos.Lector["Documento"],
+                        FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"],
+                        Email = datos.Lector["Email"].ToString(),
                         DescripcionObraSocial = datos.Lector["DescripcionObraSocial"].ToString()
-                    };
+                    }; 
                     aux.Especialidad = new Especialidad
                     {
                         Id = (int)datos.Lector["IdEspecialidad"],

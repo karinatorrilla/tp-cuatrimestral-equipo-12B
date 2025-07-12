@@ -42,7 +42,7 @@
                     <table class="table table-striped table-hover table-bordered align-middle">
                         <thead class="table-dark">
                             <tr>
-                                <th scope="col">ID</th>
+                                <th scope="col">NRO° DE TURNO</th>
                                 <th scope="col">NOMBRE</th>
                                 <th scope="col">APELLIDO</th>
                                 <th scope="col">DOCUMENTO</th>
